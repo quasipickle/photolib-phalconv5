@@ -13,6 +13,7 @@ $config = [
             "app"            => $app_file_root,
             "controllers"    => $app_file_root . "/controllers",
             "models"         => $app_file_root . "/models",
+            "public"         => $file_root . "/public",
             "tasks"          => $app_file_root . "/tasks",
             "views"          => $views_file_root,
             "views_compiled" => $views_file_root . "/compiled"
@@ -21,6 +22,7 @@ $config = [
             "root" => $web_root
         ]
     ],
+    "root_album_id" => 1,
     "sniff" => [
         "dirs" => [
             __DIR__,

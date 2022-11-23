@@ -12,6 +12,8 @@ use Phalcon\Cli\Exception as PhalconException;
 use Phalcon\Di\FactoryDefault\Cli as CliDI;
 use Phalcon\Autoload\Loader;
 
+require(__DIR__ . "/../vendor/autoload.php");
+
 $Container  = new CliDI();
 
 $Config = require "config/config.php";

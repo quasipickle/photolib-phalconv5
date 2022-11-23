@@ -21,6 +21,16 @@ $Loader->setNamespaces(
 $Loader->register();
 
 $Container = new Phalcon\Di\FactoryDefault();
+$Container->setShared("config", $Config);
+
+/**
+ * Database
+ */
+$Container->setShared("db", function () {
+    $connectionParams = require "db.php";
+    $conn = new Phalcon\Db\Adapter\Pdo\Mysql($connectionParams);
+    return $conn;
+});
 
 /**
  * Dispatcher
@@ -29,6 +39,18 @@ $Container->set("dispatcher", function () {
     $Dispatcher = new Phalcon\Mvc\Dispatcher();
     $Dispatcher->setDefaultNamespace("Controllers");
     return $Dispatcher;
+});
+
+/**
+ * Routes
+ */
+$Container->set("router", function () {
+    $Router = new Phalcon\Mvc\Router();
+    $routes = require "routes.php";
+    foreach ($routes as $pattern => $properties) {
+        $Router->add($pattern, $properties);
+    }
+    return $Router;
 });
 
 /**

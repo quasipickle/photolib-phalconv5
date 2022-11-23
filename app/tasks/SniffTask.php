@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Wrapper for PHP Codeesniffer
+ * Wrapper for PHP Codesniffer
  *
  * https://github.com/squizlabs/PHP_CodeSniffer
  */
