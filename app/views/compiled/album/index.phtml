@@ -59,12 +59,9 @@
                 <?php $v121301985799045617691iterator = $Album->photos; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photo) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
                     <div class="grid__item">
                         <div class="grid__photo">
-                            
-                            <a class="btn btn-grid-popup grid__info" 
-                                tabindex="0"
+                            <button class="btn btn-grid-popup grid__info" 
                                 data-bs-toggle="popover"
                                 data-bs-html="true"
-                                data-bs-title="<?= $photo->original_filename ?>" 
                                 data-width="<?= $photo->width ?>"
                                 data-height="<?= $photo->height ?>"
                                 data-filesize="<?= \Helpers\ViewHelper::filesize($photo->filesize) ?>"
@@ -73,7 +70,7 @@
                                 data-content="Content failed to load."
                             >
                                 <?= $this->viewHelper->icon('bi-info-circle') ?>
-                            </a>
+                            </button>
                             <button class="btn btn-grid-popup grid__tools">
                                 <?= $this->viewHelper->icon('bi-three-dots-vertical') ?>
                             </button>
@@ -113,51 +110,6 @@
         <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`<?= $this->config->dirs->web->photo ?>` + photo?.dataset.originalSrc" target = "_blank">Original <?= $this->viewHelper->icon('bi-box-arrow-up-right') ?></a>
     </div>
 </div>
-
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".grid__info").forEach($el =>  new bootstrap.Popover($el, {
-        sanitize: false,
-        content: popover,
-        customClass: "grid__popover",
-        trigger:"focus",
-    }));
-});
-
-function popover()
-{
-    const battlesInt = parseInt(this.dataset.battles);
-    let winPercentageInt = parseInt(this.dataset.winPercentage);
-    winPercentageInt = isNaN(winPercentageInt) ? 0 : winPercentageInt;
-    const lossPercentageInt = 100 - winPercentageInt;
-
-    let info = `
-        ${this.dataset.width} &times; ${this.dataset.height }<br />
-        ${this.dataset.filesize}<br />
-        <div class="d-flex gap-1 align-items-center">
-            <?= $this->viewHelper->icon('bi-bar-chart') ?>          
-    `;
-    if (battlesInt > 0) {
-        info += `
-            <div class="progress flex-grow-1">
-                <div class="progress flex-grow-1">
-                    <div class="progress-bar bg-success" role="progressbar" aria-label="wins" style="width: ${winPercentageInt}%" aria-valuenow="${winPercentageInt}" aria-valuemin="0" aria-valuemax="100"></div>
-                    <div class="progress-bar bg-danger" role="progressbar" aria-label="losses" style="width: ${lossPercentageInt}%" aria-valuenow="${lossPercentageInt}" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-            <div class="text-nowrap">
-                ${winPercentageInt}% / ${battlesInt}
-            </div>
-        `;
-    } else {
-        info += "-";
-    }
-    info += "</div>";
-
-    return info;
-}
-</script>
-
 
 <script src = "<?= $this->url->get('/public/js/album.js') ?>" type="module"></script>
 

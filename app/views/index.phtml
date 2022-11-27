@@ -22,24 +22,24 @@
                     <div class="btn-toolbar gap-2" role="toolbar" aria-label="Album-wide tools">
                         <div class="btn-group" x-data="gridSize">
                             <div class="btn btn-outline-secondary" :class="size == 'sm' && 'active'" @click="setSize('sm')">
-                                {{ viewHelper.icon("bi-grid-3x3-gap") }}
+                                {{ icon("bi-grid-3x3-gap") }}
                             </div>
                             <div class="btn btn-outline-secondary" :class="size == 'lg' && 'active'" @click="setSize('lg')">
-                                {{ viewHelper.icon("bi-grid") }}
+                                {{ icon("bi-grid") }}
                             </div>
                         </div>
                         <div class="btn-group" x-data="gridRatio">
                             <div class="btn btn-outline-secondary" :class="ratio == 'square' && 'active'" @click="setRatio('square')">
-                                {{ viewHelper.icon("bi-aspect-ratio") }}
+                                {{ icon("bi-aspect-ratio") }}
                             </div>
                             <div class="btn btn-outline-secondary"  :class="ratio == 'natural' && 'active'" @click="setRatio('natural')">
-                                {{ viewHelper.icon("bi-square") }}
+                                {{ icon("bi-square") }}
                             </div>
                         </div>
                     </div>
                 {% endif %}
                 <a href ="{{ url('/battle') }}" class="btn btn-outline-secondary">
-                    {{ viewHelper.icon("bi-bar-chart") }}
+                    {{ icon("bi-bar-chart") }}
                 </a>
             </div>
             <?= $this->getContent(); ?>

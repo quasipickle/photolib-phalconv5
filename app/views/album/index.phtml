@@ -31,7 +31,7 @@
                         {% if !loop.last %}
                             <a href="{{ viewHelper.albumUrl(crumb.id) }}">
                         {% endif %}
-                        {% if loop.first %}{{ viewHelper.icon("bi-house-fill me-1") }}{% endif %}{{ crumb.name }}
+                        {% if loop.first %}{{ icon("bi-house-fill me-1") }}{% endif %}{{ crumb.name }}
                         {% if !loop.last %}
                             </a>
                         {% endif %}
@@ -67,12 +67,9 @@
                 {% for photo in Album.photos %}
                     <div class="grid__item">
                         <div class="grid__photo">
-                            {# This must be an <a> to enable the exclusive effect.  See BS docs #}
-                            <a class="btn btn-grid-popup grid__info" 
-                                tabindex="0"
+                            <button class="btn btn-grid-popup grid__info" 
                                 data-bs-toggle="popover"
                                 data-bs-html="true"
-                                data-bs-title="{{ photo.original_filename }}" 
                                 data-width="{{ photo.width }}"
                                 data-height="{{ photo.height }}"
                                 data-filesize="{{ filesize(photo.filesize) }}"
@@ -81,7 +78,7 @@
                                 data-content="Content failed to load."
                             >
                                 {{ viewHelper.icon("bi-info-circle") }}
-                            </a>
+                            </button>
                             <button class="btn btn-grid-popup grid__tools">
                                 {{ viewHelper.icon("bi-three-dots-vertical") }}
                             </button>
@@ -121,51 +118,6 @@
         <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`{{ config.dirs.web.photo }}` + photo?.dataset.originalSrc" target = "_blank">Original {{ viewHelper.icon("bi-box-arrow-up-right") }}</a>
     </div>
 </div>
-
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".grid__info").forEach($el =>  new bootstrap.Popover($el, {
-        sanitize: false,
-        content: popover,
-        customClass: "grid__popover",
-        trigger:"focus",
-    }));
-});
-
-function popover()
-{
-    const battlesInt = parseInt(this.dataset.battles);
-    let winPercentageInt = parseInt(this.dataset.winPercentage);
-    winPercentageInt = isNaN(winPercentageInt) ? 0 : winPercentageInt;
-    const lossPercentageInt = 100 - winPercentageInt;
-
-    let info = `
-        ${this.dataset.width} &times; ${this.dataset.height }<br />
-        ${this.dataset.filesize}<br />
-        <div class="d-flex gap-1 align-items-center">
-            {{ icon("bi-bar-chart") }}          
-    `;
-    if (battlesInt > 0) {
-        info += `
-            <div class="progress flex-grow-1">
-                <div class="progress flex-grow-1">
-                    <div class="progress-bar bg-success" role="progressbar" aria-label="wins" style="width: ${winPercentageInt}%" aria-valuenow="${winPercentageInt}" aria-valuemin="0" aria-valuemax="100"></div>
-                    <div class="progress-bar bg-danger" role="progressbar" aria-label="losses" style="width: ${lossPercentageInt}%" aria-valuenow="${lossPercentageInt}" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-            <div class="text-nowrap">
-                ${winPercentageInt}% / ${battlesInt}
-            </div>
-        `;
-    } else {
-        info += "-";
-    }
-    info += "</div>";
-
-    return info;
-}
-</script>
-
 
 <script src = "{{ url('/public/js/album.js') }}" type="module"></script>
 

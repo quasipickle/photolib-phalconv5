@@ -3,6 +3,7 @@ import { docOnLoad } from "./on.js";
 import "./lightbox.js";
 import "./gridSize.js";
 import "./gridRatio.js";
+import "./photo-info.js";
 import "./search.js";
 
 docOnLoad(() => {
