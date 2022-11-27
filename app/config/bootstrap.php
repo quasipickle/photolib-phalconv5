@@ -79,6 +79,9 @@ $Container->set("router", function () {
 /**
  * View
  */
+$Container->setShared("viewHelper", function () use ($Container, $Config) {
+    return new \Helpers\ViewHelper($Container->get("url"), $Config);
+});
 $Container->setShared("voltService", function (Phalcon\Mvc\View $View) use ($Container, $Config) {
     $Volt = new Phalcon\Mvc\View\Engine\Volt($View, $Container);
     $Volt->setOptions([
@@ -107,6 +110,16 @@ $Container->setShared("voltService", function (Phalcon\Mvc\View $View) use ($Con
         return '$this->viewHelper->icon(' . $icon . ')';
     });
 
+    $Compiler->addFunction("album", function($resolvedArgs, $exprArgs) use ($Compiler) {
+        $albumId = $Compiler->expression($exprArgs[0]['expr']);
+        return '$this->viewHelper->albumUrl(' . $albumId . ')';
+    });
+
+    $Compiler->addFunction("photo", function($resolvedArgs, $exprArgs) use ($Compiler) {
+        $path = $Compiler->expression($exprArgs[0]['expr']);
+        return '$this->viewHelper->photoUrl(' . $path . ')';
+    });
+
     return $Volt;
 });
 $Container->setShared("view", function () use ($Config) {
@@ -118,9 +131,6 @@ $Container->setShared("view", function () use ($Config) {
         ]
     );
     return $View;
-});
-$Container->setShared("viewHelper", function () use ($Container, $Config) {
-    return new \Helpers\ViewHelper($Container->get("url"), $Config);
 });
 
 /**

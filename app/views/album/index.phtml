@@ -5,7 +5,7 @@
                     {# required is needed to be able to target with css.  See _sidebar.scss #}
                     <input type="text" class="form-control" required id="sidebar-search"/>
                     <button class="btn btn-outline-input lh-1" id="sidebar-search-clear">
-                        {{ viewHelper.icon("bi-x-lg") }}
+                        {{ icon("bi-x-lg") }}
                     </button>
                 </div>
             </div>
@@ -13,7 +13,7 @@
             {% for album in menuAlbums %}
                 <a class = "list-group-item list-group-item-action {% if Album.id == album.id %}active{% endif %} sidebar__list-item" 
                    data-album-name = "{{ album.name|escape_attr }}"
-                   href="{{ viewHelper.albumUrl(album.id) }}">
+                   href="{{ album(album.id) }}">
                     {{ album.name }}
                 </a>
             {% endfor %}
@@ -29,7 +29,7 @@
                     {% set active = loop.last ? "active" : "" %}
                     <li class="breadcrumb-item {{ active }}">
                         {% if !loop.last %}
-                            <a href="{{ viewHelper.albumUrl(crumb.id) }}">
+                            <a href="{{ album(crumb.id) }}">
                         {% endif %}
                         {% if loop.first %}{{ icon("bi-house-fill me-1") }}{% endif %}{{ crumb.name }}
                         {% if !loop.last %}
@@ -50,9 +50,9 @@
                 #}
                 {% for album in Album.albums %}
                     <div class="grid__item">
-                        <a class="grid__album" href="{{ viewHelper.albumUrl(album.id) }}">
+                        <a class="grid__album" href="{{ album(album.id) }}">
                             {% if album.Featured != null %}
-                                <img src = "{{ viewHelper.photoUrl(album.Featured.thumb_path) }}" loading="lazy" />
+                                <img src = "{{ photo(album.Featured.thumb_path) }}" loading="lazy" />
                             {% endif %}
                             <div class="grid__caption">
                                 {{ album.name }}
@@ -65,7 +65,7 @@
                     Photos
                 #}
                 {% for photo in Album.photos %}
-                    <div class="grid__item">
+                    <div class="grid__item {% if Album.IsFeatured(photo) %} grid__item--featured{% endif %}">
                         <div class="grid__photo">
                             <button class="btn btn-grid-popup grid__info" 
                                 data-bs-toggle="popover"
@@ -77,15 +77,15 @@
                                 data-win-percentage="{{ photo.winPercentage() }}"
                                 data-content="Content failed to load."
                             >
-                                {{ viewHelper.icon("bi-info-circle") }}
+                                {{ icon("bi-info-circle") }}
                             </button>
                             <button class="btn btn-grid-popup grid__tools">
-                                {{ viewHelper.icon("bi-three-dots-vertical") }}
+                                {{ icon("bi-three-dots-vertical") }}
                             </button>
                             <img class="lightboxable"
                                  loading="lazy"
-                                 src = "{{ viewHelper.photoUrl(photo.thumb_path) }}" 
-                                 data-src = "{{ viewHelper.photoUrl(photo.display_path) }}" 
+                                 src = "{{ photo(photo.thumb_path) }}" 
+                                 data-src = "{{ photo(photo.display_path) }}" 
                                  data-width = "{{ photo.width }}"
                                  data-height = "{{ photo.height }}"
                                  data-filesize = "{{ photo.filesize }}"
@@ -115,7 +115,7 @@
     <div  class = "lightbox__details">
         <span class = "lightbox__detail" x-text="`${photo?.dataset.width} x ${photo?.dataset.height}`"></span>
         <span class = "lightbox__detail" x-text="`${Math.floor((photo?.dataset.filesize ?? 0) /1000)}KB`"></span>
-        <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`{{ config.dirs.web.photo }}` + photo?.dataset.originalSrc" target = "_blank">Original {{ viewHelper.icon("bi-box-arrow-up-right") }}</a>
+        <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`{{ config.dirs.web.photo }}` + photo?.dataset.originalSrc" target = "_blank">Original {{ icon("bi-box-arrow-up-right") }}</a>
     </div>
 </div>
 
