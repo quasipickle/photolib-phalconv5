@@ -47,4 +47,9 @@ class Album extends \Phalcon\Mvc\Model
     {
         return count($this->albums) > 0;
     }
+
+    public function isFeatured(Photo $photo): bool
+    {
+        return $photo->id == ($this->featured?->id ?? -1);
+    }
 }

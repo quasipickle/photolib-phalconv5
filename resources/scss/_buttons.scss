@@ -9,7 +9,7 @@
     --bs-btn-color: var(--bs-gray-600);
 }
 
-.btn-grid-popup{
+.btn-grid{
     --bs-btn-bg: hsla(0, 0%, 50%, 50%);
     --bs-btn-color:white;
 
@@ -20,5 +20,7 @@
     --bs-btn-active-color: var(--bs-btn-color);
     --bs-btn-active-border-color: transparent;
     border-radius:1rem;
-    padding:3px 8px;
+    padding:0;
+    line-height:24px;
+    width:26px;
 }

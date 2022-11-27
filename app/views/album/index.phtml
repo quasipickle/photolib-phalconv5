@@ -1,6 +1,6 @@
 <div class="album">
     <div class="album__sidebar">
-            <div class="p-2">
+            <div class="p-2 pt-0">
                 <div class="input-group">
                     {# required is needed to be able to target with css.  See _sidebar.scss #}
                     <input type="text" class="form-control" required id="sidebar-search"/>
@@ -49,7 +49,7 @@
                     Albums
                 #}
                 {% for album in Album.albums %}
-                    <div class="grid__item">
+                    <div class="grid__item {% if Album.isFeatured(album.Featured) %}grid__item--featured {% endif %}">
                         <a class="grid__album" href="{{ album(album.id) }}">
                             {% if album.Featured != null %}
                                 <img src = "{{ photo(album.Featured.thumb_path) }}" loading="lazy" />
@@ -65,9 +65,9 @@
                     Photos
                 #}
                 {% for photo in Album.photos %}
-                    <div class="grid__item {% if Album.IsFeatured(photo) %} grid__item--featured{% endif %}">
+                    <div class="grid__item {% if Album.IsFeatured(photo) %}grid__item--featured{% endif %}">
                         <div class="grid__photo">
-                            <button class="btn btn-grid-popup grid__info" 
+                            <button class="btn btn-grid grid__photo-btn grid__info" 
                                 data-bs-toggle="popover"
                                 data-bs-html="true"
                                 data-width="{{ photo.width }}"
@@ -79,7 +79,7 @@
                             >
                                 {{ icon("bi-info-circle") }}
                             </button>
-                            <button class="btn btn-grid-popup grid__tools">
+                            <button class="btn btn-grid grid__photo-btn grid__tools">
                                 {{ icon("bi-three-dots-vertical") }}
                             </button>
                             <img class="lightboxable"
