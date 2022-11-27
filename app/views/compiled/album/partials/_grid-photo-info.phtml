@@ -1,0 +1,14 @@
+
+<?= $photo->width ?> &times; <?= $photo->height ?><br />
+<?= \Helpers\ViewHelper::filesize($photo->filesize) ?><br />
+<div class='d-flex gap-1 align-items-center'>
+<?= $this->escaper->attributes($this->viewHelper->icon('bi-bar-chart')) ?> 
+<div class='progress flex-grow-1'>
+    <?php if ($photo->battles != 0) { ?>
+        <div class='progress-bar bg-success' role='progressbar' aria-label='wins' style='width: <?= $photo->winPercentage() ?>%' aria-valuenow='<?= $photo->winPercentage() ?>' aria-valuemin='0' aria-valuemax='100'></div>
+        <div class='progress-bar bg-danger' role='progressbar' aria-label='losses' style='width: <?= 100 - $photo->winPercentage() ?>%' aria-valuenow='<?= 100 - $photo->winPercentage() ?>' aria-valuemin='0' aria-valuemax='100'></div>
+    <?php } ?>
+</div>
+<div class='text-nowrap'>
+    <?= $photo->winPercentage() ?>%/<?= $photo->battles ?>
+</div>

@@ -1,0 +1,19 @@
+.navbar{
+    padding:0.5rem;
+}
+.navbar-icon{
+    display:inline-block;
+    background-color:var(--bs-gray-800);
+    color:var(--bs-gray-200);
+    border-radius:0.25rem;
+    padding:0 0.4rem;
+    margin-inline-end:1rem;
+    font-weight:700;
+    letter-spacing:1px;
+    text-decoration:none;
+
+    &:hover{
+        color:var(--bs-gray-100);
+        background-color:var(--bs-gray-600);
+    }
+}

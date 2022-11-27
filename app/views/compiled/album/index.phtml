@@ -1,1 +1,165 @@
-This is Album Index
+<div class="album">
+    <div class="album__sidebar">
+            <div class="p-2">
+                <div class="input-group">
+                    
+                    <input type="text" class="form-control" required id="sidebar-search"/>
+                    <button class="btn btn-outline-input lh-1" id="sidebar-search-clear">
+                        <?= $this->viewHelper->icon('bi-x-lg') ?>
+                    </button>
+                </div>
+            </div>
+        <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
+            <?php foreach ($menuAlbums as $album) { ?>
+                <a class = "list-group-item list-group-item-action <?php if ($Album->id == $album->id) { ?>active<?php } ?> sidebar__list-item" 
+                   data-album-name = "<?= $this->escaper->attributes($album->name) ?>"
+                   href="<?= $this->viewHelper->albumUrl($album->id) ?>">
+                    <?= $album->name ?>
+                </a>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="album__main">
+        
+        <nav aria-label="breadcrumb" class="album__breadcrumb">
+            <ol class="breadcrumb">
+                <?php $v121301985799045617691iterator = $breadcrumbs; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $crumb) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                    <?php $active = ($v121301985799045617691loop->last ? 'active' : ''); ?>
+                    <li class="breadcrumb-item <?= $active ?>">
+                        <?php if (!$v121301985799045617691loop->last) { ?>
+                            <a href="<?= $this->viewHelper->albumUrl($crumb->id) ?>">
+                        <?php } ?>
+                        <?php if ($v121301985799045617691loop->first) { ?><?= $this->viewHelper->icon('bi-house-fill me-1') ?><?php } ?><?= $crumb->name ?>
+                        <?php if (!$v121301985799045617691loop->last) { ?>
+                            </a>
+                        <?php } ?>
+                    </li>
+                <?php $v121301985799045617691incr++; } ?>
+            </ol>
+        </nav>
+
+        
+        <div class="album__grid-container">
+            <div class="album__grid">
+                
+                <?php $v121301985799045617691iterator = $Album->albums; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $album) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                    <div class="grid__item">
+                        <a class="grid__album" href="<?= $this->viewHelper->albumUrl($album->id) ?>">
+                            <?php if ($album->Featured != null) { ?>
+                                <img src = "<?= $this->viewHelper->photoUrl($album->Featured->thumb_path) ?>" loading="lazy" />
+                            <?php } ?>
+                            <div class="grid__caption">
+                                <?= $album->name ?>
+                            </div>
+                        </a>
+                    </div>
+                <?php $v121301985799045617691incr++; } ?>
+
+                
+                <?php $v121301985799045617691iterator = $Album->photos; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photo) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                    <div class="grid__item">
+                        <div class="grid__photo">
+                            
+                            <a class="btn btn-grid-popup grid__info" 
+                                tabindex="0"
+                                data-bs-toggle="popover"
+                                data-bs-html="true"
+                                data-bs-title="<?= $photo->original_filename ?>" 
+                                data-width="<?= $photo->width ?>"
+                                data-height="<?= $photo->height ?>"
+                                data-filesize="<?= \Helpers\ViewHelper::filesize($photo->filesize) ?>"
+                                data-battles="<?= $photo->battles ?>"
+                                data-win-percentage="<?= $photo->winPercentage() ?>"
+                                data-content="Content failed to load."
+                            >
+                                <?= $this->viewHelper->icon('bi-info-circle') ?>
+                            </a>
+                            <button class="btn btn-grid-popup grid__tools">
+                                <?= $this->viewHelper->icon('bi-three-dots-vertical') ?>
+                            </button>
+                            <img class="lightboxable"
+                                 loading="lazy"
+                                 src = "<?= $this->viewHelper->photoUrl($photo->thumb_path) ?>" 
+                                 data-src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>" 
+                                 data-width = "<?= $photo->width ?>"
+                                 data-height = "<?= $photo->height ?>"
+                                 data-filesize = "<?= $photo->filesize ?>"
+                                 data-original-src = "<?= $photo->path ?>"
+                            />
+                        </div>
+                    </div>
+                <?php $v121301985799045617691incr++; } ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "lightbox" 
+    x-data="lightbox" 
+    x-on:lightboxable-clicked.window="box($event.detail)" 
+    :class="show ? 'lightbox--show' : ''" 
+    [x-cloak]>
+    <div class="lightbox__current" @click="show=false">
+        <img class="lightbox__img" :src="photo?.dataset.src ?? ''"/>
+    </div>
+    <div class = "lightbox__previous" @click="box(previous)" x-show="previous != null">
+        <img class="lightbox__img--previous" :src="previous?.dataset.src"/>
+    </div>
+    <div class = "lightbox__next" @click="box(next)" x-show="next != null">
+        <img class="lightbox__img--next" :src="next?.dataset.src"/>
+    </div>
+    <div  class = "lightbox__details">
+        <span class = "lightbox__detail" x-text="`${photo?.dataset.width} x ${photo?.dataset.height}`"></span>
+        <span class = "lightbox__detail" x-text="`${Math.floor((photo?.dataset.filesize ?? 0) /1000)}KB`"></span>
+        <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`<?= $this->config->dirs->web->photo ?>` + photo?.dataset.originalSrc" target = "_blank">Original <?= $this->viewHelper->icon('bi-box-arrow-up-right') ?></a>
+    </div>
+</div>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".grid__info").forEach($el =>  new bootstrap.Popover($el, {
+        sanitize: false,
+        content: popover,
+        customClass: "grid__popover",
+        trigger:"focus",
+    }));
+});
+
+function popover()
+{
+    const battlesInt = parseInt(this.dataset.battles);
+    let winPercentageInt = parseInt(this.dataset.winPercentage);
+    winPercentageInt = isNaN(winPercentageInt) ? 0 : winPercentageInt;
+    const lossPercentageInt = 100 - winPercentageInt;
+
+    let info = `
+        ${this.dataset.width} &times; ${this.dataset.height }<br />
+        ${this.dataset.filesize}<br />
+        <div class="d-flex gap-1 align-items-center">
+            <?= $this->viewHelper->icon('bi-bar-chart') ?>          
+    `;
+    if (battlesInt > 0) {
+        info += `
+            <div class="progress flex-grow-1">
+                <div class="progress flex-grow-1">
+                    <div class="progress-bar bg-success" role="progressbar" aria-label="wins" style="width: ${winPercentageInt}%" aria-valuenow="${winPercentageInt}" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-danger" role="progressbar" aria-label="losses" style="width: ${lossPercentageInt}%" aria-valuenow="${lossPercentageInt}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="text-nowrap">
+                ${winPercentageInt}% / ${battlesInt}
+            </div>
+        `;
+    } else {
+        info += "-";
+    }
+    info += "</div>";
+
+    return info;
+}
+</script>
+
+
+<script src = "<?= $this->url->get('/public/js/album.js') ?>" type="module"></script>
+
+<script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>

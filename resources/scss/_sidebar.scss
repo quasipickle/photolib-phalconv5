@@ -1,0 +1,19 @@
+.album__sidebar{
+    display:flex;
+    flex-direction:column;
+}
+
+#sidebar-search:invalid{
+    border-radius:var(--bs-border-radius);
+
+    & ~ button {
+        display:none;
+    }
+}
+#sidebar-search:valid ~ button{
+    display:inline-block;
+}
+
+.sidebar__list-group{
+    overflow-y:auto;
+}

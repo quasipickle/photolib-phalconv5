@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css");
+
+@import "variables";
+
 // Configuration
 @import "../../vendor/twbs/bootstrap/scss/functions";
 @import "../../vendor/twbs/bootstrap/scss/variables";
+
+@import "maps";
+
 @import "../../vendor/twbs/bootstrap/scss/maps";
 @import "../../vendor/twbs/bootstrap/scss/mixins";
 @import "../../vendor/twbs/bootstrap/scss/utilities";
@@ -43,3 +51,15 @@
 
 // Utilities
 @import "../../vendor/twbs/bootstrap/scss/utilities/api";
+
+@import "album";
+@import "buttons";
+@import "layout";
+@import "lightbox";
+@import "list-group";
+@import "navbar";
+@import "sidebar";
+
+[x-cloak]{
+    display:none;
+}

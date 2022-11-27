@@ -8,32 +8,43 @@ class Album extends \Phalcon\Mvc\Model
     {
         $this->hasManyToMany(
             "id",
-            "Models\AlbumPhoto",
+            AlbumPhoto::class,
             "album_id",
             "photo_id",
-            "Models\Photo",
+            Photo::class,
             "id",
             [
+                "params" => [
+                    "order" => "position ASC"
+                ],
                 "alias" => "photos"
             ]
         );
 
         $this->hasMany(
             "id",
-            "Models\Album",
+            Album::class,
             "album_id",
             [
+                "params" => [
+                    "order" => "name ASC"
+                ],
                 "alias" => "albums"
             ]
         );
 
         $this->hasOne(
             "photo_id",
-            "Models\Photo",
+            Photo::class,
             "id",
             [
                 "alias" => "Featured"
             ]
         );
+    }
+
+    public function hasSubAlbums(): bool
+    {
+        return count($this->albums) > 0;
     }
 }

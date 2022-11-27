@@ -1,0 +1,24 @@
+.btn-outline-input{
+    --bs-btn-border-color: #{$input-border-color};
+    &:hover{
+        --bs-btn-hover-bg: var(--bs-btn-border-color);
+    }
+}
+
+.btn-outline-secondary{
+    --bs-btn-color: var(--bs-gray-600);
+}
+
+.btn-grid-popup{
+    --bs-btn-bg: hsla(0, 0%, 50%, 50%);
+    --bs-btn-color:white;
+
+    --bs-btn-hover-bg: hsla(0, 0%, 70%, 50%);
+    --bs-btn-hover-color: var(--bs-btn-color);
+
+    --bs-btn-active-bg: hsla(0, 0%, 30%, 50%);
+    --bs-btn-active-color: var(--bs-btn-color);
+    --bs-btn-active-border-color: transparent;
+    border-radius:1rem;
+    padding:3px 8px;
+}

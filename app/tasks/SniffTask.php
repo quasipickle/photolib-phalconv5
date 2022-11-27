@@ -35,7 +35,7 @@ class SniffTask extends \Phalcon\Cli\Task
         shell_exec($executable_path . " --config-set default_standard " . $this->config->sniff->standard);
         shell_exec($executable_path . " --config-set colors 1");
         shell_exec($executable_path . " --config-set php_version " . PHP_VERSION_ID);
-        if ($this->config->sniff->show_progress) {
+        if ($this->config->sniff->showProgress) {
             shell_exec($executable_path . " --config-set show_progress 1");
         }
     }

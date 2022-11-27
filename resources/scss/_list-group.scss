@@ -1,0 +1,10 @@
+.list-group-item-light{
+    background-color:var(--bs-gray-100);
+}
+.list-group--sm{
+    font-size: $font-size-sm;
+
+    .list-group-item{
+        padding:0.5rem;
+    }
+}

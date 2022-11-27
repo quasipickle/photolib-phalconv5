@@ -16,23 +16,24 @@ $config = [
             "public"         => $file_root . "/public",
             "tasks"          => $app_file_root . "/tasks",
             "views"          => $views_file_root,
-            "views_compiled" => $views_file_root . "/compiled"
+            "viewsCompiled" => $views_file_root . "/compiled"
         ],
         "web" => [
-            "root" => $web_root
+            "root" => $web_root,
+            "photo" => $web_root. "/../photos"
         ]
     ],
-    "root_album_id" => 1,
+    "rootAlbumId" => 1,
     "sniff" => [
         "dirs" => [
             __DIR__,
             $app_file_root
         ],
-        "show_progress" => true,
+        "showProgress" => true,
         "standard"      => "PSR12"
     ],
     "view" => [
-        "compile_always" => true
+        "compileAlways" => true
     ]
 ];
 
