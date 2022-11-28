@@ -1,0 +1,32 @@
+.grid__photo-btn{
+    position:absolute;
+    top:0.5rem;
+    z-index:2;
+}
+.grid__info{
+    left:0.5rem;
+}
+.grid__tools{
+    right:0.5rem;
+}
+.grid__item:not(:hover){
+    .grid__info,
+    .grid__tools{
+        display:none;
+    }
+}
+
+.grid__popover{
+    min-width:250px;
+    font-size:1rem;
+}
+.grid__battle-bar{
+    position:relative;
+    margin:1rem -1rem -1rem -1rem;
+    border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+}
+.grid__battle-stats{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+}

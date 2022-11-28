@@ -1,0 +1,26 @@
+.album{
+    display:grid;
+    grid-template-columns: 200px 1fr;
+    overflow:hidden;
+}
+.album__sidebar{
+    overflow:hidden;
+}
+.album__main{
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+.album__grid-container{
+    flex-grow:1;
+    overflow-y:auto;
+    padding-inline-end:1.25rem;
+    padding-block-start:0.5rem;
+}
+.album__breadcrumb .breadcrumb{
+    --bs-breadcrumb-margin-bottom:0;
+}
+.album__breadcrumb,
+.album__grid-container{
+    padding-inline-start:1rem;
+}
