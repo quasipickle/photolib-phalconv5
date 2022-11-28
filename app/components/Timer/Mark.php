@@ -24,7 +24,7 @@ class Mark
     /**
      * Get a string representation of this mark in the format expected by the Server Timing API
      *
-     * @param $from The microtimestamp to measure the elapsed time from
+     * @param $from float microtimestamp to measure the elapsed time from
      * @return string
      */
     public function getRender(float $from, ?string $prefix = null): string

@@ -83,7 +83,7 @@ class AlbumController extends BaseController
         $Album->albums = $albumsArray;
     }
 
-    private function buildBreadcrumbs(Album $Album): array
+    private function buildBreadcrumbs(Album|null $Album): array
     {
         $breadcrumbs = [];
         while($Album != null)

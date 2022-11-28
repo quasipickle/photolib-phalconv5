@@ -4,6 +4,7 @@ import { $$ } from "./selector.js";
 docOnLoad(() => {
     $$(".grid__info").forEach($el =>  new bootstrap.Popover($el, {
         sanitize: false,
+        placement: "bottom",
         content: window.popover,
         customClass: "grid__popover",
         trigger:"hover",
