@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Cli\Exception as PhalconException;
+use Phalcon\Cli\Console\Exception as PhalconException;
 use Phalcon\Di\FactoryDefault\Cli as CliDI;
 use Phalcon\Autoload\Loader;
 
