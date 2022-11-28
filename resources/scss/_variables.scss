@@ -1,3 +1,34 @@
 @use "sass:math";
 $font-family-sans-serif: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 $font-size-base: math.div(15rem,16);
+
+/**
+ * Change colours to Tailwind
+ */
+
+
+@import "_tailwind-colours.scss";
+
+$white:    #fff;
+$gray-100: $slate-100;
+$gray-200: $slate-200;
+$gray-300: $slate-300;
+$gray-400: $slate-400;
+$gray-500: $slate-500;
+$gray-600: $slate-600;
+$gray-700: $slate-700;
+$gray-800: $slate-800;
+$gray-900: $slate-900;
+$black:    #000;
+
+$blue: $blue-500;
+$indigo: $indigo-500;
+$purple: $purple-500;
+$pink: $pink-500;
+$red: $red-500;
+$orange: $orange-500;
+$green: $green-500;
+$teal: $teal-500;
+$cyan: $cyan-500;
+$gray: $gray-600;
+$gray-dark: $gray-800;
