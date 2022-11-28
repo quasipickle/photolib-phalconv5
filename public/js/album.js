@@ -4,6 +4,7 @@ import "./lightbox.js";
 import "./gridSize.js";
 import "./gridRatio.js";
 import "./photo-info.js";
+import "./tools.js";
 import "./search.js";
 
 docOnLoad(() => {

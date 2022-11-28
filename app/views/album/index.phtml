@@ -48,14 +48,28 @@
                 {#
                     Albums
                 #}
-                {% for album in Album.albums %}
-                    <div class="grid__item {% if Album.isFeatured(album.Featured) %}grid__item--featured {% endif %}">
-                        <a class="grid__album" href="{{ album(album.id) }}">
-                            {% if album.Featured != null %}
-                                <img src = "{{ photo(album.Featured.thumb_path) }}" loading="lazy" />
+                {% for subAlbum in Album.albums %}
+                    <div class="grid__item {% if Album.isFeatured(subAlbum.Featured) %}grid__item--featured {% endif %}" id="album-{{ subAlbum.id}}">
+                        {% if subAlbum.Featured != null %}
+                            <div class="grid__photo-btn grid__tools" x-data="albumTools('album-' + {{ subAlbum.id }}, {{ Album.id }})">
+                                <div class="dropdown dropdown--no-caret">
+                                    <button class="btn btn-grid dropdown-toggle" id="tools-{{ subAlbum.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ icon("bi-three-dots-vertical") }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledBy="tools-{{ subAlbum.id }}">
+                                        <li>
+                                            <a class="dropdown-item" href="#" @click="feature({{ subAlbum.Featured.id}})">Feature</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <a class="grid__album" href="{{ album(subAlbum.id) }}">
+                            {% if subAlbum.Featured != null %}
+                                <img src = "{{ photo(subAlbum.Featured.thumb_path) }}" loading="lazy" />
                             {% endif %}
                             <div class="grid__caption">
-                                {{ album.name }}
+                                {{ subAlbum.name }}
                             </div>
                         </a>
                     </div>
@@ -65,7 +79,7 @@
                     Photos
                 #}
                 {% for photo in Album.photos %}
-                    <div class="grid__item {% if Album.IsFeatured(photo) %}grid__item--featured{% endif %}">
+                    <div class="grid__item {% if Album.IsFeatured(photo) %}grid__item--featured{% endif %}" id="photo-{{ photo.id }}">
                         <div class="grid__photo">
                             <button class="btn btn-grid grid__photo-btn grid__info" 
                                 data-bs-toggle="popover"
@@ -79,16 +93,29 @@
                             >
                                 {{ icon("bi-info-circle") }}
                             </button>
-                            <button class="btn btn-grid grid__photo-btn grid__tools">
-                                {{ icon("bi-three-dots-vertical") }}
-                            </button>
+                            <div class="grid__photo-btn grid__tools" x-data="photoTools('photo-' + {{ photo.id }}, {{ Album.id }}, {{ photo.id }})">
+                                <div class="dropdown dropdown--no-caret">
+                                    <button class="btn btn-grid dropdown-toggle" id="tools-{{ photo.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ icon("bi-three-dots-vertical") }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledBy="tools={{ photo.id }}">
+                                        <li>
+                                            <a class="dropdown-item" href="#" @click="feature()">Feature</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ photo(photo.path) }}" target="_blank">View original {{ icon("bi-box-arrow-up-right") }}</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Remove from album</a></li>
+                                        <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                             <img class="lightboxable"
                                  loading="lazy"
                                  src = "{{ photo(photo.thumb_path) }}" 
                                  data-src = "{{ photo(photo.display_path) }}" 
                                  data-width = "{{ photo.width }}"
                                  data-height = "{{ photo.height }}"
-                                 data-filesize = "{{ photo.filesize }}"
+                                 data-filesize = "{{ filesize(photo.filesize) }}"
                                  data-original-src = "{{ photo.path }}"
                             />
                         </div>
@@ -114,10 +141,14 @@
     </div>
     <div  class = "lightbox__details">
         <span class = "lightbox__detail" x-text="`${photo?.dataset.width} x ${photo?.dataset.height}`"></span>
-        <span class = "lightbox__detail" x-text="`${Math.floor((photo?.dataset.filesize ?? 0) /1000)}KB`"></span>
+        <span class = "lightbox__detail" x-text="photo?.dataset.filesize"></span>
         <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`{{ config.dirs.web.photo }}` + photo?.dataset.originalSrc" target = "_blank">Original {{ icon("bi-box-arrow-up-right") }}</a>
     </div>
 </div>
+<script type="text/javascript">
+    window.webRootPath = "{{ config.dirs.web.root }}";
+</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script src = "{{ url('/public/js/album.js') }}" type="module"></script>
 

@@ -42,14 +42,28 @@
         <div class="album__grid-container">
             <div class="album__grid">
                 
-                <?php $v121301985799045617691iterator = $Album->albums; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $album) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                    <div class="grid__item <?php if ($Album->isFeatured($album->Featured)) { ?>grid__item--featured <?php } ?>">
-                        <a class="grid__album" href="<?= $this->viewHelper->albumUrl($album->id) ?>">
-                            <?php if ($album->Featured != null) { ?>
-                                <img src = "<?= $this->viewHelper->photoUrl($album->Featured->thumb_path) ?>" loading="lazy" />
+                <?php $v121301985799045617691iterator = $Album->albums; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $subAlbum) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                    <div class="grid__item <?php if ($Album->isFeatured($subAlbum->Featured)) { ?>grid__item--featured <?php } ?>" id="album-<?= $subAlbum->id ?>">
+                        <?php if ($subAlbum->Featured != null) { ?>
+                            <div class="grid__photo-btn grid__tools" x-data="albumTools('album-' + <?= $subAlbum->id ?>, <?= $Album->id ?>)">
+                                <div class="dropdown dropdown--no-caret">
+                                    <button class="btn btn-grid dropdown-toggle" id="tools-<?= $subAlbum->id ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?= $this->viewHelper->icon('bi-three-dots-vertical') ?>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledBy="tools-<?= $subAlbum->id ?>">
+                                        <li>
+                                            <a class="dropdown-item" href="#" @click="feature(<?= $subAlbum->Featured->id ?>)">Feature</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <a class="grid__album" href="<?= $this->viewHelper->albumUrl($subAlbum->id) ?>">
+                            <?php if ($subAlbum->Featured != null) { ?>
+                                <img src = "<?= $this->viewHelper->photoUrl($subAlbum->Featured->thumb_path) ?>" loading="lazy" />
                             <?php } ?>
                             <div class="grid__caption">
-                                <?= $album->name ?>
+                                <?= $subAlbum->name ?>
                             </div>
                         </a>
                     </div>
@@ -57,7 +71,7 @@
 
                 
                 <?php $v121301985799045617691iterator = $Album->photos; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photo) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                    <div class="grid__item <?php if ($Album->IsFeatured($photo)) { ?>grid__item--featured<?php } ?>">
+                    <div class="grid__item <?php if ($Album->IsFeatured($photo)) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>">
                         <div class="grid__photo">
                             <button class="btn btn-grid grid__photo-btn grid__info" 
                                 data-bs-toggle="popover"
@@ -71,16 +85,29 @@
                             >
                                 <?= $this->viewHelper->icon('bi-info-circle') ?>
                             </button>
-                            <button class="btn btn-grid grid__photo-btn grid__tools">
-                                <?= $this->viewHelper->icon('bi-three-dots-vertical') ?>
-                            </button>
+                            <div class="grid__photo-btn grid__tools" x-data="photoTools('photo-' + <?= $photo->id ?>, <?= $Album->id ?>, <?= $photo->id ?>)">
+                                <div class="dropdown dropdown--no-caret">
+                                    <button class="btn btn-grid dropdown-toggle" id="tools-<?= $photo->id ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?= $this->viewHelper->icon('bi-three-dots-vertical') ?>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledBy="tools=<?= $photo->id ?>">
+                                        <li>
+                                            <a class="dropdown-item" href="#" @click="feature()">Feature</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="<?= $this->viewHelper->photoUrl($photo->path) ?>" target="_blank">View original <?= $this->viewHelper->icon('bi-box-arrow-up-right') ?></a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Remove from album</a></li>
+                                        <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                             <img class="lightboxable"
                                  loading="lazy"
                                  src = "<?= $this->viewHelper->photoUrl($photo->thumb_path) ?>" 
                                  data-src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>" 
                                  data-width = "<?= $photo->width ?>"
                                  data-height = "<?= $photo->height ?>"
-                                 data-filesize = "<?= $photo->filesize ?>"
+                                 data-filesize = "<?= \Helpers\ViewHelper::filesize($photo->filesize) ?>"
                                  data-original-src = "<?= $photo->path ?>"
                             />
                         </div>
@@ -106,10 +133,14 @@
     </div>
     <div  class = "lightbox__details">
         <span class = "lightbox__detail" x-text="`${photo?.dataset.width} x ${photo?.dataset.height}`"></span>
-        <span class = "lightbox__detail" x-text="`${Math.floor((photo?.dataset.filesize ?? 0) /1000)}KB`"></span>
+        <span class = "lightbox__detail" x-text="photo?.dataset.filesize"></span>
         <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`<?= $this->config->dirs->web->photo ?>` + photo?.dataset.originalSrc" target = "_blank">Original <?= $this->viewHelper->icon('bi-box-arrow-up-right') ?></a>
     </div>
 </div>
+<script type="text/javascript">
+    window.webRootPath = "<?= $this->config->dirs->web->root ?>";
+</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script src = "<?= $this->url->get('/public/js/album.js') ?>" type="module"></script>
 
