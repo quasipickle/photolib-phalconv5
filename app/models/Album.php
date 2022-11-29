@@ -4,6 +4,15 @@ namespace Models;
 
 class Album extends \Phalcon\Mvc\Model
 {
+    /**
+     * The number of subalbums for this album.
+     * 
+     * This is NOT automatically populated - it is manually populated
+     * by AlbumController::getSubAlbums()
+     */
+    public int $subAlbumCount = 0;
+    public $albums = [];
+
     public function initialize()
     {
         $this->hasManyToMany(
@@ -48,8 +57,8 @@ class Album extends \Phalcon\Mvc\Model
         return count($this->albums) > 0;
     }
 
-    public function isFeatured(Photo|null $photo): bool
+    public function hasFeatured(): bool
     {
-        return $photo != null && $photo->id == ($this->featured?->id ?? -1);
+        return $this->Featured != null && $this->Featured->id != null;
     }
 }

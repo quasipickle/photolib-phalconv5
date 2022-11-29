@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Helpers\IterableHelper;
 use Models\Album;
+use Models\AlbumPhoto;
 use Models\Photo;
 
 class AlbumController extends BaseController
@@ -15,72 +16,65 @@ class AlbumController extends BaseController
         if($Album == null)
             exit("Album not found");
 
-        $this->populateFeatured($Album);
-        $menuAlbums = $Album->hasSubAlbums() ? $Album->albums : Album::find([
-            "album_id = :id:",
-            "bind" => ["id" => $Album->album_id],
-            "order" => "name ASC"
-        ]);
+        $subAlbums = [];
+        $siblingAlbums = [];
+        $this->getAlbums($Album, $subAlbums, $siblingAlbums);
+        $menuAlbums = count($subAlbums) > 0 ? $subAlbums : $siblingAlbums;
 
         $this->view->setVars([
             "Album" => $Album,
             "breadcrumbs" => $this->buildBreadcrumbs($Album),
+            "Featured" => $Album->Featured,
             "menuAlbums" => $menuAlbums,
-            "menuCanGoBack" => $menuAlbums[0]->album_id != $this->config->rootAlbumId,
+            "subAlbums" => $subAlbums,
             "title" => $Album->name,
             "viewingRoot" => $Album->id == $this->config->rootAlbumId
         ]);
     }
 
     /**
-     * Retrieves all the featured photos for an album's sub-albums 
-     * in a single query and injects them into the sub-album
+     * Retrieves featured photos & sub album count for all sub albums
      * 
-     * This is done to prevent accessing [sub-album].Featured from 
-     * triggering a new query every time
+     * This is done to prevent a separate query for every featured photo
      */
-    private function populateFeatured(Album|null $Album): void
+    private function getAlbums(Album|null $Album, array &$subAlbums = [], array &$siblingAlbums = []): void
     {
-        if(!$Album->hasSubAlbums())
-            return;
+        $subAlbums = $this->getSubAlbums($Album->id);
+        if(count($subAlbums) == 0)
+            $siblingAlbums = $this->getSubAlbums($Album->album_id);
+    }
 
-        $params = [
-            "container" => \Phalcon\Di\Di::getDefault(),
-            "models" => [
-                "a" => Album::class,
-                "p" => Photo::class
-            ],
-            "columns" => ["[p].*"],
-            "conditions" => [
-                [
-                    "a.photo_id = p.id AND a.album_id = :id:",
-                    [
-                        "id" => $Album->id
-                    ],
-                    [
-                        "id" => \PDO::PARAM_INT
-                    ]
-                ]
-            ]
-        ];
+    private function getSubAlbums(int $id): array
+    {
+        $Builder = new \Phalcon\Mvc\Model\Query\Builder();
+        $result = $Builder
+            ->from([
+                "album" => Album::class
+            ])
+            ->columns([
+                "album.*",
+                "photo.*",
+                "subAlbumCount" => "COUNT(sub.id)"
+            ])
+            ->where("album.album_id = :id:")
+            ->leftJoin(Photo::class, "album.photo_id = photo.id", "photo")
+            ->leftJoin(Album::class, "album.id = sub.album_id", "sub")
+            ->orderBy("album.name")
+            ->groupBy("album.id")
+            ->setBindParams(["id" => $id])
+            ->getQuery()
+            ->execute();
 
-        $builder = new \Phalcon\Mvc\Model\Query\Builder($params);
-        $photosResult = $builder->getQuery()->execute();
-        $albumsArray = IterableHelper::toArray($Album->albums);
-
-        foreach($photosResult as $photo)
+        $resultArray = [];
+        foreach($result as $row)
         {
-            $filtered = array_filter($albumsArray, function($album) use ($photo){
-                if($album->photo_id == $photo->id)
-                    return $album;
-            });
-            foreach($filtered as $albumKey => $album)
-            {
-                $albumsArray[$albumKey]->Featured = $photo;
-            }
-        }
+            $Album = $row->album;
 
-        $Album->albums = $albumsArray;
+            $Album->Featured = $row->photo;
+            $Album->subAlbumCount = $row->subAlbumCount ?? 0;
+            $resultArray[] = $Album;
+        }
+        return $resultArray;
     }
 
     private function buildBreadcrumbs(Album|null $Album): array

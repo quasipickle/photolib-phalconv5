@@ -22,10 +22,10 @@
                     <div class="btn-toolbar gap-2" role="toolbar" aria-label="Album-wide tools">
                         <div class="btn-group" x-data="gridSize">
                             <div class="btn btn-outline-secondary" :class="size == 'sm' && 'active'" @click="setSize('sm')">
-                                {{ icon("bi-grid-3x3-gap") }}
+                                {{ icon("bi-grid-3x3-gap-fill") }}
                             </div>
                             <div class="btn btn-outline-secondary" :class="size == 'lg' && 'active'" @click="setSize('lg')">
-                                {{ icon("bi-grid") }}
+                                {{ icon("bi-grid-fill") }}
                             </div>
                         </div>
                         <div class="btn-group" x-data="gridRatio">

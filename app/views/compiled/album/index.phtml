@@ -11,10 +11,13 @@
             </div>
         <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
             <?php foreach ($menuAlbums as $album) { ?>
-                <a class = "list-group-item list-group-item-action <?php if ($Album->id == $album->id) { ?>active<?php } ?> sidebar__list-item" 
+                <a class = "list-group-item list-group-item-action <?php if ($Album->id == $album->id) { ?>active<?php } ?> sidebar__list-item d-flex justify-content-between align-items-center" 
                    data-album-name = "<?= $this->escaper->attributes($album->name) ?>"
                    href="<?= $this->viewHelper->albumUrl($album->id) ?>">
                     <?= $album->name ?>
+                    <?php if ($album->subAlbumCount != 0) { ?>
+                        <span class="badge rounded-pill border-circle bg-secondary"><?= $album->subAlbumCount ?></span>
+                    <?php } ?>
                 </a>
             <?php } ?>
         </div>
@@ -42,9 +45,9 @@
         <div class="album__grid-container">
             <div class="album__grid">
                 
-                <?php $v121301985799045617691iterator = $Album->albums; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $subAlbum) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                    <div class="grid__item <?php if ($Album->isFeatured($subAlbum->Featured)) { ?>grid__item--featured <?php } ?>" id="album-<?= $subAlbum->id ?>">
-                        <?php if ($subAlbum->Featured != null) { ?>
+                <?php $v121301985799045617691iterator = $subAlbums; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $subAlbum) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                    <div class="grid__item <?php if ($Featured != null && $subAlbum->photo_id == $Featured->id) { ?>grid__item--featured <?php } ?>" id="album-<?= $subAlbum->id ?>">
+                        <?php if ($subAlbum->hasFeatured()) { ?>
                             <div class="grid__photo-btn grid__tools" x-data="albumTools('album-' + <?= $subAlbum->id ?>, <?= $Album->id ?>)">
                                 <div class="dropdown dropdown--no-caret">
                                     <button class="btn btn-grid dropdown-toggle" id="tools-<?= $subAlbum->id ?>" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,7 +62,7 @@
                             </div>
                         <?php } ?>
                         <a class="grid__album" href="<?= $this->viewHelper->albumUrl($subAlbum->id) ?>">
-                            <?php if ($subAlbum->Featured != null) { ?>
+                            <?php if ($subAlbum->hasFeatured()) { ?>
                                 <img src = "<?= $this->viewHelper->photoUrl($subAlbum->Featured->thumb_path) ?>" loading="lazy" />
                             <?php } ?>
                             <div class="grid__caption">
@@ -71,7 +74,7 @@
 
                 
                 <?php $v121301985799045617691iterator = $Album->photos; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photo) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                    <div class="grid__item <?php if ($Album->IsFeatured($photo)) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>">
+                    <div class="grid__item <?php if ($Featured != null && $photo->id == $Featured->id) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>">
                         <div class="grid__photo">
                             <button class="btn btn-grid grid__photo-btn grid__info" 
                                 data-bs-toggle="popover"

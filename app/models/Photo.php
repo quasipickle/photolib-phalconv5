@@ -14,6 +14,12 @@ class Photo extends \Phalcon\Mvc\Model
             Album::class,
             "id"
         );
+
+        $this->belongsTo(
+            "id",
+            Album::class,
+            "photo_id"
+        );
     }
 
     public function winPercentage() : ?int
