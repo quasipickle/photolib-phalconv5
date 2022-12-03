@@ -2,10 +2,8 @@
 
 namespace Controllers;
 
-use Helpers\IterableHelper;
+use Components\Retval;
 use Models\Album;
-use Models\AlbumPhoto;
-use Models\Photo;
 
 class AlbumController extends BaseController
 {
@@ -32,6 +30,76 @@ class AlbumController extends BaseController
         ]);
     }
 
+    public function createAction()
+    {
+        $Retval = new Retval();
+        $parentAlbumId = $this->request->getPost("parentId");
+        $newAlbumName = $this->request->getPost("name");
+        if($newAlbumName == "")
+            return $Retval->message("The new album must have a name.")->response();
+
+        $Parent = Album::findFirst($parentAlbumId);
+        if($Parent == null)
+            return $Retval->message("The specified album in which to create the new album, doesn't exist.")->response();
+
+        $Album = new Album();
+        $Album->album_id = $parentAlbumId;
+        $Album->name = $newAlbumName;
+        $Album->create();
+
+        return $Retval->success(true)->id($Album->id)->response();
+    }
+
+    public function renameAction()
+    {
+        $Retval = new Retval();
+        $newName = $this->request->getPost("name");
+        if($newName == "")
+            return $Retval->message("You must provide a new name.")->response();
+
+        $Album = Album::findFirst($this->request->getPost("id"));
+        if($Album == null)
+            return $Retval->message("The album you requested to rename, does not exist.")->response();
+        
+        $Album->name = $newName;
+        $Album->save();
+        return $Retval->success(true)->response();
+    }
+
+    public function moveAction()
+    {
+        $Retval = new Retval();
+        $Album = Album::findFirst($this->request->getPost("albumId"));
+        $Parent = Album::findFirst($this->request->getPost("parentId"));
+
+        if($Album == null)
+            return $Retval->message("The album to move was not found.")->response();
+        if($Parent == null)
+            return $Retval->message("The new parent album was not found.")->response();
+        if($Album->id == $Parent->id)
+            return $Retval->message("The album cannot be moved into itself.")->response();
+        
+        $Album->album_id = $Parent->id;
+        $Album->save();
+
+        return $Retval->success(true)->response();
+    }
+
+    public function deleteAction()
+    {
+        $Retval = new Retval();
+        $Album = Album::findFirst($this->request->getPost("albumId"));
+        if(count($Album->albums) > 0)
+            return $Retval->message("The album cannot be deleted because it contains sub-albums.")->response();
+        if(count($Album->photos) > 0)
+            return $Retval->message("The album cannot be deleted because it cantains photos.")->response();
+        if($Album->id == $this->config->rootAlbumId)
+            return $Retval->message("You cannot delete the root album.")->response();
+        
+        $Album->delete();
+        return $Retval->success(true)->response();
+    }
+
     /**
      * Retrieves featured photos & sub album count for all sub albums
      * 
@@ -42,39 +110,6 @@ class AlbumController extends BaseController
         $subAlbums = $this->getSubAlbums($Album->id);
         if(count($subAlbums) == 0)
             $siblingAlbums = $this->getSubAlbums($Album->album_id);
-    }
-
-    private function getSubAlbums(int $id): array
-    {
-        $Builder = new \Phalcon\Mvc\Model\Query\Builder();
-        $result = $Builder
-            ->from([
-                "album" => Album::class
-            ])
-            ->columns([
-                "album.*",
-                "photo.*",
-                "subAlbumCount" => "COUNT(sub.id)"
-            ])
-            ->where("album.album_id = :id:")
-            ->leftJoin(Photo::class, "album.photo_id = photo.id", "photo")
-            ->leftJoin(Album::class, "album.id = sub.album_id", "sub")
-            ->orderBy("album.name")
-            ->groupBy("album.id")
-            ->setBindParams(["id" => $id])
-            ->getQuery()
-            ->execute();
-
-        $resultArray = [];
-        foreach($result as $row)
-        {
-            $Album = $row->album;
-
-            $Album->Featured = $row->photo;
-            $Album->subAlbumCount = $row->subAlbumCount ?? 0;
-            $resultArray[] = $Album;
-        }
-        return $resultArray;
     }
 
     private function buildBreadcrumbs(Album|null $Album): array

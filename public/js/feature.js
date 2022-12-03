@@ -1,9 +1,9 @@
 import { docOn } from "./on.js";
-import { get, post } from "./axios-wrapper.js";
+import { post } from "./axios-wrapper.js";
 import { $ } from "./selector.js";
 
 docOn("alpine:init", () => {
-    Alpine.data("photoTools", (itemIdParam = 0, albumIdParam = 0, photoIdParam = 0) => ({
+    Alpine.data("photoFeature", (itemIdParam = 0, albumIdParam = 0, photoIdParam = 0) => ({
         itemId: itemIdParam,
         photoId: photoIdParam,
         albumId: albumIdParam,
@@ -17,7 +17,7 @@ docOn("alpine:init", () => {
         }
     }));
 
-    Alpine.data("albumTools", (itemIdParam = 0, parentAlbumIdParam = 0) => ({
+    Alpine.data("albumFeature", (itemIdParam = 0, parentAlbumIdParam = 0) => ({
         itemId: itemIdParam,
         parentAlbumId: parentAlbumIdParam,
         feature(photoId) {

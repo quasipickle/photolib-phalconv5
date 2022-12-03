@@ -1,0 +1,24 @@
+<div id = "new-album-modal" class="modal fade" tabindex="-1" aria-label="New album" 
+     x-data="albumNew" 
+     x-ref="modal"
+     @shown-bs-modal.dot="$refs.name.focus()" 
+     @hidden-bs-modal.dot="name = ''">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form @submit="create(true)">
+                    <div class="d-flex justify-content-between">
+                        <label for="new-album-name" class="form-label">New album name</label>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <input id="new-album-name" x-ref="name" type="text" class="form-control" name = "name" x-model="name" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" id = "new-album-create" @click = "create()" :disabled="saving">Create</button>
+                <button type="button" class="btn btn-primary" id = "new-album-create-enter" @click = "create(true)" :disabled="saving">Create and Enter</button>
+            </div>
+        </div>
+    </div>
+</div>

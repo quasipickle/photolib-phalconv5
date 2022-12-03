@@ -26,9 +26,15 @@ export async function post(url, formData, task) {
  *                                                                Only GET requests are cached.
  * @returns
  */
-async function axiosWrapper(url, formData, task, verb, options = {}) {
-
-    options = Object.assign({ fresh: false }, options);
+async function axiosWrapper(url, formData, task, verb) {
+    if (verb == "get" && Object.keys(formData).length > 0) {
+        const options = {};
+        if(formData instanceof FormData)
+            options.params = JSON.parse(JSON.stringify(FormData));
+        else
+            options.params = formData;
+        formData = options;
+    }
     url += "?_=" + window.performance.now();
 
     const fn = axios[verb];

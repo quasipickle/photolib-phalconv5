@@ -1,0 +1,17 @@
+.chooser__item{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding:0 0.5rem 0 0;
+}
+.chooser__title{
+    flex-grow:1;
+    padding:0.5rem;
+}
+.chooser__item:has(a.chooser__title):hover{
+    background-color:$blue-100;
+}
+
+a.chooser__title:hover{   
+    text-decoration:none;
+}

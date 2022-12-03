@@ -13,6 +13,7 @@ $config = [
             "app"            => $app_file_root,
             "controllers"    => $app_file_root . "/controllers",
             "models"         => $app_file_root . "/models",
+            "photo"          => realpath($file_root . "/../photos"),
             "public"         => $file_root . "/public",
             "tasks"          => $app_file_root . "/tasks",
             "views"          => $views_file_root,
@@ -36,5 +37,4 @@ $config = [
         "compileAlways" => true
     ]
 ];
-
 return new Phalcon\Config\Config($config);

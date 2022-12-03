@@ -7,15 +7,55 @@
         <title>
             <?php if (isset($title)) { ?><?= $title ?> &lt; <?php } ?>Photolib
         </title>
-        <link rel = "stylesheet" type="text/css" href="<?= $this->url->get('/public/css/style.css') ?>" />
+        <link rel = "stylesheet" type="text/css" href="<?= $this->url->get('/public/css/style.css') ?>">
     </head>
     <body>
         <div class = "app">
             <div class="navbar">
-                <div class="navbar-brand">
-                    <a class="navbar-icon" href = "<?= $this->viewHelper->albumUrl(1) ?>">PL</a>
-                    <?php if (isset($title)) { ?>
-                        <?= $title ?>
+                <div class="d-flex">
+                    <div class="navbar-brand">
+                        <a class="navbar-icon" href = "<?= $this->viewHelper->albumUrl($this->config->rootAlbumId) ?>">PL</a>
+                        <?php if (isset($title)) { ?>
+                            <?= $title ?>
+                        <?php } ?>
+                    </div>
+                    <?php if (isset($Album)) { ?>
+                        <div class="d-inline-flex align-items-center gap-1">
+                            <?php if (!$Album->isRootAlbum()) { ?>
+                                <div class="dropdown dropdown--no-caret">
+                                    <button class="btn btn-appear-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?= $this->viewHelper->icon('bi-gear-fill') ?>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="#" x-data="albumRename" @click="start('<?= $this->escaper->js($Album->name) ?>', <?= $Album->id ?> )">
+                                                <?= $this->viewHelper->icon('bi-input-cursor-text me-2') ?>Rename
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#" x-data="albumMove" @click="start()">
+                                                <?= $this->viewHelper->icon('bi-folder-symlink me-2') ?>Move
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <?php if ($this->length($subAlbums) > 0 || $Album->hasPhotos()) { ?>
+                                                <small class="form-text d-block ps-3 lh-sm text-danger">
+                                                    This album cannot be deleted because it contains photos and/or albums.
+                                                </small>
+                                            <?php } else { ?>
+                                                <a class="dropdown-item text-danger" href="#" x-data="albumDelete" @click="deleteAlbum()">
+                                                    <?= $this->viewHelper->icon('bi-trash-fill me-2') ?>Delete
+                                                </a>
+                                            <?php } ?>
+                                        </li>
+                                    </ul>
+                                </div>
+                            <?php } ?>
+                            <button class="btn btn-appear-secondary" data-bs-toggle="modal" data-bs-target="#new-album-modal">
+                                <?= $this->viewHelper->icon('bi-folder-plus') ?>
+                            </button>
+                        </div>
                     <?php } ?>
                 </div>
                 <?php if (isset($Album)) { ?>

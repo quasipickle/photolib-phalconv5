@@ -1,0 +1,14 @@
+/**
+ * Styles for the filter component
+ */
+.filter__input:invalid{
+    border-radius:var(--bs-border-radius)!important;
+
+    & ~ .filter__button {
+        display:none;
+    }
+}
+.filter__input:valid ~ .filter__button{
+    display:inline-block;
+}
+

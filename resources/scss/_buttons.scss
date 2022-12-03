@@ -8,6 +8,9 @@
 .btn-outline-secondary{
     --bs-btn-color: var(--bs-gray-600);
 }
+.btn-primary{
+    --bs-btn-color:#fff;
+}
 
 .btn-grid{
     --bs-btn-bg: hsla(0, 0%, 50%, 50%);
@@ -23,4 +26,25 @@
     padding:0;
     line-height:24px;
     width:26px;
+}
+
+/**
+ * .btn-appear-* classes behave like .btn-outline-* classes, but without the outline
+ */
+ [class*="btn-appear"]{
+    background-color:transparent;
+    --base-colour:pink;
+    --hover-text-colour:purple;
+
+    color:var(--base-colour);
+    &:hover{
+        background-color:var(--base-colour);
+        color:var(--hover-text-colour);
+    }
+}
+@each $name, $colour in $theme-colors{
+    .btn-appear-#{$name}{
+        --base-colour: #{$colour};
+        --hover-text-colour: #{color-contrast($colour)};
+    }
 }
