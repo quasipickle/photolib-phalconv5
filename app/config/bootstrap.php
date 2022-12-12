@@ -42,17 +42,18 @@ $Container->setShared("db", function () {
  */
 $Container->set("dispatcher", function () {
     $EM = new Manager();
-    $EM->attach("dispatch:beforeException", function (Event $evt, $dispatcher, Exception $exc) {
-        if ($exc instanceof DispatchException) {
+    $EM->attach("dispatch:beforeException", function (Event $Evt, $dispatcher, Exception $Exc) {
+        if ($Exc instanceof DispatcherException) {
             $dispatcher->forward([
                 "controller" => "index",
                 "action" => "notFound"
             ]);
+            return false;
         }
     });
     $Dispatcher = new Phalcon\Mvc\Dispatcher();
     $Dispatcher->setDefaultNamespace("Controller");
-    $Dispatcher->setEventsManager(($EM));
+    $Dispatcher->setEventsManager($EM);
     return $Dispatcher;
 });
 

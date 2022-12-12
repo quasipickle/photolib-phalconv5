@@ -84,12 +84,23 @@
                         </div>
                     </div>
                 <?php } ?>
-                <a href ="<?= $this->url->get('/battle') ?>" class="btn btn-outline-secondary">
-                    <?= $this->viewHelper->icon('bi-bar-chart') ?>
-                </a>
+                <?php if ($this->router->getControllerName() != 'battle') { ?>
+                    <a href ="<?= $this->url->get('/battle') ?>" class="btn btn-icon btn-outline-secondary">
+                        <?= $this->viewHelper->icon('bi-bar-chart') ?>
+                    </a>
+                <?php } else { ?>
+                    <a href="#" class="btn btn-outline-secondary" id="battle-stats">
+                        Stats
+                    </a>
+                <?php } ?>
             </div>
             <?= $this->getContent(); ?>
         </div>
+        <script type="text/javascript">
+            window.webRootPath = "<?= $this->config->dirs->web->root ?>";
+            window.rootAlbumId = <?= $this->config->rootAlbumId ?>;
+        </script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src = "<?= $this->url->get('/public/js/site.js') ?>" type="module"></script>
     </body>

@@ -1,0 +1,108 @@
+.contenders{
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+}
+.contender{
+    flex-grow:1;
+    width:50%;
+    height:100%;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:transform 200ms ease-in-out;
+    //src: https://icons.getbootstrap.com/icons/hand-thumbs-up-fill/
+    //run through https://yoksel.github.io/url-encoder/
+    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' fill='%2322C55E' class='bi bi-hand-thumbs-up-fill' viewBox='0 0 16 16'%3E%3Cpath style = 'stroke:white;stroke-width:1px' d='M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z'/%3E%3C/svg%3E"), pointer;
+
+    @media(hover:hover){
+        &:hover{
+            background-color:$green-500;
+            img{
+                transform:scale(0.97);
+            }
+        }
+    }
+
+    img{
+        pointer-events:none;
+        transition:transform 200ms ease-in-out;
+        max-width:95%;
+        max-height:95%;
+        object-fit:contain;
+        object-position:center;
+    }
+
+    &__meta{
+        position:absolute;
+        bottom:0;
+        display:flex;
+        justify-content:space-around;
+        height:3rem;
+        align-items:center;
+        width:100%;
+    }
+}
+
+
+.battle-dist{
+    display:flex;
+    gap:0.25rem;
+    height:100px;
+}
+.battle-dist__col{
+    display:flex;
+    flex-direction: column;
+    flex:1 0 0;
+    border-radius:$border-radius;
+    &:hover{
+        background-color:$blue-100;
+    }
+}
+.battle-dist__bar-container{
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:end;
+}
+.battle-dist__bar{
+    // make the height a minimum of 2px, because otherwise it gets weird artifacts at the edges
+    height:max(2px, var(--percentage));
+    background:$primary;
+    border-radius: $border-radius $border-radius 0 0;
+}
+.battle-dist__label{
+    text-align:center;
+}
+
+.battle__ranking{
+    display:grid;
+    grid-template-columns:repeat(10, 1fr);
+    gap:1rem;
+}
+
+.battle__rankee{
+    display:flex;
+    flex-direction:column;
+    --percentage: 50%;
+    &-img{
+        max-width:100%;
+        flex-grow:1;
+        object-fit:contain;
+        object-position:top;
+        aspect-ratio:1;
+    }
+    &-rate{
+        text-align:center;
+        $bg-green: $green-400;
+        $bg-red: $red-400;
+        background:linear-gradient(to right, $bg-green 0, $bg-green var(--percentage), $bg-red var(--percentage), $bg-red 100%);
+        margin-bottom:0.25rem;
+        border-radius:4px;
+    }
+}
+.battle__stat-popover{
+    --bs-popover-max-width: 400px;
+}

@@ -1,0 +1,52 @@
+<h5>
+    Distribution
+</h5>
+<div class = "battle-dist mb-3">
+    {% for battles, count in distribution %}
+        <?php
+            $percentage = ceil($count/max($distributionMax,1) * 100);
+        ?>
+        <div class="battle-dist__col" data-bs-toggle="tooltip" title="{{ count }}">
+            <div class="battle-dist__bar-container">
+                <div class="battle-dist__bar {% if percentage == 0 %}visually-hidden{% endif %}" style="--percentage: {{ percentage }}%"></div>
+            </div>
+            <div class="battle-dist__label">{{ battles }}</div>
+        </div>
+    {% endfor %}
+</div>
+<h5>
+    Popular photos
+</h5>
+<div class = "battle__ranking mb-3">
+    {% for photo in popularPhotos %}
+        <div class="battle__rankee" style="--percentage:{{ photo.wins/photo.battles * 100 }}%">
+            <div class="battle__rankee-rate">{{ photo.wins }}/{{ photo.battles }}</div>
+            <img class="battle__rankee-img"
+                src = "{{ photo(photo.thumb_path) }}"
+                data-bs-toggle="popover"
+                data-bs-content="<img src = '{{ photo(photo.display_path) }}' class='mw-100'>"
+                data-bs-html="true"
+                data-bs-trigger="hover"
+                data-bs-custom-class="battle__stat-popover"
+            >
+        </div>
+    {% endfor %}
+</div>
+<h5>
+    Popular albums
+</h5>
+<div class = "battle__ranking mb-3">
+    {% for album in popularAlbums %}
+        <div class="battle__rankee" style="--percentage:{{ album.success * 100}}%">
+            <div class = "battle__rankee-rate">{{ album.photoWins }}/ {{ album.photoBattles }}</div>
+            <img class="battle__rankee-img"
+                src = "{{ photo(album.thumb_path) }}"
+                data-bs-toggle="popover"
+                data-bs-content="<img src = '{{ photo(album.thumb_path) }}' class='mw-100'><div class='text-center fw-bold mt-3'>{{ album.name }}</div>"
+                data-bs-html="true"
+                data-bs-trigger="hover"
+                data-bs-custom-class="battle__stat-popover"
+            >
+        </div>
+    {% endfor %}
+</div>

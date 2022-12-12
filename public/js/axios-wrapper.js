@@ -21,7 +21,7 @@ export async function post(url, formData, task) {
  * @param {object}      formData    The data to POST
  * @param {string}      task        A string that describes the task being taken
  * @param {string}      verb        The verb to make the call with.  "get", "post"
- * @param {object}      options     An object of options.  
+ * @param {object}      options     An object of options.
  *                                      `fresh` - default:false.  Forces a new request, bypassing the cache.
  *                                                                Only GET requests are cached.
  * @returns
@@ -36,7 +36,6 @@ async function axiosWrapper(url, formData, task, verb) {
         formData = options;
     }
     url += "?_=" + window.performance.now();
-
     const fn = axios[verb];
     const result = await fn(window.webRootPath + url, formData, {
         headers: {

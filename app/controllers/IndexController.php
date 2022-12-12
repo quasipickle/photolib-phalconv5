@@ -10,5 +10,7 @@ class IndexController extends BaseController
     }
 
     public function notFoundAction()
-    {}
+    {
+        $this->view->title = "Page not found";
+    }
 }

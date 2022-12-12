@@ -223,12 +223,9 @@
 {{ partial("album/partials/album-new") }}
 {{ partial("album/partials/album-chooser") }}
 <script type="text/javascript">
-    window.webRootPath = "{{ config.dirs.web.root }}";
-    window.rootAlbumId = {{ config.rootAlbumId }};
     window.albumId = {{ Album.id }};
     window.parentAlbumId = {{ Album.album_id|default(0) }};
 </script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
 

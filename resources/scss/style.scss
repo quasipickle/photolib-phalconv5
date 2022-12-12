@@ -55,6 +55,7 @@
 @import "mixins";
 
 @import "album";
+@import "battle";
 @import "buttons";
 @import "dropdown";
 @import "filter";
@@ -67,4 +68,12 @@
 
 [x-cloak]{
     display:none;
+}
+
+.bg-frosted,
+.btn.bg-frosted:not(:hover){
+  background-color:hsla(0,0%,100%, 0.7);
+}
+.mw-100{
+    max-width:100%;
 }

@@ -1,0 +1,34 @@
+<div class="contenders">
+    <?php foreach ($photos as $photo) { ?>
+        <div class="contender" data-id="<?= $photo->id ?>">
+            <img src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>" />
+            <div class="contender__meta">
+                <div>
+                    <a href="<?= $this->viewHelper->albumUrl($photo->firstAlbum()->id) ?>" class="btn bg-frosted btn-outline-secondary" target="_blank"><?= $photo->firstAlbum()->name ?> <?= $this->viewHelper->icon('bi-arrow-up-right') ?></a>
+                    <a href="<?= $this->viewHelper->photoUrl($photo->path) ?>" class="btn bg-frosted btn-outline-secondary" target="_blank">Original <?= $this->viewHelper->icon('bi-arrow-up-right') ?></a>
+                </div>
+                <span class="badge bg-frosted rounded-pill text-dark">
+                    <?= $this->viewHelper->icon('bi-bar-chart') ?> <?= $photo->battles ?>
+                </span>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+<div class = "modal" id="stats-modal">
+    <div class = "modal-dialog modal-dialog-scrollable modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Battle stats</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="stats-body">
+                Nothing
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src = "<?= $this->url->get('/public/js/battle.js') ?>"></script>
+<form method = "post" action = "battle" id="form">
+    <input type="hidden" name="winnerId" id="winner-id-field" />
+    <input type="hidden" name="loserId" id = "loser-id-field" />
+</form>
