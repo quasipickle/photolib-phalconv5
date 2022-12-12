@@ -29,6 +29,18 @@
 }
 
 /**
+ * For buttons that contain only an icon - make the icons a little bigger
+ */
+.btn-icon{
+    padding:3px 0.5rem;
+    & i.bi{
+        opacity:0.8;
+        font-size:1.5rem;
+        line-height:1.8125rem; // <- completely magic number. = 29px
+    }
+}
+
+/**
  * .btn-appear-* classes behave like .btn-outline-* classes, but without the outline
  */
  [class*="btn-appear"]{
@@ -46,5 +58,7 @@
     .btn-appear-#{$name}{
         --base-colour: #{$colour};
         --hover-text-colour: #{color-contrast($colour)};
+        --bs-btn-active-bg: #{rgba($colour, 0.5)};
+        --bs-btn-active-border-color:transparent;
     }
 }

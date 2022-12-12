@@ -4,9 +4,9 @@
  * This class is used to simplify timings
  */
 
-namespace Components;
+namespace Component;
 
-use Components\Timer\Mark;
+use Component\Timer\Mark;
 
 class Timer
 {

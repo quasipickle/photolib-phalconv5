@@ -21,7 +21,7 @@
         content:"";
         width:50px;
         height:50px;
-        border:25px solid rgba($gray-800, 0.8);
+        border:25px solid $gray-800;
         border-bottom-color:transparent;
         border-right-color:transparent;
     }
@@ -56,7 +56,6 @@
 .grid__album:hover .grid__album-image{
     transform:scale(1.075);
 }
-
 .grid__caption{
     position:absolute;
     inset: 0;
@@ -80,10 +79,29 @@
     cursor:zoom-in;
 
     &:hover{
-        // --outline-size: 0.4rem;        
-        // outline: var(--outline-size) solid rgb(13 110 253 / 25%);
-        // outline-offset:calc(-1 * var(--outline-size));
-        outline:1px solid $input-focus-border-color;
-        box-shadow: 0 0 0 0.4rem $input-btn-focus-color;
+        @include grid-photo-focus;
     }
+}
+
+/**
+ * Sorting
+ */
+.album__grid--sorting{
+    .grid__item:has(.grid__photo) img{
+        cursor:move;
+    }
+    .grid__item:has(.grid__album){
+        cursor:not-allowed;
+    }
+    .grid__item:has(.grid__album){
+        pointer-events:none;
+        opacity:0.4;
+    }
+    & .grid__item:hover :is(.grid__tools,.grid__info),
+    & .grid__item--featured::before{
+        display:none;
+    }
+}
+.sortable-selected img{
+    @include grid-photo-focus;
 }

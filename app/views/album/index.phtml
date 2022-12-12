@@ -4,14 +4,14 @@
                 <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item')">
                     {# required is needed to be able to target with css.  See _sidebar.scss #}
                     <input type="text" class="form-control filter__input" required x-model="searchTerms">
-                    <button class="btn btn-outline-input lh-1 filter__button" @click="clear()">
+                    <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
                         {{ icon("bi-x-lg") }}
                     </button>
                 </div>
             </div>
         <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
             {% for album in menuAlbums %}
-                <a class = "list-group-item list-group-item-action {% if Album.id == album.id %}active{% endif %} sidebar__list-item d-flex justify-content-between align-items-center" 
+                <a class = "list-group-item list-group-item-action {% if Album.id == album.id %}active{% endif %} sidebar__list-item d-flex justify-content-between align-items-center"
                    data-filter-on = "{{ album.name|escape_attr }}"
                    href="{{ album(album.id) }}">
                     {{ album.name }}
@@ -23,25 +23,77 @@
         </div>
     </div>
     <div class="album__main">
-        {#
-            Breadcrumbs
-        #}
-        <nav aria-label="breadcrumb" class="album__breadcrumb">
-            <ol class="breadcrumb">
-                {% for crumb in breadcrumbs %}
-                    {% set active = loop.last ? "active" : "" %}
-                    <li class="breadcrumb-item {{ active }}">
-                        {% if !loop.last %}
-                            <a href="{{ album(crumb.id) }}">
-                        {% endif %}
-                        {% if loop.first %}{{ icon("bi-house-fill me-1") }}{% endif %}{{ crumb.name }}
-                        {% if !loop.last %}
-                            </a>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ol>
-        </nav>
+        <div class = "album__header">
+            {#
+                Breadcrumbs
+            #}
+            <nav aria-label="breadcrumb" class="album__breadcrumb">
+                <ol class="breadcrumb">
+                    {% for crumb in breadcrumbs %}
+                        {% set active = loop.last ? "active" : "" %}
+                        <li class="breadcrumb-item {{ active }}">
+                            {% if !loop.last %}
+                                <a href="{{ album(crumb.id) }}">
+                            {% endif %}
+                            {% if loop.first %}{{ icon("bi-house-fill me-1") }}{% endif %}{{ crumb.name }}
+                            {% if loop.last %}
+                                <div class = "breadcrumb__breakdown">
+                                    {{ partial("album/partials/breakdown",["albums": subAlbums|length, "photos": Album.photos|length]) }}
+                                </div>
+                            {% endif %}
+                            {% if !loop.last %}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+
+            <div class="d-flex gap-4">
+                <div class="d-flex gap-2" x-data="reorder" x-cloak>
+                    <template x-if="!$store.sorting">
+                        <button class="btn btn-outline-secondary btn-icon"@click="startReorder()">
+                            {{ icon("bi-arrow-left-right") }}
+                        </button>
+                    </template>
+                    <template x-if="$store.sorting">
+                        <button class="btn btn-success btn-icon" @click="saveOrder()">
+                            {{ icon("bi-check") }}
+                        </button>
+                    </template>
+                    <template x-if="$store.sorting">
+                        <button class="btn btn-danger btn-icon" @click="cancelOrder()">
+                            {{ icon("bi-x") }}
+                        </button>
+                    </template>
+                </div>
+                {#
+                    Uploading
+                #}
+                {% if !Album.isRootAlbum() %}
+                <div x-data="upload">
+                    <div class = "d-flex gap-2" :class="$store.sorting && 'invisible'">
+                        <button class="btn btn-outline-secondary btn-icon" @click="startDownload()">
+                            {{ icon("bi-cloud-arrow-down") }}
+                        </button>
+                        <span>
+                            <button class="btn btn-outline-secondary btn-icon" @click="filesChoose()">
+                                {{ icon("bi-upload") }}
+                            </button>
+                            <div class="d-none">
+                                <input type="file" x-ref="fileInput" multiple @change="filesChosen($event)"/>
+                            </div>
+                        </span>
+                        <div class = "drop-target">
+                            <div class = "drop-target__target">
+                                Drop files
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
 
         {#
             Grid
@@ -76,6 +128,9 @@
                             {% endif %}
                             <div class="grid__caption">
                                 {{ subAlbum.name }}
+                                <span class="ms-2">
+                                    {{ partial("album/partials/breakdown",["albums": subAlbum.subAlbumCount, "photos": 0]) }}
+                                </span>
                             </div>
                         </a>
                     </div>
@@ -85,9 +140,9 @@
                     Photos
                 #}
                 {% for photo in Album.photos %}
-                    <div class="grid__item {% if Featured IS NOT null AND photo.id == Featured.id %}grid__item--featured{% endif %}" id="photo-{{ photo.id }}">
+                    <div class="grid__item {% if Featured IS NOT null AND photo.id == Featured.id %}grid__item--featured{% endif %}" id="photo-{{ photo.id }}" data-id="{{ photo.id}}">
                         <div class="grid__photo">
-                            <button class="btn btn-grid grid__photo-btn grid__info" 
+                            <button class="btn btn-grid grid__photo-btn grid__info"
                                 data-bs-toggle="popover"
                                 data-bs-html="true"
                                 data-width="{{ photo.width }}"
@@ -106,20 +161,20 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledBy="tools={{ photo.id }}" id="dropdown-{{ photo.id }}" x-data="membership({{ photo.id }})">
                                         <li x-data="photoFeature('photo-' + {{ photo.id }}, {{ Album.id }}, {{ photo.id }})">
-                                            <a class="dropdown-item" href="#" @click="feature()">Feature</a>
+                                            <a class="dropdown-item" href="#" @click="feature()">{{ icon("bi-star me-1") }}Feature</a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ photo(photo.path) }}" target="_blank">View original {{ icon("bi-box-arrow-up-right") }}</a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="#" @click="startMove()">Move to&hellip;</a></li>
+                                        <li><a class="dropdown-item" href="#" @click="startMove()">{{ icon("bi-arrow-right-short me-1") }}Move to&hellip;</a></li>
                                         <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
                                             <li>
-                                                <a class="dropdown-item" href="#" @click="moveToLast()">Move to <i x-text="getLastAlbum().name"></i></a>
+                                                <a class="dropdown-item" href="#" @click="moveToLast()">{{ icon("bi-arrow-right-short me-1") }}Move to <i x-text="getLastAlbum().name"></i></a>
                                             </li>
                                         </template>
-                                        <li><a class="dropdown-item" href="#" @click="startAdd()">Add to&hellip;</a></li>
+                                        <li><a class="dropdown-item" href="#" @click="startAdd()">{{ icon("bi-files me-1") }}Add to&hellip;</a></li>
                                         <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
                                             <li>
-                                                <a class="dropdown-item" href="#" @click="addToLast()">Add to <i x-text="getLastAlbum().name"></i></a>
+                                                <a class="dropdown-item" href="#" @click="addToLast()">{{ icon("bi-files me-1") }}Add to <i x-text="getLastAlbum().name"></i></a>
                                             </li>
                                         </template>
                                         <li><hr class="dropdown-divider"></li>
@@ -131,8 +186,8 @@
                             <img class="lightboxable"
                                  alt="{{ photo.original_filename }}"
                                  loading="lazy"
-                                 src = "{{ photo(photo.thumb_path) }}" 
-                                 data-src = "{{ photo(photo.display_path) }}" 
+                                 src = "{{ photo(photo.thumb_path) }}"
+                                 data-src = "{{ photo(photo.display_path) }}"
                                  data-width = "{{ photo.width }}"
                                  data-height = "{{ photo.height }}"
                                  data-filesize = "{{ filesize(photo.filesize) }}"
@@ -145,10 +200,10 @@
         </div>
     </div>
 </div>
-<div class = "lightbox" 
-    x-data="lightbox" 
-    x-on:lightboxable-clicked.window="box($event.detail)" 
-    :class="show ? 'lightbox--show' : ''" 
+<div class = "lightbox"
+    x-data="lightbox"
+    x-on:lightboxable-clicked.window="box($event.detail)"
+    :class="show ? 'lightbox--show' : ''"
     [x-cloak]>
     <div class="lightbox__current" @click="show=false">
         <img class="lightbox__img" :src="photo?.dataset.src ?? ''"/>
@@ -171,7 +226,7 @@
     window.webRootPath = "{{ config.dirs.web.root }}";
     window.rootAlbumId = {{ config.rootAlbumId }};
     window.albumId = {{ Album.id }};
-    window.parentAlbumId = {{ Album.album_id }}
+    window.parentAlbumId = {{ Album.album_id|default(0) }};
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 

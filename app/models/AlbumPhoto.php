@@ -1,11 +1,11 @@
 <?php
 
-namespace Models;
+namespace Model;
 
 class AlbumPhoto extends \Phalcon\Mvc\Model
 {
-    const MAX_POSITION = 999999999;
-    
+    public const MAX_POSITION = 999999999;
+
     public function initialize()
     {
         $this->belongsTo(

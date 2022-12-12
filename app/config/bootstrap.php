@@ -1,5 +1,8 @@
 <?php
 
+use Phalcon\Events\{Event, Manager};
+use Phalcon\Mvc\Dispatcher\Exception as DispatcherException;
+
 /**
  * Bootstrap all services for the app
  */
@@ -14,10 +17,10 @@ $Config = require "config.php";
 $Loader = new Phalcon\Autoload\Loader();
 $Loader->setNamespaces(
     [
-        "Controllers" => $Config->dirs->file->app . "/controllers",
-        "Components" => $Config->dirs->file->app . "/components",
-        "Helpers"     => $Config->dirs->file->app . "/helpers",
-        "Models"      => $Config->dirs->file->app . "/models"
+        "Controller" => $Config->dirs->file->app . "/controllers",
+        "Component"  => $Config->dirs->file->app . "/components",
+        "Helper"     => $Config->dirs->file->app . "/helpers",
+        "Model"      => $Config->dirs->file->app . "/models"
     ]
 );
 $Loader->register();
@@ -38,8 +41,18 @@ $Container->setShared("db", function () {
  * Dispatcher
  */
 $Container->set("dispatcher", function () {
+    $EM = new Manager();
+    $EM->attach("dispatch:beforeException", function (Event $evt, $dispatcher, Exception $exc) {
+        if ($exc instanceof DispatchException) {
+            $dispatcher->forward([
+                "controller" => "index",
+                "action" => "notFound"
+            ]);
+        }
+    });
     $Dispatcher = new Phalcon\Mvc\Dispatcher();
-    $Dispatcher->setDefaultNamespace("Controllers");
+    $Dispatcher->setDefaultNamespace("Controller");
+    $Dispatcher->setEventsManager(($EM));
     return $Dispatcher;
 });
 
@@ -80,7 +93,7 @@ $Container->set("router", function () {
  * View
  */
 $Container->setShared("viewHelper", function () use ($Container, $Config) {
-    return new \Helpers\ViewHelper($Container->get("url"), $Config);
+    return new \Helper\ViewHelper($Container->get("url"), $Config);
 });
 $Container->setShared("voltService", function (Phalcon\Mvc\View $View) use ($Container, $Config) {
     $Volt = new Phalcon\Mvc\View\Engine\Volt($View, $Container);
@@ -99,23 +112,23 @@ $Container->setShared("voltService", function (Phalcon\Mvc\View $View) use ($Con
     ]);
 
     $Compiler = $Volt->getCompiler();
-    $Compiler->addFunction("filesize", function($resolvedArgs, $exprArgs) use ($Compiler) {
+    $Compiler->addFunction("filesize", function ($resolvedArgs, $exprArgs) use ($Compiler) {
         $size = $Compiler->expression($exprArgs[0]['expr']);
 
-        return "\Helpers\ViewHelper::filesize(" . $size . ")";
+        return "\Helper\ViewHelper::filesize(" . $size . ")";
     });
 
-    $Compiler->addFunction("icon", function($resolvedArgs, $exprArgs) use ($Compiler) {
+    $Compiler->addFunction("icon", function ($resolvedArgs, $exprArgs) use ($Compiler) {
         $icon = $Compiler->expression($exprArgs[0]['expr']);
         return '$this->viewHelper->icon(' . $icon . ')';
     });
 
-    $Compiler->addFunction("album", function($resolvedArgs, $exprArgs) use ($Compiler) {
+    $Compiler->addFunction("album", function ($resolvedArgs, $exprArgs) use ($Compiler) {
         $albumId = $Compiler->expression($exprArgs[0]['expr']);
         return '$this->viewHelper->albumUrl(' . $albumId . ')';
     });
 
-    $Compiler->addFunction("photo", function($resolvedArgs, $exprArgs) use ($Compiler) {
+    $Compiler->addFunction("photo", function ($resolvedArgs, $exprArgs) use ($Compiler) {
         $path = $Compiler->expression($exprArgs[0]['expr']);
         return '$this->viewHelper->photoUrl(' . $path . ')';
     });

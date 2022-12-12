@@ -1,0 +1,8 @@
+@use "sass:map";
+.breadcrumb__breakdown{
+    margin-inline-start: map.get($spacers, 2);
+    display:inline-flex;
+    gap: map.get($spacers, 2);
+    color: $gray-400;
+    font-size:0.8rem;
+}

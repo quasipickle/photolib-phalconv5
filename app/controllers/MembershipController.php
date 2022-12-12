@@ -1,11 +1,9 @@
 <?php
 
-namespace Controllers;
+namespace Controller;
 
-use Components\Retval;
-use Models\Album;
-use Models\AlbumPhoto;
-use Models\Photo;
+use Component\Retval;
+use Model\{Album, AlbumPhoto, Photo};
 
 class MembershipController extends BaseController
 {
@@ -39,9 +37,11 @@ class MembershipController extends BaseController
                 "photoId" => $this->photoId
             ]
         ]);
-        if(count($otherMemberships) == 0)
+        if (count($otherMemberships) == 0) {
+            //phpcs:ignore Generic.Files.LineLength
             return $Retval->message("The photo cannot be removed from this album because this is the only album the photo is in")->response();
-        
+        }
+
         $desiredMembership = AlbumPhoto::findFirst([
             "album_id = :albumId: AND photo_id = :photoId:",
             "bind" => [
@@ -49,8 +49,10 @@ class MembershipController extends BaseController
                 "photoId" => $this->photoId
             ]
         ]);
-        if($desiredMembership == null)
+        if ($desiredMembership == null) {
+            //phpcs:ignore Generic.Files.LineLength
             return $Retval->message("The photo cannot be removed from this album because its membership does not exist")->response();
+        }
 
         $desiredMembership->delete();
         return $Retval->success(true)->response();
@@ -60,20 +62,27 @@ class MembershipController extends BaseController
     {
         $Retval = new Retval();
         $photo = Photo::findFirst($this->photoId);
-        if($photo == null)
+        if ($photo == null) {
             return $Retval->message("The photo could not be deleted because it does not exist.")->response();
+        }
 
         $originalPath = realpath($this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $photo->path);
-        if(!$this->deleteFile($originalPath))
+        if (!$this->deleteFile($originalPath)) {
+            // phpcs:
             return $Retval->message("Could not delete the original file, so nothing was deleted.")->response();
+        }
 
         $displayPath = realpath($this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $photo->display_path);
-        if(!$this->deleteFile($displayPath))
+        if (!$this->deleteFile($displayPath)) {
+            //phpcs:ignore Generic.Files.LineLength
             return $Retval->message("The original file was deleted, but there was an error deleting the display file: " . $displayPath . ". The database record has not been removed.")->response();
-        
+        }
+
         $thumbPath = realpath($this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $photo->thumb_path);
-        if(!$this->deleteFile($thumbPath))
+        if (!$this->deleteFile($thumbPath)) {
+            //phpcs:ignore Generic.Files.LineLength
             return $Retval->message("The original and display files were deleted, but there was an error deleting the thumb file: " . $thumbPath . ". The database record has not been removed.")->response();
+        }
 
         $photo->delete();
         return $Retval->success(true)->response();
@@ -88,15 +97,16 @@ class MembershipController extends BaseController
     private function deleteFile($path): bool
     {
         $realPath = realpath($path);
-        if($realPath != $path)
+        if ($realPath != $path) {
             return false;
-        
-        if(strpos($realPath, realpath($this->config->dirs->file->photo)) !== 0)
+        }
+
+        if (strpos($realPath, realpath($this->config->dirs->file->photo)) !== 0) {
             return false;
-        
+        }
+
         return unlink($path);
     }
-
 
     /**
      * Create a new membership
@@ -111,37 +121,34 @@ class MembershipController extends BaseController
         $albumId = $this->request->getPost("albumId");
         $photoId = $this->request->getPost("photoId");
 
-        if($albumId == null) {
+        if ($albumId == null) {
             return $Retval->message("The destination album was not specified.")->response();
         }
-        if($photoId == null) {
+        if ($photoId == null) {
             return $Retval->message("The target photo was not specified.")->response();
         }
 
         $Album = Album::findFirst($albumId);
-        if($Album == null || $Album->id != $albumId)
-        { 
+        if ($Album == null || $Album->id != $albumId) {
             return $Retval->message("The destination album does not exist.")->response();
         }
 
         $this->db->begin();
-        if($deleteExisting)
-        {
+        if ($deleteExisting) {
             $existingMappings = AlbumPhoto::find(["photo_id = :photoId:", "bind" => [ "photoId" => $photoId]]);
-            if(!$existingMappings->delete())
-            {
+            if (!$existingMappings->delete()) {
                 $this->db->rollback();
+                //phpcs:ignore Generic.Files.LineLength
                 return $Retval->message("There was an error when trying to delete the photo's existing location record.")->response();
             }
-        }
-        else
-        {
+        } else {
             $existingMapping = AlbumPhoto::findFirst(["photo_id = :photoId: AND album_id = :albumId:", "bind" => [
                 "photoId" => $photoId,
                 "albumId" => $albumId
             ]]);
-            if($existingMapping != null)
+            if ($existingMapping != null) {
                 return $Retval->message("That photo is already in that album.")->response();
+            }
         }
         $NewMapping = new AlbumPhoto();
         $NewMapping->album_id = $albumId;

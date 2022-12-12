@@ -1,0 +1,8 @@
+The ImageHash library (vendor/jensseners/src/Hash.php::toInt(), line 58)
+must be tweaked to to allow a return type of "float"
+
+Currently it is locked at v0.8.0
+
+See
+    https://github.com/jenssegers/imagehash/issues/62, specifically
+    https://github.com/jenssegers/imagehash/issues/62#issuecomment-961630537

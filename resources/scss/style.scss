@@ -52,6 +52,8 @@
 // Utilities
 @import "../../vendor/twbs/bootstrap/scss/utilities/api";
 
+@import "mixins";
+
 @import "album";
 @import "buttons";
 @import "dropdown";
@@ -61,6 +63,7 @@
 @import "list-group";
 @import "navbar";
 @import "sidebar";
+@import "upload";
 
 [x-cloak]{
     display:none;

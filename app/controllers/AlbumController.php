@@ -1,9 +1,9 @@
 <?php
 
-namespace Controllers;
+namespace Controller;
 
-use Components\Retval;
-use Models\Album;
+use Component\Retval;
+use Model\{Album, AlbumPhoto};
 
 class AlbumController extends BaseController
 {
@@ -11,8 +11,9 @@ class AlbumController extends BaseController
     {
         $albumId = $this->dispatcher->getParam("id");
         $Album = Album::findFirst($albumId);
-        if($Album == null)
+        if ($Album == null) {
             exit("Album not found");
+        }
 
         $subAlbums = [];
         $siblingAlbums = [];
@@ -35,12 +36,14 @@ class AlbumController extends BaseController
         $Retval = new Retval();
         $parentAlbumId = $this->request->getPost("parentId");
         $newAlbumName = $this->request->getPost("name");
-        if($newAlbumName == "")
+        if ($newAlbumName == "") {
             return $Retval->message("The new album must have a name.")->response();
+        }
 
         $Parent = Album::findFirst($parentAlbumId);
-        if($Parent == null)
+        if ($Parent == null) {
             return $Retval->message("The specified album in which to create the new album, doesn't exist.")->response();
+        }
 
         $Album = new Album();
         $Album->album_id = $parentAlbumId;
@@ -54,13 +57,15 @@ class AlbumController extends BaseController
     {
         $Retval = new Retval();
         $newName = $this->request->getPost("name");
-        if($newName == "")
+        if ($newName == "") {
             return $Retval->message("You must provide a new name.")->response();
+        }
 
         $Album = Album::findFirst($this->request->getPost("id"));
-        if($Album == null)
+        if ($Album == null) {
             return $Retval->message("The album you requested to rename, does not exist.")->response();
-        
+        }
+
         $Album->name = $newName;
         $Album->save();
         return $Retval->success(true)->response();
@@ -72,13 +77,16 @@ class AlbumController extends BaseController
         $Album = Album::findFirst($this->request->getPost("albumId"));
         $Parent = Album::findFirst($this->request->getPost("parentId"));
 
-        if($Album == null)
+        if ($Album == null) {
             return $Retval->message("The album to move was not found.")->response();
-        if($Parent == null)
+        }
+        if ($Parent == null) {
             return $Retval->message("The new parent album was not found.")->response();
-        if($Album->id == $Parent->id)
+        }
+        if ($Album->id == $Parent->id) {
             return $Retval->message("The album cannot be moved into itself.")->response();
-        
+        }
+
         $Album->album_id = $Parent->id;
         $Album->save();
 
@@ -89,38 +97,67 @@ class AlbumController extends BaseController
     {
         $Retval = new Retval();
         $Album = Album::findFirst($this->request->getPost("albumId"));
-        if(count($Album->albums) > 0)
+        if (count($Album->albums) > 0) {
             return $Retval->message("The album cannot be deleted because it contains sub-albums.")->response();
-        if(count($Album->photos) > 0)
+        }
+        if (count($Album->photos) > 0) {
             return $Retval->message("The album cannot be deleted because it cantains photos.")->response();
-        if($Album->id == $this->config->rootAlbumId)
+        }
+        if ($Album->id == $this->config->rootAlbumId) {
             return $Retval->message("You cannot delete the root album.")->response();
-        
+        }
+
         $Album->delete();
+        return $Retval->success(true)->response();
+    }
+
+    public function orderAction()
+    {
+        $Retval = new Retval();
+        $albumId = $this->request->getPost("albumId");
+        $order = $this->request->getPost("order","int");
+
+        $AlbumPhotos = AlbumPhoto::find(["album_id = :id:", "bind" => ["id" => $albumId]]);
+        if(count($AlbumPhotos) == 0)
+            return $Retval->message("There are no photos in the passed album: #$albumId")->response();
+
+        $albumPhotosByPhotoId = [];
+        foreach ($AlbumPhotos as $AlbumPhoto) {
+            $albumPhotosByPhotoId[$AlbumPhoto->photo_id] = $AlbumPhoto;
+        }
+
+        foreach ( $order as $position => $photoId) {
+            if (array_key_exists($photoId, $albumPhotosByPhotoId) &&
+                $albumPhotosByPhotoId[$photoId]->position != $position) {
+                $albumPhotosByPhotoId[$photoId]->position = $position;
+                $albumPhotosByPhotoId[$photoId]->save();
+            }
+        };
+
         return $Retval->success(true)->response();
     }
 
     /**
      * Retrieves featured photos & sub album count for all sub albums
-     * 
+     *
      * This is done to prevent a separate query for every featured photo
      */
     private function getAlbums(Album|null $Album, array &$subAlbums = [], array &$siblingAlbums = []): void
     {
         $subAlbums = $this->getSubAlbums($Album->id);
-        if(count($subAlbums) == 0)
+        if (count($subAlbums) == 0) {
             $siblingAlbums = $this->getSubAlbums($Album->album_id);
+        }
     }
 
     private function buildBreadcrumbs(Album|null $Album): array
     {
         $breadcrumbs = [];
-        while($Album != null)
-        {
+        while ($Album != null) {
             array_unshift($breadcrumbs, $Album);
             $Album = Album::findFirst(["id = :id:","bind" => ["id" => $Album->album_id]]);
         }
-        
+
         return $breadcrumbs;
     }
 }

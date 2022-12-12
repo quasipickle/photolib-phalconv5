@@ -21,7 +21,31 @@ $config = [
         ],
         "web" => [
             "root" => $web_root,
-            "photo" => $web_root. "/../photos"
+            "photo" => $web_root . "/../photos"
+        ]
+    ],
+    "image" => [
+        "conversions" => [
+            // Chrome likes to save .jif files as .jpg files sometimes.  Screw chrome - save 'em as JPGs
+            "jif" => "jpg"
+        ],
+        "versions" => [
+            // A version of type "thumb" is required - as the Controller\PhotoController::importFile
+            // uses it to know which version to generate the perceptual hash from
+            [
+                "type" => "thumb",
+                "suffix" => "-th",
+                "quality" => 95,
+                "width" => 225,
+                "height" => 300
+            ],
+            [
+                "type" => "display",
+                "suffix" => "-dsp",
+                "quality" => 90,
+                "width" => 1000,
+                "height" => 1000
+            ]
         ]
     ],
     "rootAlbumId" => 1,

@@ -4,14 +4,14 @@
                 <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item')">
                     
                     <input type="text" class="form-control filter__input" required x-model="searchTerms">
-                    <button class="btn btn-outline-input lh-1 filter__button" @click="clear()">
+                    <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
                         <?= $this->viewHelper->icon('bi-x-lg') ?>
                     </button>
                 </div>
             </div>
         <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
             <?php foreach ($menuAlbums as $album) { ?>
-                <a class = "list-group-item list-group-item-action <?php if ($Album->id == $album->id) { ?>active<?php } ?> sidebar__list-item d-flex justify-content-between align-items-center" 
+                <a class = "list-group-item list-group-item-action <?php if ($Album->id == $album->id) { ?>active<?php } ?> sidebar__list-item d-flex justify-content-between align-items-center"
                    data-filter-on = "<?= $this->escaper->attributes($album->name) ?>"
                    href="<?= $this->viewHelper->albumUrl($album->id) ?>">
                     <?= $album->name ?>
@@ -23,23 +23,73 @@
         </div>
     </div>
     <div class="album__main">
-        
-        <nav aria-label="breadcrumb" class="album__breadcrumb">
-            <ol class="breadcrumb">
-                <?php $v121301985799045617691iterator = $breadcrumbs; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $crumb) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                    <?php $active = ($v121301985799045617691loop->last ? 'active' : ''); ?>
-                    <li class="breadcrumb-item <?= $active ?>">
-                        <?php if (!$v121301985799045617691loop->last) { ?>
-                            <a href="<?= $this->viewHelper->albumUrl($crumb->id) ?>">
-                        <?php } ?>
-                        <?php if ($v121301985799045617691loop->first) { ?><?= $this->viewHelper->icon('bi-house-fill me-1') ?><?php } ?><?= $crumb->name ?>
-                        <?php if (!$v121301985799045617691loop->last) { ?>
-                            </a>
-                        <?php } ?>
-                    </li>
-                <?php $v121301985799045617691incr++; } ?>
-            </ol>
-        </nav>
+        <div class = "album__header">
+            
+            <nav aria-label="breadcrumb" class="album__breadcrumb">
+                <ol class="breadcrumb">
+                    <?php $v121301985799045617691iterator = $breadcrumbs; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $crumb) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                        <?php $active = ($v121301985799045617691loop->last ? 'active' : ''); ?>
+                        <li class="breadcrumb-item <?= $active ?>">
+                            <?php if (!$v121301985799045617691loop->last) { ?>
+                                <a href="<?= $this->viewHelper->albumUrl($crumb->id) ?>">
+                            <?php } ?>
+                            <?php if ($v121301985799045617691loop->first) { ?><?= $this->viewHelper->icon('bi-house-fill me-1') ?><?php } ?><?= $crumb->name ?>
+                            <?php if ($v121301985799045617691loop->last) { ?>
+                                <div class = "breadcrumb__breakdown">
+                                    <?= $this->partial('album/partials/breakdown', ['albums' => $this->length($subAlbums), 'photos' => $this->length($Album->photos)]) ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (!$v121301985799045617691loop->last) { ?>
+                                </a>
+                            <?php } ?>
+                        </li>
+                    <?php $v121301985799045617691incr++; } ?>
+                </ol>
+            </nav>
+
+            <div class="d-flex gap-4">
+                <div class="d-flex gap-2" x-data="reorder" x-cloak>
+                    <template x-if="!$store.sorting">
+                        <button class="btn btn-outline-secondary btn-icon"@click="startReorder()">
+                            <?= $this->viewHelper->icon('bi-arrow-left-right') ?>
+                        </button>
+                    </template>
+                    <template x-if="$store.sorting">
+                        <button class="btn btn-success btn-icon" @click="saveOrder()">
+                            <?= $this->viewHelper->icon('bi-check') ?>
+                        </button>
+                    </template>
+                    <template x-if="$store.sorting">
+                        <button class="btn btn-danger btn-icon" @click="cancelOrder()">
+                            <?= $this->viewHelper->icon('bi-x') ?>
+                        </button>
+                    </template>
+                </div>
+                
+                <?php if (!$Album->isRootAlbum()) { ?>
+                <div x-data="upload">
+                    <div class = "d-flex gap-2" :class="$store.sorting && 'invisible'">
+                        <button class="btn btn-outline-secondary btn-icon" @click="startDownload()">
+                            <?= $this->viewHelper->icon('bi-cloud-arrow-down') ?>
+                        </button>
+                        <span>
+                            <button class="btn btn-outline-secondary btn-icon" @click="filesChoose()">
+                                <?= $this->viewHelper->icon('bi-upload') ?>
+                            </button>
+                            <div class="d-none">
+                                <input type="file" x-ref="fileInput" multiple @change="filesChosen($event)"/>
+                            </div>
+                        </span>
+                        <div class = "drop-target">
+                            <div class = "drop-target__target">
+                                Drop files
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
 
         
         <div class="album__grid-container">
@@ -70,6 +120,9 @@
                             <?php } ?>
                             <div class="grid__caption">
                                 <?= $subAlbum->name ?>
+                                <span class="ms-2">
+                                    <?= $this->partial('album/partials/breakdown', ['albums' => $subAlbum->subAlbumCount, 'photos' => 0]) ?>
+                                </span>
                             </div>
                         </a>
                     </div>
@@ -77,14 +130,14 @@
 
                 
                 <?php $v121301985799045617691iterator = $Album->photos; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photo) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                    <div class="grid__item <?php if ($Featured != null && $photo->id == $Featured->id) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>">
+                    <div class="grid__item <?php if ($Featured != null && $photo->id == $Featured->id) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>" data-id="<?= $photo->id ?>">
                         <div class="grid__photo">
-                            <button class="btn btn-grid grid__photo-btn grid__info" 
+                            <button class="btn btn-grid grid__photo-btn grid__info"
                                 data-bs-toggle="popover"
                                 data-bs-html="true"
                                 data-width="<?= $photo->width ?>"
                                 data-height="<?= $photo->height ?>"
-                                data-filesize="<?= \Helpers\ViewHelper::filesize($photo->filesize) ?>"
+                                data-filesize="<?= \Helper\ViewHelper::filesize($photo->filesize) ?>"
                                 data-battles="<?= $photo->battles ?>"
                                 data-win-percentage="<?= $photo->winPercentage() ?>"
                                 data-content="Content failed to load."
@@ -98,20 +151,20 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledBy="tools=<?= $photo->id ?>" id="dropdown-<?= $photo->id ?>" x-data="membership(<?= $photo->id ?>)">
                                         <li x-data="photoFeature('photo-' + <?= $photo->id ?>, <?= $Album->id ?>, <?= $photo->id ?>)">
-                                            <a class="dropdown-item" href="#" @click="feature()">Feature</a>
+                                            <a class="dropdown-item" href="#" @click="feature()"><?= $this->viewHelper->icon('bi-star me-1') ?>Feature</a>
                                         </li>
                                         <li><a class="dropdown-item" href="<?= $this->viewHelper->photoUrl($photo->path) ?>" target="_blank">View original <?= $this->viewHelper->icon('bi-box-arrow-up-right') ?></a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="#" @click="startMove()">Move to&hellip;</a></li>
+                                        <li><a class="dropdown-item" href="#" @click="startMove()"><?= $this->viewHelper->icon('bi-arrow-right-short me-1') ?>Move to&hellip;</a></li>
                                         <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
                                             <li>
-                                                <a class="dropdown-item" href="#" @click="moveToLast()">Move to <i x-text="getLastAlbum().name"></i></a>
+                                                <a class="dropdown-item" href="#" @click="moveToLast()"><?= $this->viewHelper->icon('bi-arrow-right-short me-1') ?>Move to <i x-text="getLastAlbum().name"></i></a>
                                             </li>
                                         </template>
-                                        <li><a class="dropdown-item" href="#" @click="startAdd()">Add to&hellip;</a></li>
+                                        <li><a class="dropdown-item" href="#" @click="startAdd()"><?= $this->viewHelper->icon('bi-files me-1') ?>Add to&hellip;</a></li>
                                         <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
                                             <li>
-                                                <a class="dropdown-item" href="#" @click="addToLast()">Add to <i x-text="getLastAlbum().name"></i></a>
+                                                <a class="dropdown-item" href="#" @click="addToLast()"><?= $this->viewHelper->icon('bi-files me-1') ?>Add to <i x-text="getLastAlbum().name"></i></a>
                                             </li>
                                         </template>
                                         <li><hr class="dropdown-divider"></li>
@@ -123,11 +176,11 @@
                             <img class="lightboxable"
                                  alt="<?= $photo->original_filename ?>"
                                  loading="lazy"
-                                 src = "<?= $this->viewHelper->photoUrl($photo->thumb_path) ?>" 
-                                 data-src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>" 
+                                 src = "<?= $this->viewHelper->photoUrl($photo->thumb_path) ?>"
+                                 data-src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>"
                                  data-width = "<?= $photo->width ?>"
                                  data-height = "<?= $photo->height ?>"
-                                 data-filesize = "<?= \Helpers\ViewHelper::filesize($photo->filesize) ?>"
+                                 data-filesize = "<?= \Helper\ViewHelper::filesize($photo->filesize) ?>"
                                  data-original-src = "<?= $photo->path ?>"
                             >
                         </div>
@@ -137,10 +190,10 @@
         </div>
     </div>
 </div>
-<div class = "lightbox" 
-    x-data="lightbox" 
-    x-on:lightboxable-clicked.window="box($event.detail)" 
-    :class="show ? 'lightbox--show' : ''" 
+<div class = "lightbox"
+    x-data="lightbox"
+    x-on:lightboxable-clicked.window="box($event.detail)"
+    :class="show ? 'lightbox--show' : ''"
     [x-cloak]>
     <div class="lightbox__current" @click="show=false">
         <img class="lightbox__img" :src="photo?.dataset.src ?? ''"/>
@@ -163,7 +216,7 @@
     window.webRootPath = "<?= $this->config->dirs->web->root ?>";
     window.rootAlbumId = <?= $this->config->rootAlbumId ?>;
     window.albumId = <?= $Album->id ?>;
-    window.parentAlbumId = <?= $Album->album_id ?>
+    window.parentAlbumId = <?= (empty($Album->album_id) ? (0) : ($Album->album_id)) ?>;
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 

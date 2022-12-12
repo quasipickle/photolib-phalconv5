@@ -1,12 +1,12 @@
 <?php
 
-namespace Models;
+namespace Model;
 
 class Album extends \Phalcon\Mvc\Model
 {
     /**
      * The number of subalbums for this album.
-     * 
+     *
      * This is NOT automatically populated - it is manually populated
      * by BaseController::getSubAlbums()
      */

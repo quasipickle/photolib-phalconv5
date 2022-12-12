@@ -10,6 +10,9 @@ import "./gridRatio.js";
 import "./lightbox.js";
 import "./membership.js";
 import "./photo-info.js";
+import "./reorder.js";
+import "./upload.js";
+import "./uploadProgress.js";
 
 import { $ } from "./selector.js";
 import { docOn, docOnLoad } from "./on.js";
@@ -21,4 +24,5 @@ docOn("alpine:init", () => {
     Alpine.store("lastAlbum", {
         album: Alpine.$persist(false)
     });
+    Alpine.store("sorting", false);
 });

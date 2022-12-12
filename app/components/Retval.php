@@ -1,8 +1,8 @@
 <?php
 
-namespace Components;
+namespace Component;
 
-use \Phalcon\Http\Response;
+use Phalcon\Http\Response;
 
 /**
  * A simple helper class for returning values (usually via JSON)
@@ -14,7 +14,7 @@ use \Phalcon\Http\Response;
  *
  * Method is chainable, so this works:
  *  $Retval->success(false)->message("Error");
- * 
+ *
  * return response() to get a proper Phalcon response object
  */
 class Retval

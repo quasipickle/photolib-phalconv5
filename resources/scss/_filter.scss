@@ -10,5 +10,6 @@
 }
 .filter__input:valid ~ .filter__button{
     display:inline-block;
+    padding-bottom:2px; // override the default .btn-icon of 3px;
 }
 

@@ -1,30 +1,29 @@
 <?php
 
-namespace Controllers;
+namespace Controller;
 
-use Components\Retval;
-use Models\Album;
+use Component\Retval;
+use Model\Album;
 
 class ChooserController extends BaseController
 {
     public function indexAction(int $albumId)
     {
-        $omit = $this->request->hasQuery("omit") ? $this->request->getQuery("omit","int") : [];
-        
+        $omit = $this->request->hasQuery("omit") ? $this->request->getQuery("omit", "int") : [];
+
         $Retval = new Retval();
-        
-        if($albumId == null) {
+
+        if ($albumId == null) {
             return $Retval->message("The album to load was not specified.")->response();
         }
 
         $Album = Album::findFirst($albumId);
-        if($Album == null || $Album->id != $albumId) { 
+        if ($Album == null || $Album->id != $albumId) {
             return $Retval->message("Album does not exist.")->response();
         }
 
         $subAlbums = $this->getSubAlbums($albumId, $omit);
-        if(count($subAlbums) == 0)
-        {
+        if (count($subAlbums) == 0) {
             $Album = $Album->Parent;
             $subAlbums = $this->getSubAlbums($Album->id, $omit);
         }

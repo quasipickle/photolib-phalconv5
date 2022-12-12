@@ -1,0 +1,10 @@
+{% if albums > 0 %}
+    <span>
+        {{ icon("bi-folder me-1") }}{{ albums }}
+    </span>
+{% endif %}
+{% if photos > 0 %}
+    <span>
+        {{ icon("bi-file-person me-1") }}{{ photos }}
+    </span>
+{% endif %}

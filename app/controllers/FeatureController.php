@@ -1,9 +1,9 @@
 <?php
 
-namespace Controllers;
+namespace Controller;
 
-use Components\Retval;
-use Models\Album;
+use Component\Retval;
+use Model\Album;
 
 class FeatureController extends BaseController
 {
@@ -14,16 +14,15 @@ class FeatureController extends BaseController
         $albumId = $this->request->getPost("albumId");
         $photoId = $this->request->getPost("photoId");
 
-        if($albumId == null) {
+        if ($albumId == null) {
             return $Retval->message("The album for which to feature the photo was not specified.")->response();
         }
-        if($photoId == null) {
+        if ($photoId == null) {
             return $Retval->message("The photo to be featured was not specified.")->response();
         }
 
         $Album = Album::findFirst($albumId);
-        if($Album == null || $Album->id != $albumId)
-        { 
+        if ($Album == null || $Album->id != $albumId) {
             return $Retval->message("Album does not exist.")->response();
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Helpers;
+namespace Helper;
 
 class ViewHelper
 {
@@ -25,16 +25,16 @@ class ViewHelper
 
     public static function filesize(int $size): string
     {
-        $units = array('B', 'KiB', 'MiB', 'GiB', 'TiB'); 
-        
-        $bytes = max($size, 0); 
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
-        $pow = min($pow, count($units) - 1); 
-    
+        $units = array('B', 'KiB', 'MiB', 'GiB', 'TiB');
+
+        $bytes = max($size, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+
         $bytes /= pow(1024, $pow);
 
         $precision = $size <= 1_024_000 ? 0 : 2;
-    
-        return round($bytes, $precision) . ' ' . $units[$pow]; 
+
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 }

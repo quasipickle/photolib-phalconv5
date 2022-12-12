@@ -22,7 +22,11 @@ class SniffTask extends \Phalcon\Cli\Task
         }
 
         $this->configurePHPCodeSniff($executable_path);
-        $command = $executable_path;
+        $Parser = new \Phalcon\Cop\Parser();
+        $Parser->parse();
+        $showIdentifier = $Parser->getBoolean("s", false) ? " -s" : "";
+
+        $command = $executable_path . $showIdentifier;
         foreach ($this->config->sniff->dirs as $path) {
             $command .= " " . $path;
         }

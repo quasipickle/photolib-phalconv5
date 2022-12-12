@@ -8,8 +8,14 @@
             {% if title is defined %}{{ title }} &lt; {% endif %}Photolib
         </title>
         <link rel = "stylesheet" type="text/css" href="{{ url('/public/css/style.css') }}">
+        <script defer src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     </head>
     <body>
+        <div class="upload-progress" :class="files.length > 0 && 'upload-progress__show'" x-data="uploadProgress">
+            <div class="upload-progress__total progress" x-ref="total">
+                <div class="progress-bar" :style="{width: filesDonePercentage + '%'}"></div>
+            </div>
+        </div>
         <div class = "app">
             <div class="navbar">
                 <div class="d-flex">
@@ -20,7 +26,7 @@
                         {% endif %}
                     </div>
                     {% if Album is defined %}
-                        <div class="d-inline-flex align-items-center gap-1">
+                        <div class="d-inline-flex align-items-center gap-1" x-data="{}" :class="$store.sorting && 'invisible'">
                             {% if !Album.isRootAlbum() %}
                                 <div class="dropdown dropdown--no-caret">
                                     <button class="btn btn-appear-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,20 +65,20 @@
                     {% endif %}
                 </div>
                 {% if Album is defined %}
-                    <div class="btn-toolbar gap-2" role="toolbar" aria-label="Album-wide tools">
-                        <div class="btn-group" x-data="gridSize">
-                            <div class="btn btn-outline-secondary" :class="size == 'sm' && 'active'" @click="setSize('sm')">
-                                {{ icon("bi-grid-3x3-gap-fill") }}
+                    <div class="btn-toolbar gap-3" role="toolbar" aria-label="Album-wide tools">
+                        <div class="d-flex gap-1" x-data="gridSize">
+                            <div class="btn btn-appear-secondary btn-icon" :class="size == 'sm' && 'active'" @click="setSize('sm')">
+                                {{ icon("bi-grid-3x3-gap") }}
                             </div>
-                            <div class="btn btn-outline-secondary" :class="size == 'lg' && 'active'" @click="setSize('lg')">
-                                {{ icon("bi-grid-fill") }}
+                            <div class="btn btn-appear-secondary btn-icon" :class="size == 'lg' && 'active'" @click="setSize('lg')">
+                                {{ icon("bi-grid") }}
                             </div>
                         </div>
-                        <div class="btn-group" x-data="gridRatio">
-                            <div class="btn btn-outline-secondary" :class="ratio == 'square' && 'active'" @click="setRatio('square')">
+                        <div class="d-flex gap-1" x-data="gridRatio">
+                            <div class="btn btn-appear-secondary btn-icon" :class="ratio == 'square' && 'active'" @click="setRatio('square')">
                                 {{ icon("bi-aspect-ratio") }}
                             </div>
-                            <div class="btn btn-outline-secondary"  :class="ratio == 'natural' && 'active'" @click="setRatio('natural')">
+                            <div class="btn btn-appear-secondary btn-icon"  :class="ratio == 'natural' && 'active'" @click="setRatio('natural')">
                                 {{ icon("bi-square") }}
                             </div>
                         </div>

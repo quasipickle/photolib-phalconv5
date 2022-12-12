@@ -1,9 +1,8 @@
 <?php
 
-namespace Controllers;
+namespace Controller;
 
-use Models\Album;
-use Models\Photo;
+use Model\{Album, Photo};
 
 class BaseController extends \Phalcon\Mvc\Controller
 {
@@ -36,10 +35,9 @@ class BaseController extends \Phalcon\Mvc\Controller
             ])
             ->getQuery()
             ->execute();
-        
+
         $resultArray = [];
-        foreach($result as $row)
-        {
+        foreach ($result as $row) {
             $Album = $row->album;
 
             $Album->Featured = $row->photo;

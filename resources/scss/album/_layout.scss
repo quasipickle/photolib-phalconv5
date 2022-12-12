@@ -20,7 +20,12 @@
 .album__breadcrumb .breadcrumb{
     --bs-breadcrumb-margin-bottom:0;
 }
-.album__breadcrumb,
 .album__grid-container{
-    padding-inline-start:1rem;
+    padding-inline-start:0.5rem;
+}
+.album__header{
+    padding: 0 0.5rem 0.5rem 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }

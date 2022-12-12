@@ -1,7 +1,7 @@
 .album__grid{
     // Source of this magic: https://css-tricks.com/an-auto-filling-css-grid-with-max-columns/
     --grid-layout-gap: 0.5rem;
-    --grid-column-count: 6;
+    --grid-column-count: 8;
     --grid-item--min-width: 175px;
 
     /**
@@ -14,7 +14,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr));
     grid-gap: var(--grid-layout-gap);
-    
+
 }
 .album__grid--sm{
     --grid-column-count: 10;

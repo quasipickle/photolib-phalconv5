@@ -3,7 +3,7 @@ import { $ } from "./selector.js";
 
 docOnLoad(() => {
     docOn("click", e => {
-        if (e.target.classList.contains("lightboxable")) {
+        if (e.target.classList.contains("lightboxable") && window.sorting != true) {
             const event = new CustomEvent("lightboxable-clicked", { detail: e.target });
             window.dispatchEvent(event);
         }

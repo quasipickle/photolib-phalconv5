@@ -1,0 +1,44 @@
+$uploadProgressBarHeight: 10px;
+.upload-progress{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height: 2 * $uploadProgressBarHeight;
+    opacity:0;
+    z-index:1;
+    transition: opacity 0.5s;
+
+    .progress{
+        --bs-progress-height: #{$uploadProgressBarHeight};
+        --bs-progress-border-radius:0px;
+    }
+}
+.upload-progress__show{
+    opacity:1;
+    transition: none;
+}
+
+.drop-target{
+    background:hsl(0 100% 100% / 90%);
+    position:absolute;
+    inset:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+body:not(.show-drop-target) .drop-target{
+    display:none;
+}
+.drop-target__target{
+    pointer-events:none;
+    width:97%;
+    height:97%;
+    border:0.5rem dashed $gray-500;
+    border-radius:1rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:3rem;
+}
