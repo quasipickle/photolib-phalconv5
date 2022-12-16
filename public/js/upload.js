@@ -8,6 +8,7 @@ docOn("alpine:init", () => {
         uploadId: 0,
         inPageDragging: false,
         $body: $("body"),
+        $grid: $(".album__grid"),
         dropTargetSelector:".drop-target",
         init(){
             on(window,"dragstart", this.dragStartHandler.bind(this));
@@ -35,13 +36,10 @@ docOn("alpine:init", () => {
             this.processFiles(e.target.files);
         },
         processFiles(files){
-            const uploadPromises = [];
             for (var file of files){
                 this.files.add(file);
-                uploadPromises.push(this.upload(file,this.uploadId++));
+                this.upload(file,this.uploadId++)
             }
-            Promise.all(uploadPromises)
-                .then(this.reloadWindow);
         },
         upload(File, id) {
             this.$dispatch("uploadprogress:fileadd", id);
@@ -51,12 +49,14 @@ docOn("alpine:init", () => {
             const uploadPromise = post("/photo/upload", formData, `upload ${File.name}`)
                 .then(data => {
                     this.$dispatch("uploadprogress:filedone", id);
+                    const template = document.createElement("template");
+                    template.innerHTML = data.content.trim();
+                    const newNode = template.content.firstElementChild;
+                    this.$grid.appendChild(newNode);
+                    // this won't work well if the album is so full it has images that haven't loaded yet (lazy)
+                    newNode.scrollIntoView(false);
                 });
             return uploadPromise;
-        },
-        reloadWindow(){
-            window.location.href = window.location.origin + window.location.pathname + "#bottom";
-            window.location.reload();
         },
         dragStartHandler(e){
             this.inPageDragging = true;

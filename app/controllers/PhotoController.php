@@ -23,6 +23,8 @@ class PhotoController extends BaseController
         $Validator  = new UploadValidator($UploadedFile);
         $Retval = $this->importFile($albumId, $UploadedFile, $Validator);
 
+
+
         return $Retval->response();
     }
 
@@ -108,6 +110,13 @@ class PhotoController extends BaseController
         $AlbumPhoto->album_id = $Album->id;
         $AlbumPhoto->photo_id = $Photo->id;
         $AlbumPhoto->save();
+
+        $this->view->photo = $Photo;
+        $this->view->Album = $Album;
+        $this->view->disableLevel(\Phalcon\Mvc\View::LEVEL_MAIN_LAYOUT);
+        $this->view->start();
+        $this->view->render("photo","new");
+        $Retval->content($this->view->getContent());
 
         return $Retval->success(true);
     }

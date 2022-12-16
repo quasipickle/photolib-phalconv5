@@ -60,6 +60,7 @@ class BattleController extends BaseController
                 $distribution[$i] = 0;
             }
         }
+        ksort($distribution);
         $this->view->distribution = $distribution;
         $this->view->distributionMax = max($distribution);
 

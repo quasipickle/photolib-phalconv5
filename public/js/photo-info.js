@@ -1,14 +1,15 @@
 import { docOnLoad } from "./on.js";
-import { $$ } from "./selector.js";
+import { $, $$ } from "./selector.js";
 
 docOnLoad(() => {
-    $$(".grid__info").forEach($el =>  new bootstrap.Popover($el, {
+    new bootstrap.Popover($("body"), {
         sanitize: false,
         placement: "bottom",
         content: window.popover,
         customClass: "grid__popover",
         trigger:"hover",
-    }));
+        selector: ".grid__info"
+    });
 });
 
 function popover()

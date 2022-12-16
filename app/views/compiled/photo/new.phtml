@@ -1,0 +1,56 @@
+
+<div class="grid__item <?php if (isset($Featured) && $Featured != null && $photo->id == $Featured->id) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>" data-id="<?= $photo->id ?>">
+    <div class="grid__photo">
+        <button class="btn btn-grid grid__photo-btn grid__info"
+            data-bs-toggle="popover"
+            data-bs-html="true"
+            data-width="<?= $photo->width ?>"
+            data-height="<?= $photo->height ?>"
+            data-filesize="<?= \Helper\ViewHelper::filesize($photo->filesize) ?>"
+            data-battles="<?= $photo->battles ?>"
+            data-win-percentage="<?= $photo->winPercentage() ?>"
+            data-content="Content failed to load."
+        >
+            <?= $this->viewHelper->icon('bi-info-circle') ?>
+        </button>
+        <div class="grid__photo-btn grid__tools">
+            <div class="dropdown dropdown--no-caret">
+                <button class="btn btn-grid dropdown-toggle" id="tools-<?= $photo->id ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                    <?= $this->viewHelper->icon('bi-three-dots-vertical') ?>
+                </button>
+                <ul class="dropdown-menu" aria-labelledBy="tools=<?= $photo->id ?>" id="dropdown-<?= $photo->id ?>" x-data="membership(<?= $photo->id ?>)">
+                    <li x-data="photoFeature('photo-<?= $photo->id ?>', <?= $Album->id ?>, <?= $photo->id ?>)">
+                        <a class="dropdown-item" href="#" @click.prevent="feature()"><?= $this->viewHelper->icon('bi-star me-1') ?>Feature</a>
+                    </li>
+                    <li><a class="dropdown-item" href="<?= $this->viewHelper->photoUrl($photo->path) ?>" target="_blank">View original <?= $this->viewHelper->icon('bi-box-arrow-up-right') ?></a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" @click.prevent="startMove()"><?= $this->viewHelper->icon('bi-arrow-right-short me-1') ?>Move to&hellip;</a></li>
+                    <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
+                        <li>
+                            <a class="dropdown-item" href="#" @click.prevent="moveToLast()"><?= $this->viewHelper->icon('bi-arrow-right-short me-1') ?>Move to <i x-text="getLastAlbum().name"></i></a>
+                        </li>
+                    </template>
+                    <li><a class="dropdown-item" href="#" @click.prevent="startAdd()"><?= $this->viewHelper->icon('bi-files me-1') ?>Add to&hellip;</a></li>
+                    <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
+                        <li>
+                            <a class="dropdown-item" href="#" @click.prevent="addToLast()"><?= $this->viewHelper->icon('bi-files me-1') ?>Add to <i x-text="getLastAlbum().name"></i></a>
+                        </li>
+                    </template>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" @click.prevent="remove(<?= $Album->id ?>)">Remove from album</a></li>
+                    <li><a class="dropdown-item text-danger" @click.prevent="deletePhoto()" href="#">Delete</a></li>
+                </ul>
+            </div>
+        </div>
+        <img class="lightboxable"
+                alt="<?= $photo->original_filename ?>"
+                loading="lazy"
+                src = "<?= $this->viewHelper->photoUrl($photo->thumb_path) ?>"
+                data-src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>"
+                data-width = "<?= $photo->width ?>"
+                data-height = "<?= $photo->height ?>"
+                data-filesize = "<?= \Helper\ViewHelper::filesize($photo->filesize) ?>"
+                data-original-src = "<?= $photo->path ?>"
+        >
+    </div>
+</div>
