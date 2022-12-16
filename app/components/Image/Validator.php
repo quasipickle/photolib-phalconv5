@@ -42,12 +42,12 @@ abstract class Validator
     /**
      * Check the photo's type
      *
-     * @throws DomainException if type is not allowed
+     * @throws \DomainException if type is not allowed
      */
     protected function checkType()
     {
         if (!(in_array($this->File->getType(), $this->allowedTypes))) {
-            throw new \DomainException(sprintf("File type %s is not supported", $this->File->getRealType()));
+            throw new \DomainException(sprintf("File type %s is not supported", $this->File->getType()));
         }
     }
 }
