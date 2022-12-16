@@ -19,13 +19,8 @@ $Container  = new CliDI();
 $Config = require "config/config.php";
 $Container->setShared('config', $Config);
 
-$Loader = new Loader();
-$Loader->setNamespaces(
-    [
-       'Tasks' => $Config->dirs->file->tasks
-    ]
-);
-$Loader->register();
+require "config/services/loader.php";
+require "config/services/db.php";
 
 $Dispatcher = new Dispatcher();
 $Dispatcher->setDefaultNamespace('Tasks');

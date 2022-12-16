@@ -32,14 +32,14 @@ $config = [
         "versions" => [
             // A version of type "thumb" is required - as the Controller\PhotoController::importFile
             // uses it to know which version to generate the perceptual hash from
-            [
+            "thumb" => [
                 "type" => "thumb",
                 "suffix" => "-th",
                 "quality" => 95,
                 "width" => 225,
                 "height" => 300
             ],
-            [
+            "display" => [
                 "type" => "display",
                 "suffix" => "-dsp",
                 "quality" => 90,

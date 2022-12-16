@@ -7,9 +7,14 @@
                     <a href="{{ album(photo.firstAlbum().id) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">{{ photo.firstAlbum().name }} {{ icon('bi-arrow-up-right') }}</a>
                     <a href="{{ photo(photo.path) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">Original {{ icon('bi-arrow-up-right') }}</a>
                 </div>
-                <span class="badge bg-frosted rounded-pill text-dark">
-                    {{ icon("bi-bar-chart") }} {{ photo.battles }}
-                </span>
+                <div class="d-flex gap-2">
+                    <span class="badge bg-frosted rounded-pill text-dark">
+                        #{{ photo.id }}
+                    </span>
+                    <span class="badge bg-frosted rounded-pill text-dark">
+                        {{ icon("bi-bar-chart") }} {{ photo.battles }}
+                    </span>
+                </div>
             </div>
         </div>
     {% endfor %}

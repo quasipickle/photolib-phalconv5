@@ -135,12 +135,14 @@
         <button class="btn btn-grid grid__photo-btn grid__info"
             data-bs-toggle="popover"
             data-bs-html="true"
+            data-bs-title="#<?= $photo->id ?>"
             data-width="<?= $photo->width ?>"
             data-height="<?= $photo->height ?>"
             data-filesize="<?= \Helper\ViewHelper::filesize($photo->filesize) ?>"
             data-battles="<?= $photo->battles ?>"
             data-win-percentage="<?= $photo->winPercentage() ?>"
             data-content="Content failed to load."
+            data-photo-id="<?= $photo->id ?>"
         >
             <?= $this->viewHelper->icon('bi-info-circle') ?>
         </button>

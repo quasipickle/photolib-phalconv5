@@ -23,11 +23,16 @@ class Image
             ? new Gd($this->srcPath)
             : new Imagick($this->srcPath);
 
+        if ($Image->getWidth() < $width && $Image->getHeight() < $height) {
+            $width = $Image->getWidth();
+            $height = $Image->getHeight();
+        }
+
         $Image->resize($width, $height);
         if ($width < 500 || $height < 500) {
             $Image->sharpen(50);
         }
-        $Image->save($destination, 90);
+        $Image->save($destination, $quality);
         unset($Image);
         return true;
     }
