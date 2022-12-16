@@ -106,7 +106,7 @@ class RegenerateTask extends \Phalcon\Cli\Task
         $Progress = $this->Climate->progress($result->count());
         foreach($result as $Photo)
         {
-            $Progress->advance(0,$Photo->original_filename);
+            $Progress->advance(0,sprintf("%s - %s", $Photo->original_filename, \Helper\ViewHelper::filesize($Photo->filesize)));
             $this->resize($Photo, $version);
             $Progress->advance(1);
         }
