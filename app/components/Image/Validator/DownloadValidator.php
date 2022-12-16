@@ -10,7 +10,7 @@ use Component\Image\File\DownloadedFile;
 class DownloadValidator extends \Component\Image\Validator
 {
     /**
-     * @param Component\Image\File\DownloadedFile $File The downloaded file
+     * @param \Component\Image\File\DownloadedFile $File The downloaded file
      */
     public function __construct(DownloadedFile $File)
     {

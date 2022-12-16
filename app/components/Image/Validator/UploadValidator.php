@@ -10,7 +10,7 @@ use Component\Image\File\UploadedFile;
 class UploadValidator extends \Component\Image\Validator
 {
     /**
-     * @param Component\Image\File\UploadedFile $File The uploaded file
+     * @param \Component\Image\File\UploadedFile $File The uploaded file
      */
     public function __construct(UploadedFile $File)
     {
@@ -40,7 +40,6 @@ class UploadValidator extends \Component\Image\Validator
         switch ($this->File->getError()) {
             case \UPLOAD_ERR_OK:
                 return true;
-                break;
             case \UPLOAD_ERR_INI_SIZE:
                 throw new \RuntimeException("File is larger that PHP allows.");
             case \UPLOAD_ERR_FORM_SIZE:
@@ -57,14 +56,14 @@ class UploadValidator extends \Component\Image\Validator
                 throw new \RuntimeException("The file upload was stopped by a PHP extension.");
             default:
                 // phpcs:ignore Generic.Files.LineLength
-                throw new \UnexpectedValueException("An unknown upload status was encountered: " . $this->upload_status);
+                throw new \UnexpectedValueException("An unknown upload status was encountered: " . $this->File->getError());
         }
     }
 
     /**
      * Check whether or not the initialized tmp_name points to an actual "uploaded file"
      *
-     * @throws InvalidArgumentException if the file isn't considered an uploaded file
+     * @throws \InvalidArgumentException if the file isn't considered an uploaded file
      */
     private function photoIsUploadedFile()
     {

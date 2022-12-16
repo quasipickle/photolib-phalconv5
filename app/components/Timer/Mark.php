@@ -1,6 +1,6 @@
 <?php
 
-namespace Components\Timer;
+namespace Component\Timer;
 
 /**
  * A simple helper class for storing timing marks.
