@@ -1,4 +1,5 @@
 <?php
+
 $routes = [
     "/album/:int" => [
         "controller" => "album",

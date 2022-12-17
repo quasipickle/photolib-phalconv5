@@ -4,6 +4,8 @@ namespace Controller;
 
 use Component\Retval;
 use Model\{Album, AlbumPhoto, Photo};
+use Phalcon\Http\Response;
+use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 
 class BattleController extends BaseController
 {
@@ -24,7 +26,7 @@ class BattleController extends BaseController
                 $Loser->battles = $Loser->battles + 1;
                 $Loser->save();
             }
-            $Response = new \Phalcon\Http\Response();
+            $Response = new Response();
             return $Response->redirect("/battle", false, 302);
         }
         $this->view->title = "Battle";
@@ -37,7 +39,7 @@ class BattleController extends BaseController
      */
     public function statsAction()
     {
-        $Builder = new \Phalcon\Mvc\Model\Query\Builder();
+        $Builder = new QueryBuilder();
         // Photo rate count distribution
         $distributionResult = $Builder
             ->from([
@@ -64,7 +66,7 @@ class BattleController extends BaseController
         $this->view->distribution = $distribution;
         $this->view->distributionMax = max($distribution);
 
-        $Builder = new \Phalcon\Mvc\Model\Query\Builder();
+        $Builder = new QueryBuilder();
         $photoResult = $Builder
             ->from([
                 "photo" => Photo::class
@@ -76,7 +78,7 @@ class BattleController extends BaseController
             ->execute();
         $this->view->popularPhotos = $photoResult;
 
-        $Builder = new \Phalcon\Mvc\Model\Query\Builder();
+        $Builder = new QueryBuilder();
         $albumResult = $Builder
             ->columns([
                 "a.name",

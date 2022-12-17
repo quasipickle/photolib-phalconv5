@@ -20,7 +20,8 @@ class AlbumController extends BaseController
         $this->getAlbums($Album, $subAlbums, $siblingAlbums);
         $menuAlbums = count($subAlbums) > 0 ? $subAlbums : $siblingAlbums;
 
-        $this->view->setVars([
+        $this->view->setVars(
+            [
             "Album" => $Album,
             "breadcrumbs" => $this->buildBreadcrumbs($Album),
             "Featured" => $Album->Featured,
@@ -28,7 +29,8 @@ class AlbumController extends BaseController
             "subAlbums" => $subAlbums,
             "title" => $Album->name,
             "viewingRoot" => $Album->id == $this->config->rootAlbumId
-        ]);
+            ]
+        );
     }
 
     public function createAction()
@@ -115,20 +117,23 @@ class AlbumController extends BaseController
     {
         $Retval = new Retval();
         $albumId = $this->request->getPost("albumId");
-        $order = $this->request->getPost("order","int");
+        $order = $this->request->getPost("order", "int");
 
         $AlbumPhotos = AlbumPhoto::find(["album_id = :id:", "bind" => ["id" => $albumId]]);
-        if(count($AlbumPhotos) == 0)
+        if (count($AlbumPhotos) == 0) {
             return $Retval->message("There are no photos in the passed album: #$albumId")->response();
+        }
 
         $albumPhotosByPhotoId = [];
         foreach ($AlbumPhotos as $AlbumPhoto) {
             $albumPhotosByPhotoId[$AlbumPhoto->photo_id] = $AlbumPhoto;
         }
 
-        foreach ( $order as $position => $photoId) {
-            if (array_key_exists($photoId, $albumPhotosByPhotoId) &&
-                $albumPhotosByPhotoId[$photoId]->position != $position) {
+        foreach ($order as $position => $photoId) {
+            if (
+                array_key_exists($photoId, $albumPhotosByPhotoId)
+                && $albumPhotosByPhotoId[$photoId]->position != $position
+            ) {
                 $albumPhotosByPhotoId[$photoId]->position = $position;
                 $albumPhotosByPhotoId[$photoId]->save();
             }
