@@ -98,7 +98,8 @@
         opacity:0.4;
     }
     & .grid__item:hover :is(.grid__tools,.grid__info),
-    & .grid__item--featured::before{
+    & .grid__item--featured::before,
+    & .grid__item--featured::after{
         display:none;
     }
 }

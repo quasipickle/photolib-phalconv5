@@ -9,6 +9,7 @@ on(".contender", "click", e => {
             .from($$(".contender"))
             .find(node => node != e.target)
             .dataset.id;
+        $(".battle__mask").classList.remove("d-none");
         $("#winner-id-field").value = winnerId;
         $("#loser-id-field").value = loserId;
         $("#form").submit();

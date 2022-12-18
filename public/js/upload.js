@@ -58,12 +58,14 @@ docOn("alpine:init", () => {
                 });
             return uploadPromise;
         },
-        dragStartHandler(e){
-            this.inPageDragging = true;
+        dragStartHandler(e) {
+            if (!this.$store.sorting) {
+                this.inPageDragging = true;
+            }
         },
         dragenterHandler(e){
             e.preventDefault();
-            if(!this.inPageDragging){
+            if(!this.inPageDragging && !this.$store.sorting){
                 this.$body.classList.add("show-drop-target");
             }
         },

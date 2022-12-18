@@ -1,4 +1,5 @@
 <div class="contenders">
+    <div class="battle__mask d-none"></div>
     <?php foreach ($photos as $photo) { ?>
         <div class="contender" data-id="<?= $photo->id ?>">
             <img src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>" />

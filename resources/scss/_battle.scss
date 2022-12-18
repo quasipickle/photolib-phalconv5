@@ -2,6 +2,7 @@
     display:flex;
     align-items:center;
     overflow:hidden;
+    position:relative;
 }
 .contender{
     flex-grow:1;
@@ -105,4 +106,10 @@
 }
 .battle__stat-popover{
     --bs-popover-max-width: 400px;
+}
+.battle__mask{
+    position:absolute;
+    background:hsla(0, 100%, 100%, 70%);
+    inset:0;
+    z-index:1;
 }

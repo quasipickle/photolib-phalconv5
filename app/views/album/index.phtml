@@ -3,7 +3,7 @@
             <div class="p-2 pt-0">
                 <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item')">
                     {# required is needed to be able to target with css.  See _sidebar.scss #}
-                    <input type="text" class="form-control filter__input" required x-model="searchTerms">
+                    <input type="text" class="form-control filter__input" required x-model="searchTerms" autofocus>
                     <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
                         {{ icon("bi-x-lg") }}
                     </button>

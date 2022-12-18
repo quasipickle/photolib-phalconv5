@@ -1,4 +1,5 @@
 <div class="contenders">
+    <div class="battle__mask d-none"></div>
     {% for photo in photos %}
         <div class="contender" data-id="{{ photo.id }}">
             <img src = "{{ photo(photo.display_path) }}" />
