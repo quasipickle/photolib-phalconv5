@@ -44,6 +44,8 @@ class BaseController extends \Phalcon\Mvc\Controller
             $Album->subAlbumCount = $row->subAlbumCount ?? 0;
             $resultArray[] = $Album;
         }
+        usort($resultArray, fn($a, $b) => strnatcasecmp($a->name, $b->name));
+
         return $resultArray;
     }
 }
