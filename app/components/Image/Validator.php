@@ -29,7 +29,8 @@ abstract class Validator
         $possibleTypes = [
             "JPG" => "image/jpeg",
             "PNG" => "image/png",
-            "WEBP" => "image/webp"
+            "WEBP" => "image/webp",
+            "GIF" => "image/gif"
         ];
         $this->allowedTypes = array_intersect_key($possibleTypes, $imagickTypes);
     }

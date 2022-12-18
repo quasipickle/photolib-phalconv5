@@ -3,6 +3,8 @@
 namespace Component\Image;
 
 use Phalcon\Image\Adapter\{Gd, Imagick};
+use Jenssegers\ImageHash\ImageHash;
+use \Jenssegers\ImageHash\Implementations\DifferenceHash;
 
 class Image
 {
@@ -11,7 +13,7 @@ class Image
     private string $libToUse;
 
     private string $srcPath;
-    public function __construct(string $srcPath, string|null $lib = self::LIB_IMAGICK)
+    public function __construct(string $srcPath, string | null $lib = self::LIB_IMAGICK)
     {
         $this->libToUse = $lib;
         $this->srcPath = $srcPath;
@@ -40,12 +42,10 @@ class Image
     /**
      * Generate the perceptual hash for the file - used for finding duplicates
      */
-    public static function getPHash(string $filePath, \Jenssegers\ImageHash\ImageHash $Hasher = null): string
+    public static function getPHash(string $filePath, ImageHash $Hasher = null): string
     {
         //phpcs:ignore Generic.Files.LineLength
-        $Hasher = $Hasher ?? new \Jenssegers\ImageHash\ImageHash(new \Jenssegers\ImageHash\Implementations\DifferenceHash());
-        // hasher resizes down to 8x8 anyway, so might as well go with the
-        // smaller image to begin with as it's WAAAAY faster and uses MUCH less memory
+        $Hasher = $Hasher ?? new ImageHash(new DifferenceHash());
 
         // If this line is causing "must return int but returning float"-type errors,
         // see composer.readme
