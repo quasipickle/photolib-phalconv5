@@ -30,7 +30,7 @@ class RegenerateTask extends \Phalcon\Cli\Task
             if ($iam != "root") {
                 $this->Climate->backgroundYellow()->black()
                 //phpcs:ignore Generic.Files.LineLength
-                ->inline("Not running as `root`.  Unless you've ensured permissions you'll likely get fatal file access permisson errors.")
+                ->inline("Not running as `root`.  Unless you've ensured permissions you may get fatal file access permisson errors.")
                 ->br()->br();
             }
         }

@@ -32,6 +32,6 @@ class Photo extends \Phalcon\Mvc\Model
 
     public function firstAlbum(): Album
     {
-        return $this->Albums[0];
+        return (count($this->Albums)) ? $this->Albums[0] : null;
     }
 }

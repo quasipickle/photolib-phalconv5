@@ -7,9 +7,34 @@ use Component\Image\File\{File, UploadedFile, DownloadedFile};
 use Component\Image\{Image, Name, Validator};
 use Component\Image\Validator\{DownloadValidator, UploadValidator};
 use Model\{Album, AlbumPhoto, Photo};
+use Phalcon\Http\Response;
 
 class PhotoController extends BaseController
 {
+    /**
+     * For viewing a photo by id.  Pretty much a debugging endpoint
+     * @param mixed $photoId
+     * @return never
+     */
+    public function indexAction($photoId)
+    {
+        $Photo = Photo::findFirst($photoId);
+
+        if ($Photo == null) {
+            exit("Photo does not exist");
+        } else {
+            $filePath = $this->config->dirs->file->photo . $Photo->display_path;
+
+            $Response = new Response();
+            $Response->setStatusCode(200, "OK");
+            $Response->setContentType($Photo->mime_type);
+            $Response->setContentLength(filesize($filePath));
+            $Response->setContent(file_get_contents($filePath));
+            $Response->send();
+            exit();
+        }
+
+    }
     public function uploadAction()
     {
         $albumId = $this->request->getPost("albumId");

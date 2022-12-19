@@ -5,7 +5,11 @@
             <img src = "<?= $this->viewHelper->photoUrl($photo->display_path) ?>" />
             <div class="contender__meta">
                 <div>
-                    <a href="<?= $this->viewHelper->albumUrl($photo->firstAlbum()->id) ?>" class="btn bg-frosted btn-outline-secondary" target="_blank"><?= $photo->firstAlbum()->name ?> <?= $this->viewHelper->icon('bi-arrow-up-right') ?></a>
+                    <?php if ($photo->firstAlbum() != null) { ?>
+                        <a href="<?= $this->viewHelper->albumUrl($photo->firstAlbum()->id) ?>" class="btn bg-frosted btn-outline-secondary" target="_blank"><?= $photo->firstAlbum()->name ?> <?= $this->viewHelper->icon('bi-arrow-up-right') ?></a>
+                    <?php } else { ?>
+                        <span class = "btn btn-danger">Orphaned</span>
+                    <?php } ?>
                     <a href="<?= $this->viewHelper->photoUrl($photo->path) ?>" class="btn bg-frosted btn-outline-secondary" target="_blank">Original <?= $this->viewHelper->icon('bi-arrow-up-right') ?></a>
                 </div>
                 <div class="d-flex gap-2">

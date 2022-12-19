@@ -5,7 +5,11 @@
             <img src = "{{ photo(photo.display_path) }}" />
             <div class="contender__meta">
                 <div>
-                    <a href="{{ album(photo.firstAlbum().id) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">{{ photo.firstAlbum().name }} {{ icon('bi-arrow-up-right') }}</a>
+                    {% if photo.firstAlbum() != null %}
+                        <a href="{{ album(photo.firstAlbum().id) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">{{ photo.firstAlbum().name }} {{ icon('bi-arrow-up-right') }}</a>
+                    {% else %}
+                        <span class = "btn btn-danger">Orphaned</span>
+                    {% endif %}
                     <a href="{{ photo(photo.path) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">Original {{ icon('bi-arrow-up-right') }}</a>
                 </div>
                 <div class="d-flex gap-2">

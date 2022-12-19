@@ -10,6 +10,11 @@ $routes = [
         "controller" => "chooser",
         "action"     => "index",
         "id"         => 1
+    ],
+    "/photo/:int" => [
+        "controller" => "photo",
+        "action"     => "index",
+        "id"         => 1
     ]
 ];
 
