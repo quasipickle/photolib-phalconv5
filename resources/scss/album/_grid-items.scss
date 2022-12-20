@@ -58,8 +58,9 @@
 }
 .grid__caption{
     position:absolute;
-    inset: 0;
-    top:75%;
+    bottom:0;
+    left:0;
+    right:0;
     background: linear-gradient(to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.8));
     color:white;
     font-size:$font-size-sm;
