@@ -23,7 +23,7 @@
                     <li x-data="photoFeature('photo-{{ photo.id }}', {{ Album.id }}, {{ photo.id }})">
                         <a class="dropdown-item" href="#" @click.prevent="feature()">{{ icon("bi-star me-1") }}Feature</a>
                     </li>
-                    <li><a class="dropdown-item" href="{{ photo(photo.path) }}" target="_blank">View original {{ icon("bi-box-arrow-up-right") }}</a></li>
+                    <li><a class="dropdown-item" href="{{ photo(photo.path) }}" target="_blank">{{ icon("bi-box-arrow-up-right me-1") }}View original</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" @click.prevent="startMove()">{{ icon("bi-arrow-right-short me-1") }}Move to&hellip;</a></li>
                     <template x-if="hasLastAlbum() && getLastAlbum().id != window.albumId">
@@ -38,8 +38,23 @@
                         </li>
                     </template>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#" @click.prevent="remove({{ Album.id }})">Remove from album</a></li>
-                    <li><a class="dropdown-item text-danger" @click.prevent="deletePhoto()" href="#">Delete</a></li>
+                    <li><a class="dropdown-item" href="#" @click.prevent="remove({{ Album.id }})">{{ icon("bi-x-circle-fill me-1") }}Remove from album</a></li>
+                    <li><a class="dropdown-item text-danger" @click.prevent="deletePhoto()" href="#">{{ icon("bi-trash me-1") }}Delete</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <div class="d-flex align-items-top px-3">
+                            {{ icon("bi-hash") }}
+                            <div class="flex-grow-1">
+                                {% if tags[photo.id] is defined %}
+                                    {# using "photoTag" instead of "tag" because "tag" seems to be a magic word that invokes the TagHelper #}
+                                    {% for photoTag in tags[photo.id] %}
+                                        <span class = "badge text-bg-secondary rounded-pill">{{ photoTag.tag }}</span>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            {{ icon("bi-pencil") }}
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

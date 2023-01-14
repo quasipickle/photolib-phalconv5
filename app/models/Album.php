@@ -24,7 +24,7 @@ class Album extends \Phalcon\Mvc\Model
             "id",
             [
                 "params" => [
-                    "order" => "position ASC"
+                    "order" => "position ASC, date_uploaded ASC"
                 ],
                 "alias" => "photos"
             ]

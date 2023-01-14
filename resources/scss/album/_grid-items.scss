@@ -105,5 +105,6 @@
     }
 }
 .sortable-selected img{
-    @include grid-photo-focus;
+    outline:1px solid $input-focus-border-color;
+    box-shadow: 0 0 0 0.4rem $input-focus-border-color;
 }

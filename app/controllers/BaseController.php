@@ -3,6 +3,7 @@
 namespace Controller;
 
 use Model\{Album, Photo};
+use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 
 class BaseController extends \Phalcon\Mvc\Controller
 {
@@ -13,7 +14,7 @@ class BaseController extends \Phalcon\Mvc\Controller
     protected function getSubAlbums(int $id, array $omit = []): array
     {
         $omit[] = 0;// forcing $omit to have at least 1 element.  0 = invalid id so it won't match, but is valid SQL
-        $Builder = new \Phalcon\Mvc\Model\Query\Builder();
+        $Builder = new QueryBuilder();
         $result = $Builder
             ->from([
                 "album" => Album::class

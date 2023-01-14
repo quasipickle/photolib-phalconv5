@@ -3,7 +3,8 @@
 namespace Controller;
 
 use Component\Retval;
-use Model\{Album, AlbumPhoto};
+use Model\{Album, AlbumPhoto, Photo, Tag};
+use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 
 class AlbumController extends BaseController
 {
@@ -22,13 +23,14 @@ class AlbumController extends BaseController
 
         $this->view->setVars(
             [
-            "Album" => $Album,
-            "breadcrumbs" => $this->buildBreadcrumbs($Album),
-            "Featured" => $Album->Featured,
-            "menuAlbums" => $menuAlbums,
-            "subAlbums" => $subAlbums,
-            "title" => $Album->name,
-            "viewingRoot" => $Album->id == $this->config->rootAlbumId
+                "Album" => $Album,
+                "breadcrumbs" => $this->buildBreadcrumbs($Album),
+                "Featured" => $Album->Featured,
+                "menuAlbums" => $menuAlbums,
+                "subAlbums" => $subAlbums,
+                "title" => $Album->name,
+                "tags" => $this->getGroupedTags($albumId),
+                "viewingRoot" => $Album->id == $this->config->rootAlbumId
             ]
         );
     }
@@ -164,5 +166,42 @@ class AlbumController extends BaseController
         }
 
         return $breadcrumbs;
+    }
+
+    /**
+     * Retrieve an array of tags grouped by photo id
+     * @param int $albumId
+     * @return array a multi-dimensional array keyed by photo id, valued by an array of Tag models
+     */
+    private function getGroupedTags(int $albumId): array
+    {
+        $builder = new QueryBuilder();
+        $result = $builder
+            ->from([
+                "ap" => AlbumPhoto::class,
+                "p" => Photo::class,
+                "t" => Tag::class
+            ])
+            ->columns([
+                "p.id",
+                "t.*"
+            ])
+            ->andwhere("ap.album_id = :albumId:")
+            ->andWhere("ap.photo_id = p.id")
+            ->andWhere("t.photo_id = p.id")
+            ->orderBy("t.tag")
+            ->setBindParams([
+                "albumId" => $albumId
+            ])
+            ->getQuery()
+            ->execute();
+        $grouped = [];
+        foreach ($result as $row) {
+            if (!array_key_exists($row->id, $grouped)) {
+                $grouped[$row->id] = [];
+            }
+            $grouped[$row->id][] = $row->t;
+        }
+        return $grouped;
     }
 }

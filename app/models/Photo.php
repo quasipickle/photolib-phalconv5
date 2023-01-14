@@ -23,6 +23,15 @@ class Photo extends \Phalcon\Mvc\Model
             Album::class,
             "photo_id"
         );
+
+        $this->hasMany(
+            "id",
+            Tag::class,
+            "photo_id",
+            [
+                "alias" => "Tags"
+            ]
+        );
     }
 
     public function winPercentage(): ?int
