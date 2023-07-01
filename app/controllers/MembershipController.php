@@ -66,19 +66,18 @@ class MembershipController extends BaseController
             return $Retval->message("The photo could not be deleted because it does not exist.")->response();
         }
 
-        $originalPath = realpath($this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $photo->path);
+        $originalPath = $this->config->dirs->file->photo . $photo->path;
         if (!$this->deleteFile($originalPath)) {
-            // phpcs:
             return $Retval->message("Could not delete the original file, so nothing was deleted.")->response();
         }
 
-        $displayPath = realpath($this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $photo->display_path);
+        $displayPath = $this->config->dirs->file->photo . $photo->display_path;
         if (!$this->deleteFile($displayPath)) {
             //phpcs:ignore Generic.Files.LineLength
             return $Retval->message("The original file was deleted, but there was an error deleting the display file: " . $displayPath . ". The database record has not been removed.")->response();
         }
 
-        $thumbPath = realpath($this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $photo->thumb_path);
+        $thumbPath = $this->config->dirs->file->photo . $photo->thumb_path;
         if (!$this->deleteFile($thumbPath)) {
             //phpcs:ignore Generic.Files.LineLength
             return $Retval->message("The original and display files were deleted, but there was an error deleting the thumb file: " . $thumbPath . ". The database record has not been removed.")->response();
@@ -94,9 +93,14 @@ class MembershipController extends BaseController
      * @param string $path
      * @return boolean
      */
-    private function deleteFile($path): bool
+    private function deleteFile(string $path): bool
     {
         $realPath = realpath($path);
+
+        if ($realPath === false) {
+            return true;
+        }
+
         if ($realPath != $path) {
             return false;
         }

@@ -47,9 +47,9 @@
                             <div class="flex-grow-1">
                                 <?php if (isset($tags[$photo->id])) { ?>
                                     
-                                    <?php $v121301985799045617691iterator = $tags[$photo->id]; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photoTag) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                                    <?php foreach ($tags[$photo->id] as $photoTag) { ?>
                                         <span class = "badge text-bg-secondary rounded-pill"><?= $photoTag->tag ?></span>
-                                    <?php $v121301985799045617691incr++; } ?>
+                                    <?php } ?>
                                 <?php } ?>
                             </div>
                             <?= $this->viewHelper->icon('bi-pencil') ?>

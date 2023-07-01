@@ -27,23 +27,23 @@
             
             <nav aria-label="breadcrumb" class="album__breadcrumb">
                 <ol class="breadcrumb">
-                    <?php $v121301985799045617691iterator = $breadcrumbs; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $crumb) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
-                        <?php $active = ($v121301985799045617691loop->last ? 'active' : ''); ?>
+                    <?php $v179331560413072939921iterator = $breadcrumbs; $v179331560413072939921incr = 0; $v179331560413072939921loop = new stdClass(); $v179331560413072939921loop->self = &$v179331560413072939921loop; $v179331560413072939921loop->length = count($v179331560413072939921iterator); $v179331560413072939921loop->index = 1; $v179331560413072939921loop->index0 = 1; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - 1; ?><?php foreach ($v179331560413072939921iterator as $crumb) { ?><?php $v179331560413072939921loop->first = ($v179331560413072939921incr == 0); $v179331560413072939921loop->index = $v179331560413072939921incr + 1; $v179331560413072939921loop->index0 = $v179331560413072939921incr; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length - $v179331560413072939921incr; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - ($v179331560413072939921incr + 1); $v179331560413072939921loop->last = ($v179331560413072939921incr == ($v179331560413072939921loop->length - 1)); ?>
+                        <?php $active = ($v179331560413072939921loop->last ? 'active' : ''); ?>
                         <li class="breadcrumb-item <?= $active ?>">
-                            <?php if (!$v121301985799045617691loop->last) { ?>
+                            <?php if (!$v179331560413072939921loop->last) { ?>
                                 <a href="<?= $this->viewHelper->albumUrl($crumb->id) ?>">
                             <?php } ?>
-                            <?php if ($v121301985799045617691loop->first) { ?><?= $this->viewHelper->icon('bi-house-fill me-1') ?><?php } ?><?= $crumb->name ?>
-                            <?php if ($v121301985799045617691loop->last) { ?>
+                            <?php if ($v179331560413072939921loop->first) { ?><?= $this->viewHelper->icon('bi-house-fill me-1') ?><?php } ?><?= $crumb->name ?>
+                            <?php if ($v179331560413072939921loop->last) { ?>
                                 <div class = "breadcrumb__breakdown">
                                     <?= $this->partial('album/partials/breakdown', ['albums' => $this->length($subAlbums), 'photos' => $this->length($Album->photos)]) ?>
                                 </div>
                             <?php } ?>
-                            <?php if (!$v121301985799045617691loop->last) { ?>
+                            <?php if (!$v179331560413072939921loop->last) { ?>
                                 </a>
                             <?php } ?>
                         </li>
-                    <?php $v121301985799045617691incr++; } ?>
+                    <?php $v179331560413072939921incr++; } ?>
                 </ol>
             </nav>
 
@@ -95,7 +95,7 @@
         <div class="album__grid-container">
             <div class="album__grid">
                 
-                <?php $v121301985799045617691iterator = $subAlbums; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $subAlbum) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                <?php $v179331560413072939921iterator = $subAlbums; $v179331560413072939921incr = 0; $v179331560413072939921loop = new stdClass(); $v179331560413072939921loop->self = &$v179331560413072939921loop; $v179331560413072939921loop->length = count($v179331560413072939921iterator); $v179331560413072939921loop->index = 1; $v179331560413072939921loop->index0 = 1; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - 1; ?><?php foreach ($v179331560413072939921iterator as $subAlbum) { ?><?php $v179331560413072939921loop->first = ($v179331560413072939921incr == 0); $v179331560413072939921loop->index = $v179331560413072939921incr + 1; $v179331560413072939921loop->index0 = $v179331560413072939921incr; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length - $v179331560413072939921incr; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - ($v179331560413072939921incr + 1); $v179331560413072939921loop->last = ($v179331560413072939921incr == ($v179331560413072939921loop->length - 1)); ?>
                     <div class="grid__item <?php if ($Featured != null && $subAlbum->photo_id == $Featured->id) { ?>grid__item--featured <?php } ?>" id="album-<?= $subAlbum->id ?>">
                         <?php if ($subAlbum->hasFeatured()) { ?>
                             <div class="grid__photo-btn grid__tools">
@@ -126,10 +126,10 @@
                             </div>
                         </a>
                     </div>
-                <?php $v121301985799045617691incr++; } ?>
+                <?php $v179331560413072939921incr++; } ?>
 
                 
-                <?php $v121301985799045617691iterator = $Album->photos; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photo) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                <?php $v179331560413072939921iterator = $Album->photos; $v179331560413072939921incr = 0; $v179331560413072939921loop = new stdClass(); $v179331560413072939921loop->self = &$v179331560413072939921loop; $v179331560413072939921loop->length = count($v179331560413072939921iterator); $v179331560413072939921loop->index = 1; $v179331560413072939921loop->index0 = 1; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - 1; ?><?php foreach ($v179331560413072939921iterator as $photo) { ?><?php $v179331560413072939921loop->first = ($v179331560413072939921incr == 0); $v179331560413072939921loop->index = $v179331560413072939921incr + 1; $v179331560413072939921loop->index0 = $v179331560413072939921incr; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length - $v179331560413072939921incr; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - ($v179331560413072939921incr + 1); $v179331560413072939921loop->last = ($v179331560413072939921incr == ($v179331560413072939921loop->length - 1)); ?>
                     <div class="grid__item <?php if (isset($Featured) && $Featured != null && $photo->id == $Featured->id) { ?>grid__item--featured<?php } ?>" id="photo-<?= $photo->id ?>" data-id="<?= $photo->id ?>">
     <div class="grid__photo">
         <button class="btn btn-grid grid__photo-btn grid__info"
@@ -179,9 +179,9 @@
                             <div class="flex-grow-1">
                                 <?php if (isset($tags[$photo->id])) { ?>
                                     
-                                    <?php $v121301985799045617691iterator = $tags[$photo->id]; $v121301985799045617691incr = 0; $v121301985799045617691loop = new stdClass(); $v121301985799045617691loop->self = &$v121301985799045617691loop; $v121301985799045617691loop->length = count($v121301985799045617691iterator); $v121301985799045617691loop->index = 1; $v121301985799045617691loop->index0 = 1; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - 1; ?><?php foreach ($v121301985799045617691iterator as $photoTag) { ?><?php $v121301985799045617691loop->first = ($v121301985799045617691incr == 0); $v121301985799045617691loop->index = $v121301985799045617691incr + 1; $v121301985799045617691loop->index0 = $v121301985799045617691incr; $v121301985799045617691loop->revindex = $v121301985799045617691loop->length - $v121301985799045617691incr; $v121301985799045617691loop->revindex0 = $v121301985799045617691loop->length - ($v121301985799045617691incr + 1); $v121301985799045617691loop->last = ($v121301985799045617691incr == ($v121301985799045617691loop->length - 1)); ?>
+                                    <?php $v179331560413072939921iterator = $tags[$photo->id]; $v179331560413072939921incr = 0; $v179331560413072939921loop = new stdClass(); $v179331560413072939921loop->self = &$v179331560413072939921loop; $v179331560413072939921loop->length = count($v179331560413072939921iterator); $v179331560413072939921loop->index = 1; $v179331560413072939921loop->index0 = 1; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - 1; ?><?php foreach ($v179331560413072939921iterator as $photoTag) { ?><?php $v179331560413072939921loop->first = ($v179331560413072939921incr == 0); $v179331560413072939921loop->index = $v179331560413072939921incr + 1; $v179331560413072939921loop->index0 = $v179331560413072939921incr; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length - $v179331560413072939921incr; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - ($v179331560413072939921incr + 1); $v179331560413072939921loop->last = ($v179331560413072939921incr == ($v179331560413072939921loop->length - 1)); ?>
                                         <span class = "badge text-bg-secondary rounded-pill"><?= $photoTag->tag ?></span>
-                                    <?php $v121301985799045617691incr++; } ?>
+                                    <?php $v179331560413072939921incr++; } ?>
                                 <?php } ?>
                             </div>
                             <?= $this->viewHelper->icon('bi-pencil') ?>
@@ -202,7 +202,7 @@
         >
     </div>
 </div>
-                <?php $v121301985799045617691incr++; } ?>
+                <?php $v179331560413072939921incr++; } ?>
             </div>
         </div>
     </div>

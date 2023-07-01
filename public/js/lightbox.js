@@ -3,7 +3,8 @@ import { $ } from "./selector.js";
 
 docOnLoad(() => {
     docOn("click", e => {
-        if (e.target.classList.contains("lightboxable") && this.$store.sorting != true) {
+        console.log(Alpine.store("sorting"));
+        if (e.target.classList.contains("lightboxable") && Alpine.store("sorting") != true) {
             const event = new CustomEvent("lightboxable-clicked", { detail: e.target });
             window.dispatchEvent(event);
         }

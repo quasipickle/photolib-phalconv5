@@ -6,7 +6,7 @@ class IndexController extends BaseController
 {
     public function indexAction()
     {
-        return $this->response->redirect("/album/" . $this->config->root_album_id);
+        return $this->response->redirect("/album/" . $this->config->rootAlbumId);
     }
 
     public function notFoundAction()

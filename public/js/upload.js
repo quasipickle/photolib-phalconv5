@@ -48,14 +48,14 @@ docOn("alpine:init", () => {
             formData.append("file", File);
             const uploadPromise = post("/photo/upload", formData, `upload ${File.name}`)
                 .then(data => {
-                    this.$dispatch("uploadprogress:filedone", id);
                     const template = document.createElement("template");
                     template.innerHTML = data.content.trim();
                     const newNode = template.content.firstElementChild;
                     this.$grid.appendChild(newNode);
                     // this won't work well if the album is so full it has images that haven't loaded yet (lazy)
                     newNode.scrollIntoView(false);
-                });
+                })
+                .finally(() => this.$dispatch("uploadprogress:filedone", id));
             return uploadPromise;
         },
         dragStartHandler(e) {

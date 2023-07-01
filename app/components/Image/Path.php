@@ -4,16 +4,18 @@ namespace Component\Image;
 
 use Component\Image\File\File;
 
-class Name
+class Path
 {
     private float $now;
     private string $hash;
+    private string $rootFileDir;
 
     private string $extension;
 
     private string $directory;
-    public function __construct(File $File)
+    public function __construct(File $File, string $rootFileDir)
     {
+        $this->rootFileDir = $rootFileDir;
         $this->now = microtime(true);
         $this->hash = md5($File->getName());
         $this->directory = substr($this->hash, 0, 2);
@@ -25,7 +27,7 @@ class Name
         }
     }
 
-    public function getName(string $suffix = ""): string
+    public function getPath(string $suffix = ""): string
     {
         return sprintf(
             "%s%s%s%s-%s%s.%s",
@@ -37,5 +39,15 @@ class Name
             $suffix,
             $this->extension
         );
+    }
+
+    public function getFullPath(string $suffix = ""): string
+    {
+        return $this->rootFileDir . $this->getPath($suffix);
+    }
+
+    public function getFullDir(): string
+    {
+        return dirname($this->getFullPath());
     }
 }

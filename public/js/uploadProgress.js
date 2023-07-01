@@ -1,5 +1,4 @@
 import { docOn, docOnLoad } from "./on.js";
-import { $ } from "./selector.js";
 
 docOn("alpine:init", () => {
     Alpine.data("uploadProgress", () => ({

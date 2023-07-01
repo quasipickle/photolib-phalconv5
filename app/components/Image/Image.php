@@ -4,7 +4,7 @@ namespace Component\Image;
 
 use Phalcon\Image\Adapter\{Gd, Imagick};
 use Jenssegers\ImageHash\ImageHash;
-use \Jenssegers\ImageHash\Implementations\DifferenceHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
 
 class Image
 {

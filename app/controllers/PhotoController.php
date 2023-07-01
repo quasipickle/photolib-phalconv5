@@ -4,7 +4,7 @@ namespace Controller;
 
 use Component\Retval;
 use Component\Image\File\{File, UploadedFile, DownloadedFile};
-use Component\Image\{Image, Name, Validator};
+use Component\Image\{Image, Path, Validator};
 use Component\Image\Validator\{DownloadValidator, UploadValidator};
 use Model\{Album, AlbumPhoto, Photo};
 use Phalcon\Http\Response;
@@ -33,17 +33,17 @@ class PhotoController extends BaseController
             $Response->send();
             exit();
         }
-
     }
+
     public function uploadAction()
     {
-        $albumId = $this->request->getPost("albumId");
-        if (!$this->request->hasFiles()) {
+        $uploadedFiles = $this->request->getUploadedFiles();
+        if (count($uploadedFiles) == 0) {
             $Retval = new Retval();
-            return $Retval->message("No files were uploaded")->response();
+            return $Retval->message("No files were uploaded.")->response();
         }
-
-        $File = $this->request->getUploadedFiles()[0];
+        $albumId = $this->request->getPost("albumId");
+        $File = $uploadedFiles[0];
         $UploadedFile = new UploadedFile($File);
         $Validator  = new UploadValidator($UploadedFile);
         $Retval = $this->importFile($albumId, $UploadedFile, $Validator);
@@ -102,21 +102,22 @@ class PhotoController extends BaseController
         $Photo->width = $width;
         $Photo->height = $height;
 
-        $Name = new Name($File);
-        $originalPath = $Name->getName();
-        $originalFullPath = $this->config->dirs->file->photo . $originalPath;
-        $dirPath = dirname($originalFullPath);
-        if (!file_exists($dirPath)) {
-            mkdir($dirPath, 0777, true);
+        $Path = new Path($File, $this->config->dirs->file->photo);
+        if (!file_exists($Path->getFullDir())) {
+            mkdir($Path->getFullDir(), 0777, true);
         }
-        $File->moveTo($originalFullPath);
-        $Photo->path = $originalPath;
 
-        $Image = new Image($originalFullPath);
+        if (!$File->moveTo($Path->getFullPath())) {
+            return $Retval->message("Unable to move the file to its final location.");
+        }
+
+        $Photo->path = $Path->getPath();
+
+        $Image = new Image($Path->getFullPath());
 
         foreach ($this->config->image->versions as $version) {
-            $path = $Name->getName($version->suffix);
-            $fullPath = $this->config->dirs->file->photo . $path;
+            $path = $Path->getPath($version->suffix);
+            $fullPath = $Path->getFullPath($version->suffix);
             $Image->resize($fullPath, $version->width, $version->height, $version->quality);
             [$resizedWidth, $resizedHeight] = getimagesize($fullPath);
 
@@ -129,7 +130,20 @@ class PhotoController extends BaseController
             }
         }
 
-        $Photo->create();
+        if (!$Photo->create()) {
+            unlink($Path->getFullPath());
+            foreach ($this->config->image->versions as $version) {
+                unlink($Path->getFullPath($version->suffix));
+            }
+            $output = "Error creating the record:";
+            $messages = $Photo->getMessages();
+            $separator = count($messages) > 1 ? "\n" : " ";
+            foreach ($Photo->getMessages() as $error) {
+                $output .= $separator . $error;
+            }
+
+            return $Retval->message($output);
+        }
 
         $AlbumPhoto = new AlbumPhoto();
         $AlbumPhoto->album_id = $Album->id;
