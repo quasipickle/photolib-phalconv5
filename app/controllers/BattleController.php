@@ -93,7 +93,7 @@ class BattleController extends BaseController
             ->leftJoin(Album::class, "pf.id = a.photo_id", "a")
             ->leftJoin(AlbumPhoto::class, "a.id = ap.album_id", "ap")
             ->leftJoin(Photo::class, "ap.photo_id = p.id", "p")
-            ->groupBy("a.id")
+            ->groupBy("a.id, pf.thumb_path")
             ->orderBy("success DESC, photoBattles DESC")
             ->limit(10)
             ->getQuery()
