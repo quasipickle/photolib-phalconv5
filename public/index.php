@@ -2,7 +2,7 @@
 require(__DIR__ . "/../vendor/autoload.php");
 
 use Tracy\Debugger;
-Debugger::enable();
+//Debugger::enable();
 
 require "../app/config/bootstrap.php";
 

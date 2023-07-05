@@ -1,14 +1,14 @@
 <div class="album">
     <div class="album__sidebar">
-            <div class="p-2 pt-0">
-                <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item')">
-                    {# required is needed to be able to target with css.  See _sidebar.scss #}
-                    <input type="text" class="form-control filter__input" required x-model="searchTerms" autofocus>
-                    <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
-                        {{ icon("bi-x-lg") }}
-                    </button>
-                </div>
+        <div class="p-2 pt-0">
+            <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item, .grid__item:has(.grid__album)')">
+                {# required is needed to be able to target with css.  See _sidebar.scss #}
+                <input type="text" class="form-control filter__input" required x-model="searchTerms" autofocus>
+                <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
+                    {{ icon("bi-x-lg") }}
+                </button>
             </div>
+        </div>
         <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
             {% for album in menuAlbums %}
                 <a class = "list-group-item list-group-item-action {% if Album.id == album.id %}active{% endif %} sidebar__list-item d-flex justify-content-between align-items-center"
@@ -104,7 +104,7 @@
                     Albums
                 #}
                 {% for subAlbum in subAlbums %}
-                    <div class="grid__item {% if Featured IS NOT null AND subAlbum.photo_id == Featured.id %}grid__item--featured {% endif %}" id="album-{{ subAlbum.id}}">
+                    <div class="grid__item {% if Featured IS NOT null AND subAlbum.photo_id == Featured.id %}grid__item--featured {% endif %}" id="album-{{ subAlbum.id}}" data-filter-on="{{ subAlbum.name }}">
                         {% if subAlbum.hasFeatured() %}
                             <div class="grid__photo-btn grid__tools">
                                 <div class="dropdown dropdown--no-caret">

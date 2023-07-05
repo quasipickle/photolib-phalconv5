@@ -2,15 +2,32 @@
 
 /**
  * Tasks for Sass compilation
- *
  */
 
 declare(strict_types=1);
 
 namespace Tasks;
 
-class SassTask extends \Phalcon\Cli\Task
+class SassTask extends TaskAbstract
 {
+    /**
+     * Get all the actions & descriptions for the help
+     */
+    public function getActions(): array
+    {
+        return [
+            [
+                "Action" => "compile",
+                "Description" => "Compile the SASS -> CSS",
+            ],
+            [
+                "Action" => "watch",
+                //phpcs:ignore Generic.Files.LineLength
+                "Description" => "Same as `compile` but watches the file afterwards & recompiles when there are changes.",
+            ],
+        ];
+    }
+
     /**
      * One-time compile
      * @return void
