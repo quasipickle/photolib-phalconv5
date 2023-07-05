@@ -24,7 +24,8 @@ docOn("alpine:init", () => {
                 const $$items = $$(itemsSelector);
 
                 $$items.forEach(node => {
-                    if(this.normalize(node.dataset.filterOn).includes(normalizedSearchTerms)) {
+                    node.dataset.filterOnNormalized ??= this.normalize(node.dataset.filterOn);
+                    if(node.dataset.filterOnNormalized.includes(normalizedSearchTerms)) {
                         node.classList.remove("d-none");
                     } else {
                         node.classList.add("d-none");

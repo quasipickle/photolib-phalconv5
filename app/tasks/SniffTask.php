@@ -10,8 +10,13 @@ declare(strict_types=1);
 
 namespace Tasks;
 
-class SniffTask extends \Phalcon\Cli\Task
+class SniffTask extends TaskAbstract
 {
+    public function getActions(): array
+    {
+        return [["Execution" => 'Call the task with no action to "sniff" the project for code styles.']];
+    }
+
     public function mainAction()
     {
         $executable_path = $this->config->dirs->file->root . "/vendor/bin/phpcs";

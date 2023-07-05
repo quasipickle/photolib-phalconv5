@@ -8,41 +8,21 @@ declare(strict_types=1);
 
 namespace Tasks;
 
-use League\CLImate\CLImate;
 use Component\Image\Image;
 use Helper\ProgressPrecision;
 use Model\{Album, AlbumPhoto, Photo};
 
-class RegenerateTask extends \Phalcon\Cli\Task
+class RegenerateTask extends TaskAbstract
 {
-    private CLImate $Climate;
+    private const ENTITY_PHOTO = "Photo";
+    private const ENTITY_ALBUM = "Album";
 
     /**
-     * Initialize the task
-     * @return void
+     * Get all the actions & descriptions for the help
      */
-    public function initialize()
+    public function getActions(): array
     {
-        $this->Climate = new CLIMate();
-        $this->Climate->extend("Helper\ProgressPrecision", "ProgressPrecision");
-        if ($this->dispatcher->getActionName()) {
-            $iam = trim(`whoami`);
-            if ($iam != "root") {
-                $this->Climate->backgroundYellow()->black()
-                //phpcs:ignore Generic.Files.LineLength
-                ->inline("Not running as `root`.  Unless you've ensured permissions you may get fatal file access permisson errors.")
-                ->br()->br();
-            }
-        }
-    }
-
-    /**
-     * Output help for this task
-     * @return void
-     */
-    public function helpAction()
-    {
-        $actions = [
+        return [
             [
                 "Action" => "thumb",
                 "Description" => "Regenerate the thumbnail for a single photo.",
@@ -56,15 +36,34 @@ class RegenerateTask extends \Phalcon\Cli\Task
             [
                 "Action" => "thumbs",
                 "Description" => "Regenerate the thumbnails of all photos in an album & its descendant albums.",
-                "Params" => "The id of the album.  {$this->config->rootAlbumId} will regenerate all thumbnails."
+                "Params" => "The id of the album. No parameter will regenerate all thumbs."
             ],
             [
                 "Action" => "displays",
                 "Description" => "Regenerate the display versions of all photos in an album & its descendant albums.",
-                "Params" => "The id of the album.  {$this->config->rootAlbumId} will regenerate all display versions."
+                "Params" => "The id of the album.  No parameter will regenerate all display versions."
             ],
         ];
-        $this->Climate->table($actions);
+    }
+
+    /**
+     * Initialize the task
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->Climate->extend("Helper\ProgressPrecision", "ProgressPrecision");
+        if ($this->dispatcher->getActionName()) {
+            $iam = trim(`whoami`);
+            if ($iam != "root") {
+                $this->Climate->backgroundYellow()->black()
+                //phpcs:ignore Generic.Files.LineLength
+                ->inline("Not running as `root`.  Unless you've ensured permissions you may get fatal file access permisson errors.")
+                ->br()->br();
+            }
+        }
     }
 
     /**
@@ -136,7 +135,7 @@ class RegenerateTask extends \Phalcon\Cli\Task
      */
     private function resizeSingle(\Phalcon\Config\Config $version): void
     {
-        $id = $this->getId("Photo");
+        $id = $this->getId(self::ENTITY_PHOTO);
         $Photo = Photo::findFirst($id);
 
         if ($Photo == null) {
@@ -154,7 +153,7 @@ class RegenerateTask extends \Phalcon\Cli\Task
      */
     private function resizeMultiple(\Phalcon\Config\Config $version): void
     {
-        $id = $this->getId("Album");
+        $id = $this->getId(self::ENTITY_ALBUM);
         $Album = Album::findFirst($id);
         $this->Climate->bold()->inline("Finding all albums and subalbums of {$Album->name}: ");
         $albumIds = $this->getDescendantAlbumIds($id);
@@ -212,7 +211,10 @@ class RegenerateTask extends \Phalcon\Cli\Task
 
         $Image = new Image($srcPath);
         try {
-            $Image->resize($destinationPath, $version->width, $version->height, $version->quality);
+            if(!$Image->resize($destinationPath, $version->width, $version->height, $version->quality))
+            {
+                $this->climate->error("Failed to create image from Photo #" . $Photo->id);
+            }
         } catch (\ImagickException $e) {
             if ($e->getCode() == 435) {
                 $this->Climate->bold()->red("Unable to open image for processing:")
@@ -233,6 +235,9 @@ class RegenerateTask extends \Phalcon\Cli\Task
         $Parser = new \Phalcon\Cop\Parser();
         $params = $Parser->parse();
         if (!array_key_exists(2, $params)) {
+            if($entityName == self::ENTITY_ALBUM) {
+                return $this->config->rootAlbumId;
+            }
             $this->Climate->error("{$entityName} id must be specified.");
             exit();
         }

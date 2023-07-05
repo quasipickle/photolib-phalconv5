@@ -1,14 +1,14 @@
 <div class="album">
     <div class="album__sidebar">
-            <div class="p-2 pt-0">
-                <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item')">
-                    
-                    <input type="text" class="form-control filter__input" required x-model="searchTerms" autofocus>
-                    <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
-                        <?= $this->viewHelper->icon('bi-x-lg') ?>
-                    </button>
-                </div>
+        <div class="p-2 pt-0">
+            <div class="input-group" x-data="filter('.sidebar__list-group .sidebar__list-item, .grid__item:has(.grid__album)')">
+                
+                <input type="text" class="form-control filter__input" required x-model="searchTerms" autofocus>
+                <button class="btn btn-outline-input btn-icon filter__button" @click="clear()">
+                    <?= $this->viewHelper->icon('bi-x-lg') ?>
+                </button>
             </div>
+        </div>
         <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
             <?php foreach ($menuAlbums as $album) { ?>
                 <a class = "list-group-item list-group-item-action <?php if ($Album->id == $album->id) { ?>active<?php } ?> sidebar__list-item d-flex justify-content-between align-items-center"
@@ -96,7 +96,7 @@
             <div class="album__grid">
                 
                 <?php $v179331560413072939921iterator = $subAlbums; $v179331560413072939921incr = 0; $v179331560413072939921loop = new stdClass(); $v179331560413072939921loop->self = &$v179331560413072939921loop; $v179331560413072939921loop->length = count($v179331560413072939921iterator); $v179331560413072939921loop->index = 1; $v179331560413072939921loop->index0 = 1; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - 1; ?><?php foreach ($v179331560413072939921iterator as $subAlbum) { ?><?php $v179331560413072939921loop->first = ($v179331560413072939921incr == 0); $v179331560413072939921loop->index = $v179331560413072939921incr + 1; $v179331560413072939921loop->index0 = $v179331560413072939921incr; $v179331560413072939921loop->revindex = $v179331560413072939921loop->length - $v179331560413072939921incr; $v179331560413072939921loop->revindex0 = $v179331560413072939921loop->length - ($v179331560413072939921incr + 1); $v179331560413072939921loop->last = ($v179331560413072939921incr == ($v179331560413072939921loop->length - 1)); ?>
-                    <div class="grid__item <?php if ($Featured != null && $subAlbum->photo_id == $Featured->id) { ?>grid__item--featured <?php } ?>" id="album-<?= $subAlbum->id ?>">
+                    <div class="grid__item <?php if ($Featured != null && $subAlbum->photo_id == $Featured->id) { ?>grid__item--featured <?php } ?>" id="album-<?= $subAlbum->id ?>" data-filter-on="<?= $subAlbum->name ?>">
                         <?php if ($subAlbum->hasFeatured()) { ?>
                             <div class="grid__photo-btn grid__tools">
                                 <div class="dropdown dropdown--no-caret">
