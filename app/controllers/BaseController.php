@@ -7,8 +7,11 @@ use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 
 class BaseController extends \Phalcon\Mvc\Controller
 {
+    protected \Phalcon\Assets\Collection $footerCollection;
+
     public function initialize(): void
     {
+        $this->footerCollection = $this->assets->collection("footer");
     }
 
     protected function getSubAlbums(int $id, array $omit = []): array
