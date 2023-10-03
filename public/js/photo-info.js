@@ -1,28 +1,28 @@
 import { docOnLoad } from "./on.js";
-import { $, $$ } from "./selector.js";
+import { $ } from "./selector.js";
 
 docOnLoad(() => {
     new bootstrap.Popover($("body"), {
         sanitize: false,
         placement: "bottom",
-        content: window.popover,
+        content: infoPopover,
         customClass: "grid__popover",
         trigger:"hover",
         selector: ".grid__info"
     });
 });
 
-function popover()
+function infoPopover(element)
 {
-    const battlesInt = parseInt(this.dataset.battles);
-    let winPercentageInt = parseInt(this.dataset.winPercentage);
+    const battlesInt = parseInt(element.dataset.battles);
+    let winPercentageInt = parseInt(element.dataset.winPercentage);
     winPercentageInt = isNaN(winPercentageInt) ? 0 : winPercentageInt;
     const lossPercentageInt = 100 - winPercentageInt;
 
     let info = `
         <div class="d-flex justify-content-between">
-            <span>${this.dataset.width} &times; ${this.dataset.height }</span>
-            <span>${this.dataset.filesize}</span>
+            <span>${element.dataset.width} &times; ${element.dataset.height }</span>
+            <span>${element.dataset.filesize}</span>
         </div>
     `;
     if (battlesInt > 0) {
@@ -39,4 +39,4 @@ function popover()
 
     return info;
 }
-window.popover = popover;
+//window.popover = popover;
