@@ -39,4 +39,3 @@ function infoPopover(element)
 
     return info;
 }
-//window.popover = popover;
