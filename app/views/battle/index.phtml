@@ -1,8 +1,9 @@
 <div class="contenders">
     <div class="battle__mask d-none"></div>
     {% for photo in photos %}
-        <div class="contender" data-id="{{ photo.id }}">
-            <img class="js-contender-img" src = "{{ photo(photo.display_path) }}" data-orig-src = "{{ photo(photo.path) }}"/>
+        <div class="contender loupe-widget" data-id="{{ photo.id }}">
+            <img class="js-contender-img loupe-widget__image" src = "{{ photo(photo.display_path) }}" data-loupe-src = "{{ photo(photo.path) }}"/>
+
             <div class="contender__meta">
                 <div>
                     {% if photo.firstAlbum() != null %}

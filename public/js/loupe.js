@@ -1,37 +1,105 @@
-import { docOnLoad } from "./on.js";
-import { $$ } from "./selector.js";
+import { docOnLoad, docOn, on } from "./on.js";
+import { $, $$ } from "./selector.js";
 
-docOnLoad(evt => {
-    $$(".js-loupe-img").forEach($img => {
-       const loupe = new Loupe($img);
-       loupe.init();
-    });
+let loupeManager;
+
+docOnLoad(() => {
+    loupeManager = new LoupeManager($$(".loupe-widget"));
+    // $$(".loupe-widget").forEach($widget => {
+    //    const loupe = new Loupe($widget);
+    //    loupe.init();
+    //    window.loupes.push(loupe);
+    // });
 });
 
+/*
+Keycodes:
+17 = ctrl
+32 = space
+*/
+
+docOn("keydown", evt => {
+    if (evt.keyCode == 17) {
+        loupeManager.enable();
+        // window.loupes.forEach(loupe => loupe.enable(true));
+    }
+});
+
+docOn("keyup", evt => {
+    if (evt.keyCode == 17) {
+        loupeManager.disable();
+        // window.loupes.forEach(loupe => loupe.enable(false));
+    }
+});
+
+docOn("keyup", evt => {
+    if (evt.keyCode == 32) {
+        loupeManager.resetZoom();
+        // window.loupes.forEach(loupe => loupe.resetZoom());
+    }
+});
+
+class LoupeManager {
+    constructor($$collection)
+    {
+        this.loupes = [];
+        $$collection.forEach($widget => {
+            const loupe = new Loupe($widget);
+            loupe.init();
+            this.loupes.push(loupe);
+        });
+    }
+
+    enable(){
+        this.loupes.forEach(l => l.enable(true));
+    }
+    disable(){
+        this.loupes.forEach(l => l.enable(false));
+    }
+    resetZoom(){
+        this.loupes.forEach(loupe => loupe.resetZoom());
+    }
+}
+
 class Loupe {
-    constructor($img) {
-        this.$img = $img;
+    constructor($widget) {
+        this.$widget = $widget;
+        this.widgetWidth = 0;
+        this.widgetHeight = 0;
+        this.loupeWidth = 0;
+        this.loupeHeight = 0;
+        this.$img = null;
+        this.imgWidth = 0;
+        this.imgHeight = 0;
         this.bigWidth = 0;
         this.bigHeight = 0;
+        this.zoomLvl = 1;
+        this.minZoomedDimension = 100;
         this.$loupe = null;
+        this.enabled = false;
     }
 
     async init() {
+        [this.widgetWidth, this.widgetHeight] = this.dimensions(this.$widget);
+        this.$img = $(".loupe-widget__image", this.$widget);
+
+        this.imgWidth = this.$img.width;
+        this.imgHeight = this.$img.height;
+
         this.buildLoupe();
-        this.$img.parentNode.appendChild(this.$loupe);
-        console.log(this.$img.parentNode);
-        console.log(this.$loupe)
-        await this.loadBigImg()
+        await this.loadBigImg();
+        this.addListeners();
     }
 
-    buildLoupe()
-    {
+    buildLoupe() {
         this.$loupe = document.createElement('div');
-        this.$loupe.classList.add('loupe-widget');
+        this.$loupe.classList.add('loupe-widget__loupe');
         this.$loupe.style.backgroundImage = `url(${this.$img.dataset.loupeSrc})`; 
+        this.$widget.appendChild(this.$loupe);
+        [this.loupeWidth, this.loupeHeight] = this.dimensions(this.$loupe);
     }
 
-    async loadBigImg(){
+    async loadBigImg() {
         return new Promise((resolve, reject) => {
             let img = new Image();
             img.onload = () => {
@@ -43,68 +111,64 @@ class Loupe {
         });
     }
 
+    addListeners() {
+        on(this.$widget, "mousemove", evt => {
+            if(!this.enabled)
+                return;
 
-    roundToPlace(num, place) {
-        return Math.round(num*Math.pow(10, place))/Math.pow(10, place);
+            const positionWidth = Math.round(evt.offsetX/this.imgWidth * 1000) / 1000;
+            const positionHeight = Math.round(evt.offsetY/this.imgHeight * 1000) / 1000;
+            const offsetX = (this.loupeWidth * positionWidth) - (this.loupeWidth / 2);
+            const offsetY = (this.loupeHeight * positionHeight) - (this.loupeHeight / 2);
+            const positionPercent = `calc(${positionWidth*100}% - ${offsetX}px) calc(${positionHeight*100}% - ${offsetY}px)`;
+
+            this.$loupe.style.backgroundPosition = positionPercent;  
+
+            this.$loupe.style.left =  (this.widgetWidth * positionWidth) + "px";
+            this.$loupe.style.top = (this.widgetHeight * positionHeight) + "px";
+        });
+
+        on(this.$widget, "mousewheel", evt => {
+            if(!this.enabled)
+                return;
+            evt.preventDefault();
+            if (evt.wheelDelta > 0 || evt.detail < 0) {
+              if(this.zoomLvl < 1) {
+                this.zoomLvl += 0.1;
+                this.$loupe.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
+              }
+            }
+            else {
+                this.zoomLvl -= 0.1;
+                if((this.bigWidth * this.zoomLvl > this.minZoomedDimension) && (this.bigHeight * this.zoomLvl > this.minZoomedDimension))
+                    this.$loupe.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
+                else
+                    this.zoomLvl += 0.1;
+            }
+        });
     }
-}
 
-function blah(){
+    enable(state){
+        if(state == this.enabled)
+            return;
 
-      
-    $('.js-loupe').each(function() {
-      var $this = $(this);
-      var $image = $('.js-loupe-image', $this);
-      var imgBigUrl = $image.attr('data-image-full');
-      var $loupe = $('.js-loupe-element', $this).css('background-image', 'url('+imgBigUrl+')');
-      var loupeSize = [$loupe.width(), $loupe.height()];
-      var bigImgSize = [0,0];
-      var zoomLvl = 1;
-      var bigImg = document.createElement('img');
-      bigImg.onload = function(){
-        bigImgSize = [bigImg.width, bigImg.height]
-      }
-      bigImg.src = imgBigUrl;
-      
-      $this.on('mousemove', function(e) {
-        var positionRatio = [
-          Math.round(e.offsetX/$image.width() * 1000) / 1000,
-          Math.round(e.offsetY/$image.height() * 1000) / 1000
-        ];
-        
-        var offset = [
-          (loupeSize[0] * positionRatio[0]) - (loupeSize[0] / 2),
-          (loupeSize[1] * positionRatio[1]) - (loupeSize[1] / 2),
-        ]
-        
-        var positionPercent = [
-          'calc('+positionRatio[0]*100+'% - '+offset[0]+'px)',
-          'calc('+positionRatio[1]*100+'% - '+offset[1]+'px)'
-        ];
-        
-        $loupe.css({
-          'background-position':  positionPercent.join(' '),
-          'top': e.offsetY,
-          'left': e.offsetX
-        })
-      });
-      
-      $this.on('mousewheel DOMMouseScroll', function(event){
-        event.preventDefault();
-        if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-          if(zoomLvl < 1.5) {
-            zoomLvl += 0.1;
-            $loupe.css('background-size', bigImgSize[0]*zoomLvl+'px '+bigImgSize[1]*zoomLvl+'px');
-          }
+        this.enabled = state;
+        if(state)
+        {
+            [this.widgetWidth, this.widgetHeight] = this.dimensions(this.$widget);
+            this.$widget.classList.add("loupe-widget--enabled");
         }
-        else {
-            if(zoomLvl > 0.5) {
-              zoomLvl -= 0.1;
-              $loupe.css('background-size', bigImgSize[0]*zoomLvl+'px '+bigImgSize[1]*zoomLvl+'px');
-          }
-        }
-      });
-    });  
-      
-    };
-    
+        else
+            this.$widget.classList.remove("loupe-widget--enabled");
+    }
+
+    resetZoom(){
+        this.zoomLvl = 1;
+        this.$widget.dispatchEvent(new Event("mousewheel"));
+    }
+
+    dimensions($el) {
+        const computedStyle = getComputedStyle($el);
+        return [parseInt(computedStyle.width), parseInt(computedStyle.height)];
+    }
+}    
