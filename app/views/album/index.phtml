@@ -151,8 +151,8 @@
     x-on:lightboxable-clicked.window="box($event.detail)"
     :class="show ? 'lightbox--show' : ''"
     [x-cloak]>
-    <div class="lightbox__current" @click="show=false">
-        <img class="lightbox__img" :src="photo?.dataset.src ?? ''"/>
+    <div class="lightbox__current loupe-widget" @click="show=false">
+        <img class="lightbox__img loupe-widget__image" :src="photo?.dataset.src ?? ''" :data-loupe-src="photo?.dataset.loupeSrc"/>
     </div>
     <div class = "lightbox__previous" @click="box(previous)" x-show="previous != null">
         <img class="lightbox__img--previous" :src="previous?.dataset.src"/>
@@ -163,7 +163,7 @@
     <div  class = "lightbox__details">
         <span class = "lightbox__detail" x-text="`${photo?.dataset.width} x ${photo?.dataset.height}`"></span>
         <span class = "lightbox__detail" x-text="photo?.dataset.filesize"></span>
-        <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "`{{ config.dirs.web.photo }}` + photo?.dataset.originalSrc" target = "_blank">Original {{ icon("bi-box-arrow-up-right") }}</a>
+        <a class = "lightbox__detail btn btn-sm btn-outline-light" :href = "photo?.dataset.originalSrc" target = "_blank">Original {{ icon("bi-box-arrow-up-right") }}</a>
     </div>
 </div>
 {{ partial("album/partials/album-new") }}
@@ -176,5 +176,6 @@
 <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
 
 <script defer src = "{{ url('/public/js/album.js') }}" type="module"></script>
+<script defer src = "{{ url('/public/js/loupe.js') }}" type="module"></script>
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 

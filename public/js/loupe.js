@@ -10,7 +10,7 @@ export class LoupeManager {
             minZoomedDimension: 300
         };
 
-        this.options = options == null ? defaultOptions : Object.assign(defaultOptons, optons);
+        this.options = options == null ? defaultOptions : Object.assign(defaultOptions, options);
         this.loupes = [];
 
         docOn("keydown", evt => {
@@ -25,20 +25,25 @@ export class LoupeManager {
             }
         });
 
-        docOn("keyup", evt => {
-            if (evt.keyCode == this.options.keycodeZoom) {
+        docOn("keydown", evt => {
+            if (evt.keyCode == this.options.keycodeResetZoom) {
                 this.resetZoom();
             }
         });
     }
 
     setCollection($$collection) {
+        this.destroy();
         this.loupes = [];
         $$collection.forEach($widget => {
             const loupe = new Loupe($widget, this.options.minZoomedDimension);
             loupe.init();
             this.loupes.push(loupe);
         });
+    }
+
+    destroy() {
+        this.loupes.forEach(l => l.destroyLoupe());
     }
 
     enable() {
@@ -88,6 +93,10 @@ class Loupe {
         this.$loupe.style.backgroundImage = `url(${this.$img.dataset.loupeSrc})`; 
         this.$widget.appendChild(this.$loupe);
         [this.loupeWidth, this.loupeHeight] = this.dimensions(this.$loupe);
+    }
+
+    destroyLoupe() {
+        this.$loupe.remove();
     }
 
     async loadBigImg() {
