@@ -30,7 +30,8 @@ class BattleController extends BaseController
             return $Response->redirect("/battle", false, 302);
         }
         $this->footerCollection
-            ->addJs($this->url->get("/public/js/loupe-js.js"))
+            //->addJs($this->url->get("/public/js/loupe-js.js"))
+            ->addJs($this->url->get("/public/js/loupe.js"), true, false, ["type"=>"module"])
             ->addJs($this->url->get("/public/js/battle.js"), true, false, ["type"=>"module"]);
         $this->view->title = "Battle";
         $this->view->photos = Photo::find(["order" => "RAND()", "limit" => 2]);

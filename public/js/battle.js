@@ -1,38 +1,11 @@
 import { $, $$ } from "./selector.js";
-import { on } from "./on.js";
+import { docOnLoad, on } from "./on.js";
 import { get } from "./axios-wrapper.js";
+import { LoupeManager } from "./loupe.js";
 
-const loupeOptions = {
-    magnification: 1,
-    width:500,
-    height:500,
-    shape: "circle"
-};
-
-let disablers = [];
-
-//17 = ctrl
-on(document, "keydown", e => {
-    if(e.keyCode == 17 && disablers.length == 0) {
-        $$(".contender").forEach($container => {
-            var $img = $(".js-contender-img", $container);
-            var origUrl = $img.dataset.origSrc;
-
-            var imgLoader = new Image();
-            imgLoader.onload = () => {
-                const loupe = new window.loupe.Loupe(loupeOptions);
-                disablers.push(window.loupe.enableLoupe($img, origUrl, loupe));
-            };
-            imgLoader.src = origUrl;
-        });
-    }
-});
-
-on(document, "keyup", e => {
-    if(e.keyCode == 17)
-        disablers.forEach(disable => disable());
-
-    disablers = [];
+docOnLoad(() => {
+    const loupeManager = new LoupeManager();
+    loupeManager.setCollection($$(".loupe-widget"));
 });
 
 on(".contender", "click", e => {
