@@ -1,6 +1,12 @@
 import { $, $$ } from "./selector.js";
-import { on } from "./on.js";
+import { docOnLoad, on } from "./on.js";
 import { get } from "./axios-wrapper.js";
+import { LoupeManager } from "./loupe.js";
+
+docOnLoad(() => {
+    const loupeManager = new LoupeManager();
+    loupeManager.setCollection($$(".loupe-widget"));
+});
 
 on(".contender", "click", e => {
     if (e.target.matches(".js-contender-img, .contender")) {

@@ -1,68 +1,59 @@
-import { docOnLoad, docOn, on } from "./on.js";
-import { $, $$ } from "./selector.js";
+import { docOn, on } from "./on.js";
+import { $ } from "./selector.js";
 
-let loupeManager;
-
-docOnLoad(() => {
-    loupeManager = new LoupeManager($$(".loupe-widget"));
-    // $$(".loupe-widget").forEach($widget => {
-    //    const loupe = new Loupe($widget);
-    //    loupe.init();
-    //    window.loupes.push(loupe);
-    // });
-});
-
-/*
-Keycodes:
-17 = ctrl
-32 = space
-*/
-
-docOn("keydown", evt => {
-    if (evt.keyCode == 17) {
-        loupeManager.enable();
-        // window.loupes.forEach(loupe => loupe.enable(true));
-    }
-});
-
-docOn("keyup", evt => {
-    if (evt.keyCode == 17) {
-        loupeManager.disable();
-        // window.loupes.forEach(loupe => loupe.enable(false));
-    }
-});
-
-docOn("keyup", evt => {
-    if (evt.keyCode == 32) {
-        loupeManager.resetZoom();
-        // window.loupes.forEach(loupe => loupe.resetZoom());
-    }
-});
-
-class LoupeManager {
-    constructor($$collection)
+export class LoupeManager {
+    constructor(options = null)
     {
+        const defaultOptions = {
+            keycodeEnable: 17, // ctrl
+            keycodeResetZoom: 32, // space
+            minZoomedDimension: 300
+        };
+
+        this.options = options == null ? defaultOptions : Object.assign(defaultOptons, optons);
+        this.loupes = [];
+
+        docOn("keydown", evt => {
+            if (evt.keyCode == this.options.keycodeEnable) {
+                this.enable();
+            }
+        });
+
+        docOn("keyup", evt => {
+            if (evt.keyCode == this.options.keycodeEnable) {
+                this.disable();
+            }
+        });
+
+        docOn("keyup", evt => {
+            if (evt.keyCode == this.options.keycodeZoom) {
+                this.resetZoom();
+            }
+        });
+    }
+
+    setCollection($$collection) {
         this.loupes = [];
         $$collection.forEach($widget => {
-            const loupe = new Loupe($widget);
+            const loupe = new Loupe($widget, this.options.minZoomedDimension);
             loupe.init();
             this.loupes.push(loupe);
         });
     }
 
-    enable(){
+    enable() {
         this.loupes.forEach(l => l.enable(true));
     }
-    disable(){
+    disable() {
         this.loupes.forEach(l => l.enable(false));
     }
-    resetZoom(){
+    resetZoom() {
         this.loupes.forEach(loupe => loupe.resetZoom());
     }
 }
 
 class Loupe {
-    constructor($widget) {
+    constructor($widget, minZoomedDimension) {
         this.$widget = $widget;
         this.widgetWidth = 0;
         this.widgetHeight = 0;
@@ -74,7 +65,7 @@ class Loupe {
         this.bigWidth = 0;
         this.bigHeight = 0;
         this.zoomLvl = 1;
-        this.minZoomedDimension = 100;
+        this.minZoomedDimension = minZoomedDimension;
         this.$loupe = null;
         this.enabled = false;
     }
