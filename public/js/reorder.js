@@ -1,3 +1,5 @@
+/* global Alpine, Sortable */
+
 import { docOn } from "./on.js";
 import { $ } from "./selector.js";
 import { post } from "./axios-wrapper.js";

@@ -1,3 +1,4 @@
+/* global Alpine, bootstrap */
 import { docOn } from "./on.js";
 import { get } from "./axios-wrapper.js";
 

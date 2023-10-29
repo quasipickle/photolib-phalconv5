@@ -14,11 +14,26 @@ class SniffTask extends TaskAbstract
 {
     public function getActions(): array
     {
-        return [["Execution" => 'Call the task with no action to "sniff" the project for code styles.']];
+        return [
+            [
+                "Action" => "php (or blank)",
+                "Description" => "Sniff PHP code (requires phpcs)"
+            ],
+            [
+                "Action" => "js",
+                "Description" => "Sniff Javascript code (requires npm + eslint)"
+            ]
+        ];
     }
 
     public function mainAction()
     {
+        $this->phpAction();
+    }
+
+    public function phpAction()
+    {
+        $this->Climate->blue("Checking PHP code formatting:");
         $executable_path = $this->config->dirs->file->root . "/vendor/bin/phpcs";
 
         if (!file_exists($executable_path)) {
@@ -37,6 +52,13 @@ class SniffTask extends TaskAbstract
         }
 
         passthru($command);
+    }
+
+    public function jsAction()
+    {
+        $this->Climate->blue("Checking Javascript code formatting:");
+        passthru("npx eslint --color public/js/**");
+        return;
     }
 
     private function configurePHPCodeSniff($executable_path)

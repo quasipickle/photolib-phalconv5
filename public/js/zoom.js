@@ -12,7 +12,7 @@ class Zoom {
     static RIGHT_CLICK = 2;
     static MIDDLE_CLICK = 1;
     static CSS_CONTAINER = "zoom__container";
-    static CSS_ZOOMED = 'zoom__container--zoomed';
+    static CSS_ZOOMED = "zoom__container--zoomed";
     static CSS_IMG = "zoom__img";
     static MIN_ZOOMED_DIMENSION = 300;
 
@@ -35,7 +35,7 @@ class Zoom {
     }
 
     async loadBigImg() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             let img = new Image();
             img.onload = () => {
                 this.bigWidth = img.width;
@@ -94,10 +94,10 @@ class Zoom {
                 return;
             evt.preventDefault();
             if (evt.wheelDelta > 0 || evt.detail < 0) {
-              if(this.zoomLvl < 1) {
-                this.zoomLvl += 0.1;
-                this.$container.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
-              }
+                if(this.zoomLvl < 1) {
+                    this.zoomLvl += 0.1;
+                    this.$container.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
+                }
             }
             else {
                 this.zoomLvl -= 0.1;

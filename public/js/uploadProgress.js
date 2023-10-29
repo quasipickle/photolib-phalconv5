@@ -1,4 +1,6 @@
-import { docOn, docOnLoad } from "./on.js";
+/* global Alpine */
+
+import { docOn } from "./on.js";
 
 docOn("alpine:init", () => {
     Alpine.data("uploadProgress", () => ({

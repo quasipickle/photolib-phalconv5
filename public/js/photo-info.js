@@ -1,3 +1,5 @@
+/* global bootstrap */
+
 import { docOnLoad } from "./on.js";
 import { $ } from "./selector.js";
 

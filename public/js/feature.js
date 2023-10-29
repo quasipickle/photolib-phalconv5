@@ -1,3 +1,4 @@
+/* global Alpine */
 import { docOn } from "./on.js";
 import { post } from "./axios-wrapper.js";
 import { $ } from "./selector.js";
@@ -33,7 +34,7 @@ docOn("alpine:init", () => {
 
 const feature = (data, task, itemId) => {
     post("/feature", data, task)
-        .then(data => {
+        .then(() => {
             const newFeaturedItem = $(`#${itemId}`);
             const oldFeaturedItem = $(".grid__item--featured");
 

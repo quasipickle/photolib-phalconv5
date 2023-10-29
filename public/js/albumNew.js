@@ -1,3 +1,4 @@
+/* global Alpine */
 import { docOn } from "./on.js";
 import { post } from "./axios-wrapper.js";
 
@@ -28,6 +29,6 @@ docOn("alpine:init", () => {
                     });
                 
             }
-        }
+        };
     });
 });

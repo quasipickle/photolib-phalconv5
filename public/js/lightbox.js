@@ -1,5 +1,6 @@
+/*global Alpine */
 import { docOn, docOnLoad } from "./on.js";
-import { $, $$ } from "./selector.js";
+import { $ } from "./selector.js";
 
 docOnLoad(() => {
     docOn("click", e => {

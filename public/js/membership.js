@@ -1,3 +1,5 @@
+/* global Alpine */
+
 import { on, off,  docOn } from "./on.js";
 import { post } from "./axios-wrapper.js";
 
@@ -12,17 +14,17 @@ docOn("alpine:init", () => {
                 return this.$store.lastAlbum.album.name ?? null != null;
             },
             getLastAlbum(){
-                return this.$store.lastAlbum.album
+                return this.$store.lastAlbum.album;
             },
             startMove()
             {
-                this.$dispatch('albumchooser:show');
+                this.$dispatch("albumchooser:show");
                 this.chooseListener = on(window, "albumchooser:choose", this.move.bind(this));
                 this.cancelListener = on(window,"albumchooser:cancel", this.removeListeners.bind(this));
             },
             startAdd()
             {
-                this.$dispatch('albumchooser:show');
+                this.$dispatch("albumchooser:show");
                 this.chooseListener = on(window, "albumchooser:choose", this.add.bind(this));
                 this.cancelListener = on(window,"albumchooser:cancel", this.removeListeners.bind(this));
             },
@@ -60,7 +62,7 @@ docOn("alpine:init", () => {
             _add(album)
             {
                 this.removeListeners();
-                this.$store.lastAlbum.album = album
+                this.$store.lastAlbum.album = album;
                 const data = {
                     photoId: photoIdParam,
                     albumId: album.id
