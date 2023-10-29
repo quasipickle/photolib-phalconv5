@@ -25,8 +25,7 @@ class MainTask
         $reflection = new \ReflectionClass($this);
         $namespace = $reflection->getNamespaceName();
 
-        foreach($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $taskClassName = sprintf("%s\%sTask", $namespace, $task);
             $taskObject = new $taskClassName();
 
@@ -35,6 +34,5 @@ class MainTask
             $actions = $taskObject->getActions();
             $climate->table($actions);
         }
-
     }
 }
