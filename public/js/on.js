@@ -1,4 +1,4 @@
-import { $$ } from './selector.js';
+import { $$ } from "./selector.js";
 
 /**
  * Shortcut function for x.addEventListener
@@ -18,11 +18,11 @@ export function on(elements, eventName, fn, options = {}) {
     }
 
     return fn;
-};
+}
 
- /**
-  * Same as on(), but only triggered once, then removed
-  */
+/**
+ * Same as on(), but only triggered once, then removed
+ */
 export function once(elements, eventName, fn) {
     on(elements, eventName, fn, { once: true });
 
@@ -41,8 +41,8 @@ export function off(elements, eventName, fn){
 
 function makeIterable(elements) {
     if (elements == null) {
-        throw 'Element passed to `on()` was null';
-    } else if (typeof elements === 'string') {
+        throw "Element passed to `on()` was null";
+    } else if (typeof elements === "string") {
         elements = $$(elements);
     } else if (elements instanceof HTMLElement || elements === document || elements === window) {
         elements = [elements];

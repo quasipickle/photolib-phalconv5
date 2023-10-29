@@ -1,3 +1,4 @@
+/* global Alpine */
 import { docOn } from "./on.js";
 import { $ } from "./selector.js";
 

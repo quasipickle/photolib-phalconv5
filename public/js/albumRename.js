@@ -1,3 +1,5 @@
+/* global Alpine */
+
 import { docOn } from "./on.js";
 import { post } from "./axios-wrapper.js";
 
@@ -18,10 +20,10 @@ docOn("alpine:init", () => {
                     name: newName
                 };
                 post("/album/rename", data, "rename the album")
-                    .then(data => {
+                    .then(() => {
                         window.location.reload();
                     });
             }
-        }
+        };
     });
 });

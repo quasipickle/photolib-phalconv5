@@ -1,0 +1,10 @@
+.zoom__container{
+    background-repeat:no-repeat;
+}
+.zoom__container--zoomed{
+    cursor:none!important;
+    .zoom__img{
+        cursor:none!important;
+        opacity:0;
+    }
+}

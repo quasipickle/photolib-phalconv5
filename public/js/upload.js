@@ -1,3 +1,5 @@
+/* global Alpine */
+
 import { on, docOn, off } from "./on.js";
 import { post } from "./axios-wrapper.js";
 import { $ } from "./selector.js";
@@ -24,7 +26,7 @@ docOn("alpine:init", () => {
                 albumId: window.albumId
             };
             const id = this.uploadId++;
-            this.$dispatch("uploadprogress:fileadd", id)
+            this.$dispatch("uploadprogress:fileadd", id);
             post("/photo/download", data, `import ${url}`)
                 .then(this.reloadWindow);
         },
@@ -38,7 +40,7 @@ docOn("alpine:init", () => {
         processFiles(files){
             for (var file of files){
                 this.files.add(file);
-                this.upload(file,this.uploadId++)
+                this.upload(file,this.uploadId++);
             }
         },
         upload(File, id) {
@@ -58,7 +60,7 @@ docOn("alpine:init", () => {
                 .finally(() => this.$dispatch("uploadprogress:filedone", id));
             return uploadPromise;
         },
-        dragStartHandler(e) {
+        dragStartHandler() {
             if (!this.$store.sorting) {
                 this.inPageDragging = true;
             }

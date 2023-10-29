@@ -1,3 +1,4 @@
 vendor
 public/photos/*
 app/views/compiled/*
+node_modules/*

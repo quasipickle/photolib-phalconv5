@@ -1,4 +1,5 @@
 
+/* global axios */
 export async function get(url, formData, task, options) {
     return axiosWrapper(url, formData, task, "get", options);
 }
@@ -45,20 +46,20 @@ async function axiosWrapper(url, formData, task, verb) {
         .then(response => {
             if (typeof response.data == "string") {
                 alert(`When trying to ${task}, the server returned the message:\n\n${response.data}`);
-                return false
+                return false;
             } else if (typeof response.data != "object") {
                 alert(`There was a communication error trying to ${task}.\n\nCheck the console.`);
                 console.log(response);
                 console.log(response.data);
-                return false
-            } else if (typeof response.data.success === 'undefined') {
+                return false;
+            } else if (typeof response.data.success === "undefined") {
                 alert(`No success state was specified when trying to ${task}.`);
             } else if (response.data.success != true) {
-                const message = (response.data.hasOwnProperty("message"))
+                const message = Object.prototype.hasOwnProperty.call(response.data, "message")
                     ? response.data.message
                     : "Error message was not defined";
                 alert(`There was a server error trying to ${task}:\n\n${message}.`);
-                return false
+                return false;
             } else {
                 return response.data;
             }
@@ -66,7 +67,7 @@ async function axiosWrapper(url, formData, task, verb) {
         .catch(error => {
             alert(`There was an unknown error trying to ${task}.\n\nCheck the console.`);
             console.log(error);
-            return false
+            return false;
         });
     return (!result) ? Promise.reject() : Promise.resolve(result);
 }

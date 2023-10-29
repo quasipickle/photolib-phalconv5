@@ -151,8 +151,8 @@
     x-on:lightboxable-clicked.window="box($event.detail)"
     :class="show ? 'lightbox--show' : ''"
     [x-cloak]>
-    <div class="lightbox__current loupe-widget" @click="show=false">
-        <img class="lightbox__img loupe-widget__image" :src="photo?.dataset.src ?? ''" :data-loupe-src="photo?.dataset.loupeSrc"/>
+    <div class="lightbox__current zoom__container" @click="show=false" x-ref="current">
+        <img class="lightbox__img zoom__img" :src="photo?.dataset.src ?? ''" :data-zoom-src="photo?.dataset.zoomSrc"/>
     </div>
     <div class = "lightbox__previous" @click="box(previous)" x-show="previous != null">
         <img class="lightbox__img--previous" :src="previous?.dataset.src"/>
@@ -176,6 +176,6 @@
 <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
 
 <script defer src = "{{ url('/public/js/album.js') }}" type="module"></script>
-<script defer src = "{{ url('/public/js/loupe.js') }}" type="module"></script>
+<script defer src = "{{ url('/public/js/zoom.js') }}" type="module"></script>
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 

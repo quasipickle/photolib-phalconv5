@@ -211,8 +211,7 @@ class RegenerateTask extends TaskAbstract
 
         $Image = new Image($srcPath);
         try {
-            if(!$Image->resize($destinationPath, $version->width, $version->height, $version->quality))
-            {
+            if (!$Image->resize($destinationPath, $version->width, $version->height, $version->quality)) {
                 $this->climate->error("Failed to create image from Photo #" . $Photo->id);
             }
         } catch (\ImagickException $e) {
@@ -235,7 +234,7 @@ class RegenerateTask extends TaskAbstract
         $Parser = new \Phalcon\Cop\Parser();
         $params = $Parser->parse();
         if (!array_key_exists(2, $params)) {
-            if($entityName == self::ENTITY_ALBUM) {
+            if ($entityName == self::ENTITY_ALBUM) {
                 return $this->config->rootAlbumId;
             }
             $this->Climate->error("{$entityName} id must be specified.");

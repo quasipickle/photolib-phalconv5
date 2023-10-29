@@ -1,6 +1,6 @@
-import { LoupeManager } from "./loupe.js";
+/*global Alpine */
 import { docOn, docOnLoad } from "./on.js";
-import { $, $$ } from "./selector.js";
+import { $ } from "./selector.js";
 
 docOnLoad(() => {
     docOn("click", e => {
@@ -12,8 +12,6 @@ docOnLoad(() => {
 });
 
 docOn("alpine:init", () => {
-    const loupeManager = new LoupeManager();
-
     Alpine.data("lightbox", () => ({
         photo: null,
         previous: null,
@@ -24,7 +22,7 @@ docOn("alpine:init", () => {
             this.previous = getPhotoEl($clicked.closest(".grid__item").previousElementSibling);
             this.next = getPhotoEl($clicked.closest(".grid__item").nextElementSibling);
             this.show = true;
-            this.$nextTick(() => loupeManager.setCollection($$(".loupe-widget")));
+            this.$nextTick(() => this.$refs.current.dispatchEvent(new Event("zoom:refresh")));
         },
     }));
 });

@@ -34,7 +34,12 @@ class AlbumController extends BaseController
             ]
         );
 
-        $this->footerCollection->addJs("https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js", false, false, ["type"=>"module", "defer"=>"true"]);
+        $this->footerCollection->addJs(
+            "https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js",
+            false,
+            false,
+            ["type" => "module", "defer" => "true"]
+        );
     }
 
     public function createAction()

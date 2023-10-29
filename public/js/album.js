@@ -1,3 +1,4 @@
+/* global Alpine */
 import "./albumChooser.js";
 import "./albumDelete.js";
 import "./albumMove.js";
