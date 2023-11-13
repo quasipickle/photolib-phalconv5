@@ -164,17 +164,6 @@ class AlbumController extends BaseController
         }
     }
 
-    private function buildBreadcrumbs(Album|null $Album): array
-    {
-        $breadcrumbs = [];
-        while ($Album != null) {
-            array_unshift($breadcrumbs, $Album);
-            $Album = Album::findFirst(["id = :id:","bind" => ["id" => $Album->album_id]]);
-        }
-
-        return $breadcrumbs;
-    }
-
     /**
      * Retrieve an array of tags grouped by photo id
      * @param int $albumId

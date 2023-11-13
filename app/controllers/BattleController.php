@@ -33,7 +33,25 @@ class BattleController extends BaseController
             ->addJs($this->url->get("/public/js/zoom.js"), true, false, ["type" => "module"])
             ->addJs($this->url->get("/public/js/battle.js"), true, false, ["type" => "module"]);
         $this->view->title = "Battle";
-        $this->view->photos = Photo::find(["order" => "RAND()", "limit" => 2]);
+
+        $photos = Photo::find(["order" => "RAND()", "limit" => 2]);
+        $this->view->photos = $photos;
+
+        $photoIds = array_column($photos->toArray(), "id");
+        $memberships = AlbumPhoto::find([
+            "columns" => ["album_id" => "MAX(album_id)", "photo_id"],
+            "conditions" => "photo_id IN ({ids:array})",
+            "bind" => [ "ids" => $photoIds ],
+            "group" => "photo_id"
+        ]);
+        $breadcrumbs = [];
+        foreach($memberships as $albumPhoto)
+        {
+            $Album = Album::findFirst("id = " . $albumPhoto->album_id);
+            $breadcrumbs[$albumPhoto->photo_id] = array_filter($this->buildBreadcrumbs($Album), fn($album) => $album->id != $this->config->rootAlbumId);
+        }
+
+        $this->view->breadcrumbs = $breadcrumbs;
     }
 
     /**

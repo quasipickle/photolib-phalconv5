@@ -1,25 +1,31 @@
 <div class="contenders">
     <div class="battle__mask d-none"></div>
     {% for photo in photos %}
-        <div class="contender zoom__container" data-id="{{ photo.id }}">
-            <img class="js-contender-img zoom__img" src = "{{ photo(photo.display_path) }}" data-zoom-src = "{{ photo(photo.path) }}"/>
+        <div class="contender" data-contender-id="{{ photo.id }}">
+            <div class="contender__img-wrapper zoom__container">
+                <img class="js-contender-img zoom__img zoom__img--no-zoom" src = "{{ photo(photo.display_path) }}" data-zoom-src = "{{ photo(photo.path) }}"/>
+            </div>
             <div class="contender__meta">
-                <div>
-                    {% if photo.firstAlbum() != null %}
-                        <a href="{{ album(photo.firstAlbum().id) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">{{ photo.firstAlbum().name }} {{ icon('bi-arrow-up-right') }}</a>
-                    {% else %}
-                        <span class = "btn btn-danger">Orphaned</span>
-                    {% endif %}
-                    <a href="{{ photo(photo.path) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">Original {{ icon('bi-arrow-up-right') }}</a>
-                </div>
+                {% if breadcrumbs[photo.id] is defined %}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            {% for album in breadcrumbs[photo.id] %}
+                                <li class="breadcrumb-item">
+                                    <a href="{{ album(album.id) }}" target="_new">{{ album.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </nav>
+                {% endif %}
                 <div class="d-flex gap-2">
-                    <span class="badge bg-frosted rounded-pill text-dark">
+                    <span>
                         #{{ photo.id }}
                     </span>
-                    <span class="badge bg-frosted rounded-pill text-dark">
+                    <span>
                         {{ icon("bi-bar-chart") }} {{ photo.battles }}
                     </span>
                 </div>
+                <a href="{{ photo(photo.path) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">Original {{ icon('bi-arrow-up-right') }}</a>
             </div>
         </div>
     {% endfor %}

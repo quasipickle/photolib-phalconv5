@@ -6,11 +6,11 @@ import { get } from "./axios-wrapper.js";
 on(".contender", "click", e => {
     if (e.target.matches(".js-contender-img, .contender")) {
         const $contender = e.target.closest(".contender");
-        const winnerId = $contender.dataset.id;
+        const winnerId = $contender.dataset.contenderId;
         const loserId = Array
             .from($$(".contender"))
             .find(node => node != $contender)
-            .dataset.id;
+            .dataset.contenderId;
         $(".battle__mask").classList.remove("d-none");
         $("#winner-id-field").value = winnerId;
         $("#loser-id-field").value = loserId;
