@@ -1,4 +1,4 @@
-import { docOnLoad, on } from "./on.js";
+import { docOn, docOnLoad, on } from "./on.js";
 import { $, $$ } from "./selector.js";
 
 docOnLoad(() => {
@@ -55,18 +55,6 @@ class Zoom {
     addListeners() {
         on(this.$container, "contextmenu", e => e.preventDefault());
 
-        on(this.$container, "mouseup", evt => {
-            if(!this.IsRightClick(evt))
-                return;
-            this.disable();
-        });
-
-        on(this.$container, "mouseleave", () => {
-            if(!this.enabled)
-                return;
-            this.disable();
-        });
-
         on(this.$img, "mousedown", evt => {
             if(this.enabled && evt.button == Zoom.MIDDLE_CLICK) {
                 this.zoomLvl = 1;
@@ -74,19 +62,24 @@ class Zoom {
                 return;
             }
 
-            if(!this.IsRightClick(evt))
+            if(!this.isRightClick(evt) || !this.isZoomNecessary())
                 return;
+
             this.enabled = true;
             this.$container.classList.add(Zoom.CSS_ZOOMED);
-            this.$container.style.backgroundImage = `url(${this.bigImgUrl})`;
+            this.$container.style.backgroundImage = `url(${this.bigImgUrl})`;         
+            this.setBackgroundSize();
             this.setBackgroundCoordinates(evt);
         });
 
-        on(this.$img, "mousemove", evt => {
-            if(!this.enabled)
-                return;
+        docOn("mouseup", evt => {
+            if(this.isRightClick(evt) && this.enabled)
+                this.disable();
+        });
 
-            this.setBackgroundCoordinates(evt);
+        on(this.$img, "mousemove", evt => {
+            if(this.enabled)
+                this.setBackgroundCoordinates(evt);
         });
         
         on(this.$container, "mousewheel", evt => {
@@ -96,13 +89,13 @@ class Zoom {
             if (evt.wheelDelta > 0 || evt.detail < 0) {
                 if(this.zoomLvl < 1) {
                     this.zoomLvl += 0.1;
-                    this.$container.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
+                    this.setBackgroundSize();
                 }
             }
             else {
                 this.zoomLvl -= 0.1;
                 if((this.bigWidth * this.zoomLvl > Zoom.MIN_ZOOMED_DIMENSION) && (this.bigHeight * this.zoomLvl > Zoom.MIN_ZOOMED_DIMENSION))
-                    this.$container.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
+                    this.setBackgroundSize();
                 else
                     this.zoomLvl += 0.1;
             }
@@ -112,6 +105,7 @@ class Zoom {
          * Custom event for allowing external code to update image info
          */
         on(this.$container, "zoom:refresh", async () => {
+            this.zoomLvl = 1;
             this.setImgWidth();
             await this.loadBigImg();
         });
@@ -128,8 +122,16 @@ class Zoom {
         }
     }
 
-    IsRightClick(evt){
+    isRightClick(evt){
         return evt.button == Zoom.RIGHT_CLICK;
+    }
+
+    isZoomNecessary(){
+        return this.bigWidth > this.imgWidth || this.bigHeight > this.imgHeight;
+    }
+
+    setBackgroundSize(){
+        this.$container.style.backgroundSize = `${this.bigWidth * this.zoomLvl}px ${this.bigHeight * this.zoomLvl}px`;
     }
     
     disable(){
@@ -139,9 +141,20 @@ class Zoom {
     }
 
     setBackgroundCoordinates(evt){
-        const x = Math.round(evt.offsetX/this.imgWidth * 1000) / 1000;
-        const y = Math.round(evt.offsetY/this.imgHeight * 1000) / 1000;
+        if(this.$container.offsetWidth < this.bigWidth)
+        {
+            const x = Math.round(evt.offsetX/this.imgWidth * 1000) / 1000;
+            this.$container.style.backgroundPositionX = (x * 100) + "%";
+        }
+        else
+            this.$container.style.backgroundPositionX = "50%";
 
-        this.$container.style.backgroundPosition = `${x * 100}% ${y * 100}%`;
+        if(this.$container.offsetHeight < this.bigHeight)
+        {
+            const y = Math.round(evt.offsetY/this.imgHeight * 1000) / 1000;
+            this.$container.style.backgroundPositionY = (y * 100) + "%";
+        }
+        else
+            this.$container.style.backgroundPositionY = "50%";
     }
 }   
