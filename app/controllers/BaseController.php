@@ -14,6 +14,17 @@ class BaseController extends \Phalcon\Mvc\Controller
         $this->footerCollection = $this->assets->collection("footer");
     }
 
+    protected function buildBreadcrumbs(Album|null $Album): array
+    {
+        $breadcrumbs = [];
+        while ($Album != null) {
+            array_unshift($breadcrumbs, $Album);
+            $Album = Album::findFirst(["id = :id:","bind" => ["id" => $Album->album_id]]);
+        }
+
+        return $breadcrumbs;
+    }
+
     protected function getSubAlbums(int $id, array $omit = []): array
     {
         $omit[] = 0;// forcing $omit to have at least 1 element.  0 = invalid id so it won't match, but is valid SQL

@@ -1,8 +1,12 @@
 <?php
 require(__DIR__ . "/../vendor/autoload.php");
 
+define("DEBUG", FALSE);
+define("DEBUG_SQL", FALSE);
+
 use Tracy\Debugger;
-//Debugger::enable();
+if(DEBUG)
+    Debugger::enable();
 
 require "../app/config/bootstrap.php";
 
