@@ -1,0 +1,74 @@
+@use "sass:map";
+.duplicate{
+    display:grid;
+    grid-template-areas:
+        "primaryPhoto primaryMeta secondaryMeta secondaryPhoto"
+        "primaryPhoto ignore      ignore        secondaryPhoto";
+    gap:map.get($spacers, 2);
+    margin-bottom:map.get($spacers, 3);
+    background-color:$slate-200;
+    padding:map.get($spacers, 3);
+    border-radius:var(--bs-border-radius-xl);
+}
+.duplicate__photo{
+    width:300px;
+    max-height:300px;
+    object-fit:contain;
+
+    &--primary{
+        grid-area:primaryPhoto;
+        object-position: top right;
+        justify-self:end;
+    }
+    &--secondary{
+        grid-area: secondaryPhoto;
+        object-position: top left;
+    }
+}
+
+.duplicate__meta{
+    --space: #{map.get($spacers, 1)};
+    padding:0 0 0 var(--space);
+    &--primary{
+        grid-area:primaryMeta;
+    }
+    &--secondary{
+        grid-area:secondaryMeta;
+    }
+}
+.duplicate__actions{
+    display:flex;
+    flex-direction:column;
+    gap: var(--space);
+}
+.duplicate__ignore{
+    grid-area: ignore;
+    justify-self:center;
+    align-self:end;
+}
+.duplicate__stats{
+    display:grid;
+    gap: var(--space);
+    grid-auto-rows:min-content;
+    margin-bottom:map.get($spacers, 2);
+
+    &--primary .duplicate__stat{
+        justify-content: end;
+    }
+}
+
+.duplicate__stat{
+    gap: var(--space);
+    display:flex;
+}
+.duplicate__stat--better{
+    background-color: $green-500;
+}
+.duplicate__popover{
+    --bs-popover-max-width: 400px;
+    --bs-popover-bg: var(--bs-popover-border-color);
+    --bs-popover-border-radius:0px;
+    --bs-popover-inner-border-radius:0px;
+    --bs-popover-body-padding-x: 0px;
+    --bs-popover-body-padding-y: 0px;
+}

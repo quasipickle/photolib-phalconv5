@@ -4,8 +4,9 @@ namespace Controller;
 
 use Component\Retval;
 use Model\{Album, AlbumPhoto, Photo};
+use Trait\DeleteFileTrait;
 
-class MembershipController extends BaseController
+class MembershipController extends BaseDeleteFileController
 {
     private ?int $albumId;
     private ?int $photoId;
@@ -62,54 +63,22 @@ class MembershipController extends BaseController
     {
         $Retval = new Retval();
         $photo = Photo::findFirst($this->photoId);
-        if ($photo == null) {
-            return $Retval->message("The photo could not be deleted because it does not exist.")->response();
-        }
-
-        $originalPath = $this->config->dirs->file->photo . $photo->path;
-        if (!$this->deleteFile($originalPath)) {
-            return $Retval->message("Could not delete the original file, so nothing was deleted.")->response();
-        }
-
-        $displayPath = $this->config->dirs->file->photo . $photo->display_path;
-        if (!$this->deleteFile($displayPath)) {
-            //phpcs:ignore Generic.Files.LineLength
-            return $Retval->message("The original file was deleted, but there was an error deleting the display file: " . $displayPath . ". The database record has not been removed.")->response();
-        }
-
-        $thumbPath = $this->config->dirs->file->photo . $photo->thumb_path;
-        if (!$this->deleteFile($thumbPath)) {
-            //phpcs:ignore Generic.Files.LineLength
-            return $Retval->message("The original and display files were deleted, but there was an error deleting the thumb file: " . $thumbPath . ". The database record has not been removed.")->response();
+        switch ($this->deleteAllPhotoFiles($photo)) {
+            case self::ERROR_NO_PHOTO:
+                return $Retval->message("The photo could not be deleted because it does not exist.")->response();
+            case self::ERROR_DELETE_ORIGINAL:
+                //phpcs:ignore Generic.Files.LineLength
+                return $Retval->message("Could not delete the original file: " . $photo->path . ", so nothing was deleted.")->response();
+            case self::ERROR_DELETE_DISPLAY:
+                //phpcs:ignore Generic.Files.LineLength
+                return $Retval->message("The original file was deleted, but there was an error deleting the display file: " . $photo->display_path . ". The database record has not been removed.")->response();
+            case self::ERROR_DELETE_THUMB:
+                //phpcs:ignore Generic.Files.LineLength
+                return $Retval->message("The original and display files were deleted, but there was an error deleting the thumb file: " . $photo->thumb_path . ". The database record has not been removed.")->response();
         }
 
         $photo->delete();
         return $Retval->success(true)->response();
-    }
-
-    /**
-     * Delete a file.  Checks that the file is in an allowed location.
-     *
-     * @param string $path
-     * @return boolean
-     */
-    private function deleteFile(string $path): bool
-    {
-        $realPath = realpath($path);
-
-        if ($realPath === false) {
-            return true;
-        }
-
-        if ($realPath != $path) {
-            return false;
-        }
-
-        if (strpos($realPath, realpath($this->config->dirs->file->photo)) !== 0) {
-            return false;
-        }
-
-        return unlink($path);
     }
 
     /**

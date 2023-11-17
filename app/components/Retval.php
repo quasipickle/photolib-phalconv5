@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Component;
 
 use Phalcon\Http\Response;
@@ -44,7 +46,7 @@ class Retval
      * @param [mixed] $args The arguments passed
      * @return mixed
      */
-    public function &__call(string $name, $args)
+    public function &__call(string $name, $args): self
     {
         if ($args === []) {
             return $this->properties[$name];
@@ -52,6 +54,15 @@ class Retval
             $this->properties[$name] = $args[0];
             return $this;
         }
+    }
+
+    /**
+     * Define a "success" setter to enforce bool
+     */
+    public function &success(bool $isSuccessful): self
+    {
+        $this->properties["success"] = $isSuccessful;
+        return $this;
     }
 
     /**

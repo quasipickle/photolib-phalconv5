@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Tasks;
+namespace Task;
 
 use League\CLImate\CLImate;
 

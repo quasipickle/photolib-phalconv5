@@ -10,7 +10,10 @@ use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Console\Exception as PhalconException;
 use Phalcon\Di\FactoryDefault\Cli as CliDI;
-use Phalcon\Autoload\Loader;
+
+// phpcs:disable PSR1.Files.SideEffects
+define("DEBUG", false);
+define("DEBUG_SQL", false);
 
 require(__DIR__ . "/../vendor/autoload.php");
 
@@ -23,7 +26,7 @@ require "config/services/loader.php";
 require "config/services/db.php";
 
 $Dispatcher = new Dispatcher();
-$Dispatcher->setDefaultNamespace('Tasks');
+$Dispatcher->setDefaultNamespace('Task');
 $Container->setShared('dispatcher', $Dispatcher);
 
 $Console = new Console($Container);

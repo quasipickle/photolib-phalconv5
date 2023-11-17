@@ -1,0 +1,86 @@
+{%- macro statsTable(version, Primary, Secondary) %}
+    {% set cssClass = version == "primary" ? "duplicate__stats--primary" : "duplicate__stats--secondary" %}
+    {% set betterOrder = version == "secondary" ? "order-2" : "" %}
+    <div class="duplicate__stats {{ cssClass }}">
+        <div class="duplicate__stat">
+            {% if Primary.Area() > Secondary.Area() %}
+                {{ icon("bi bi-arrow-up-circle-fill text-success " ~ betterOrder) }}
+            {% endif %}
+            {{ Primary.width }} &times; {{ Primary.height}}
+        </div>
+        <div class="duplicate__stat">
+            {% if Primary.filesize > Secondary.filesize %}
+                {{ icon("bi bi-arrow-up-circle-fill text-success " ~ betterOrder) }}
+            {% endif %}
+            {{ filesize(Primary.filesize) }}
+        </div>
+        <div class="duplicate__stat">
+            {{ Primary.mime_type }}
+        </div>
+        <div class="duplicate__stat">
+            #{{ Primary.id }}
+        </div>
+    </div>
+{%- endmacro %}
+
+<div class="overflow-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+            <h1>
+                Duplicates {% if duplicates|length > 0 %}<small class="text-body-secondary">(<span id="duplicates-count">{{ duplicates|length }}</span>){% endif %}
+            </h1>
+            {% for duplicate in duplicates %}
+                <div class="duplicate">
+                    <img src = "{{ photo(duplicate.Primary.display_path) }}" 
+                         class="duplicate__photo duplicate__photo--primary"
+                         data-bs-toggle="popover"
+                         data-bs-content="<img src = '{{ photo(duplicate.Primary.display_path) }}' class='mw-100'>"
+                         data-bs-custom-class="duplicate__popover"
+                         data-bs-html="true"
+                         data-bs-trigger="hover"
+                         alt="{{ duplicate.Primary.id }}" />
+                    <div class="duplicate__meta duplicate__meta--primary">
+                        {{ statsTable("primary", duplicate.Primary, duplicate.Secondary) }}
+                        <div class="duplicate__actions">
+                            <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="primary">
+                                Take
+                            </button>
+                            <a href="{{ photo(duplicate.Primary.path) }}" class="btn btn-outline-secondary" target="_blank">
+                                Original {{ icon("bi-arrow-up-right")}}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="duplicate__meta duplicate__meta--secondary">
+                        {{ statsTable("secondary", duplicate.Secondary, duplicate.Primary) }}
+                        <div class="duplicate__actions">
+                            <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="secondary">
+                                Take
+                            </button>
+                            <a href="{{ photo(duplicate.Secondary.path) }}" class="btn btn-outline-secondary" target="_blank">
+                                Original {{ icon("bi-arrow-up-right")}}
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <img src = "{{ photo(duplicate.Secondary.display_path) }}" 
+                         class="duplicate__photo duplicate__photo--secondary"
+                         data-bs-toggle="popover"
+                         data-bs-content="<img src = '{{ photo(duplicate.Secondary.display_path) }}' class='mw-100'>"
+                         data-bs-custom-class="duplicate__popover"
+                         data-bs-html="true"
+                         data-bs-trigger="hover"
+                         alt="{{ duplicate.Secondary.id }}"
+                         />
+                    <button class="btn btn-secondary duplicate__ignore js-ignore" data-duplicate-id="{{ duplicate.id}}">Ignore</button>
+                </div>
+                {% else %}
+                    <p class="alert alert-light">
+                        No duplicates have been found.  Run the <code>app/cli.php duplicates</code> task on the server to look for duplicates.
+                    </p>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

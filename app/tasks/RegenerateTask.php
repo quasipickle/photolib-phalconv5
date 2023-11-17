@@ -6,10 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Tasks;
+namespace Task;
 
 use Component\Image\Image;
-use Helper\ProgressPrecision;
 use Model\{Album, AlbumPhoto, Photo};
 
 class RegenerateTask extends TaskAbstract

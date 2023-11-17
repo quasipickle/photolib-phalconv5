@@ -1,7 +1,7 @@
 <?php
 require(__DIR__ . "/../vendor/autoload.php");
 
-define("DEBUG", FALSE);
+define("DEBUG", TRUE);
 define("DEBUG_SQL", FALSE);
 
 use Tracy\Debugger;

@@ -39,6 +39,11 @@ class Photo extends \Phalcon\Mvc\Model
         return $this->battles != 0 ? round($this->wins / $this->battles * 100) : null;
     }
 
+    public function area(): int
+    {
+        return $this->width * $this->height;
+    }
+
     public function firstAlbum(): Album
     {
         return (count($this->Albums)) ? $this->Albums[0] : null;
