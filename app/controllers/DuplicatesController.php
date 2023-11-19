@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Controller;
 
 use Component\Retval;
-use Model\{Duplicate, Photo};
+use Model\{Album, Duplicate, Photo};
 use Phalcon\Http\Response;
 
 class DuplicatesController extends BaseDeleteFileController
@@ -84,6 +84,13 @@ class DuplicatesController extends BaseDeleteFileController
                     //phpcs:ignore Generic.Files.LineLength
                     ->message("The original and display discard files were deleted, but there was an error deleting the discard thumb file: " . $Delete->thumb_path . ". The database record has not been removed.")
                     ->response();
+        }
+
+        $featuringAlbums = Album::findByPhotoId($Delete->id);
+        foreach($featuringAlbums as $Album)
+        {
+            $Album->photo_id = $Take->id;
+            $Album->save();
         }
 
         $Duplicate->delete();
