@@ -25,7 +25,7 @@ $config = [
         ]
     ],
     "duplicate" => [
-        "distance" => 4
+        "distance" => 6
     ],
     "image" => [
         "conversions" => [

@@ -18,9 +18,10 @@ class MainTask
     public function mainAction()
     {
         $tasks = [
+            "Duplicates",
             "Regenerate",
             "Sass",
-            "Sniff"
+            "Sniff",
         ];
         $reflection = new \ReflectionClass($this);
         $namespace = $reflection->getNamespaceName();
@@ -30,7 +31,7 @@ class MainTask
             $taskObject = new $taskClassName();
 
             $climate = new CLIMate();
-            $climate->br()->bold()->green('"' . strtolower($task) . '"');
+            $climate->br()->bold()->green()->inline('"' . strtolower($task) . '" ')->lightGray($taskObject->getDescription());
             $actions = $taskObject->getActions();
             $climate->table($actions);
         }

@@ -16,6 +16,7 @@ class DuplicatesTask extends TaskAbstract
 {
     /** @var int The maximum value distance can have - this is due to the DB column being tinyint. */
     public const DISTANCE_MAX = 255;
+    private int $distance = 0;
 
     private DuplicateList $ExistingDuplicates;
 
@@ -28,6 +29,13 @@ class DuplicatesTask extends TaskAbstract
         parent::initialize();
         $this->Climate->extend("Helper\ProgressPrecision", "ProgressPrecision");
         $this->ExistingDuplicates = new DuplicateList();
+
+        $this->getDistance();
+    }
+
+    public function getDescription() : string
+    {
+        return "Look for photos.  After running, go to /duplicates to process discovered duplicates.";
     }
 
     /**
@@ -35,12 +43,42 @@ class DuplicatesTask extends TaskAbstract
      */
     public function getActions(): array
     {
-        return [];
+        return [
+            [
+                "Action" => "code (or blank)",
+                "Description" => "Use code-based comparison. Much quicker, but requires php-gmp.",
+            ],
+            [
+                "Action" => "db",
+                "Description" => "Use database-based comparison.  Much slower, but doesn't require php-gmp.",
+            ]
+        ];
     }
 
     public function mainAction()
     {
+        if (!function_exists("gmp_hamdist2")) {
+            $this->Climate->comment("`gmp_hamdist()` does not exist - falling back to the slower, database comparison.");
+            $this->Climate->comment("It is suggested you install php-gmp to enable much quicker comparisons.");
+            $this->dbAction();
+        }
+        else {
+            $this->codeAction();
+        }
+
+    }
+
+    /**
+     * Find duplicates using database queries to calculate the distance.
+     * 
+     * This is slow because a query has to be run for every photo
+     */
+    public function dbAction()
+    {
         $this->ExistingDuplicates->addDuplicates(Duplicate::find());
+
+        $start = microtime(true);
+        $found = 0;
 
         // Get all hashes
         $photos = Photo::find();
@@ -58,8 +96,7 @@ class DuplicatesTask extends TaskAbstract
         SQL;
         $connection = $this->db;
         $statement = $connection->prepare($query);
-        $distance = min($this->config->duplicate->distance, self::DISTANCE_MAX);
-        $statement->bindParam(":distance", $distance);
+        $statement->bindParam(":distance", $this->distance);
 
         $Progress = $this->Climate->ProgressPrecision(count($photos));
         $Progress->precision(3);
@@ -85,6 +122,7 @@ class DuplicatesTask extends TaskAbstract
                     }
 
                     $this->ExistingDuplicates->addPair($targetId, $duplicateId);
+                    $found++;
 
                     $Duplicate = new Duplicate();
                     $Duplicate->primary_id = $targetId;
@@ -94,7 +132,94 @@ class DuplicatesTask extends TaskAbstract
                 }
             }
 
-            $Progress->advance(1);
+            $Progress->advance(1, "Checked: #$targetId; Duplicates found: $found");
         }
+
+        $elapsed = number_format(microtime(true) - $start,2);
+        $this->Climate->bold()->inline("Elapsed: ")->out($elapsed . "s");
+    }
+
+    /**
+     * Find all duplicates using code to calculate the distance.
+     * 
+     * This is quick because it bails early as soon as a non-duplicate is found
+     */
+    public function codeAction()
+    {
+        $this->ExistingDuplicates->addDuplicates(Duplicate::find());
+        $start = microtime(true);
+        $found = 0;
+
+        // Get all hashes
+        $photos = Photo::find(["order"=>"phash"]);
+        $photos->setHydrateMode(Resultset::HYDRATE_OBJECTS);
+        $lastIndex = $photos->count() - 1;
+
+        $Progress = $this->Climate->ProgressPrecision($photos->count());
+        $Progress->precision(3);
+
+        foreach ($photos as $index => $primary) {
+            if ($index == $lastIndex) {
+                $Progress->current($index+1, "Checked: #$primary->id; Duplicates found: $found");
+                continue;
+            }
+
+            $primaryGmp = gmp_init($primary->phash, 10);
+            for ($i = $index + 1; $i < $lastIndex; $i++) {
+                $secondary = $photos[$i];
+
+                if ($this->ExistingDuplicates->exists($primary->id, $secondary->id)) {
+                    continue;
+                }
+
+                $secondaryGmp = gmp_init($secondary->phash, 10);
+                $distance = gmp_hamdist($primaryGmp, $secondaryGmp);
+                if ($distance <= $this->distance) {
+                    $this->ExistingDuplicates->addPair($primary->id, $secondary->id);
+
+                    $Duplicate = new Duplicate();
+                    $Duplicate->primary_id = $primary->id;
+                    $Duplicate->secondary_id = $secondary->id;
+                    $Duplicate->distance = $distance;
+                    $Duplicate->save();
+
+                    $found++;
+                }
+                else {
+                    break;
+                }
+            }
+
+            $Progress->current($index+1, "Checked: #$primary->id; Duplicates found: $found");
+        }
+        $elapsed = number_format(microtime(true) - $start, 2);
+        $this->Climate->bold()->inline("Elapsed: ")->out($elapsed . "s");
+    }
+
+    /**
+     * Get the passed ID from the command line
+     * @param string $entityName The name of the entity the id should be for.
+     * @return int
+     */
+    private function getDistance(): void
+    {
+        $Parser = new \Phalcon\Cop\Parser();
+        $params = $Parser->parse();
+
+        $desiredDistance = $this->config->duplicate->distance;
+        if (array_key_exists(2, $params)) {
+            $paramDistance = (int)$params[2];
+            if($paramDistance != $desiredDistance){
+                $this->Climate->lightBlue("Overriding default distance of $desiredDistance: Using $paramDistance instead.");
+                $desiredDistance = $paramDistance;
+            }
+        }
+
+        if ($desiredDistance > self::DISTANCE_MAX) {
+            $this->Climate->warning("The requested distance ($desiredDistance) is too large to store in the database.  Reducing to (self::DISTANCE_MAX)");
+            $desiredDistance = self::DISTANCE_MAX;
+        }
+        
+        $this->distance = $desiredDistance;
     }
 }

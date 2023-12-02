@@ -1,12 +1,18 @@
 /* global bootstrap */
 import { $, $$ } from "./selector.js";
-import { docOn } from "./on.js";
+import { docOn, on } from "./on.js";
 import { post } from "./axios-wrapper.js";
 
 Array.from($$('[data-bs-toggle="popover"]')).map($el => new bootstrap.Popover($el)); // eslint-disable-line quotes
 
 const $duplicatesCount = $("#duplicates-count");
-let duplicateCount = parseInt($duplicatesCount.textContent, 10);
+let duplicateCount = $duplicatesCount != null ? parseInt($duplicatesCount.textContent, 10) : 0;
+
+on("#clear-form", "submit", evt => {    
+    var c = confirm("This will clear all duplicate records - even the ignored duplicates.  Are you sure?");
+    if(!c)
+        evt.preventDefault();
+});
 
 docOn("click", evt => {
     if(evt.target.matches(".js-take"))

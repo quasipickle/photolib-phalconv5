@@ -12,6 +12,11 @@ namespace Task;
 
 class SniffTask extends TaskAbstract
 {
+    public function getDescription() : string
+    {
+        return "Check code styles.";
+    }
+
     public function getActions(): array
     {
         return [

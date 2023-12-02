@@ -12,6 +12,14 @@ class DuplicatesController extends BaseDeleteFileController
 {
     public function indexAction()
     {
+        $this->footerCollection
+                ->addJs($this->url->get("/public/js/duplicate.js"), true, false, ["type" => "module"]);
+
+        $ignored = Duplicate::count("ignore = 1");
+        $this->view->ignoredDuplicatesExist = $ignored > 0;
+        
+        $this->view->cleared = $this->request->hasQuery("cleared");
+
         $this->view->duplicates = [];
         $duplicates = Duplicate::find(["conditions" => "ignore != 1 OR ignore IS NULL"]);
         if (count($duplicates) > 0) {
@@ -39,9 +47,6 @@ class DuplicatesController extends BaseDeleteFileController
                 $Duplicate->Primary = $photosIndexed[$Duplicate->primary_id];
                 $Duplicate->Secondary = $photosIndexed[$Duplicate->secondary_id];
             }
-
-            $this->footerCollection
-                ->addJs($this->url->get("/public/js/duplicate.js"), true, false, ["type" => "module"]);
 
             $this->view->duplicates = $duplicates;
         }
@@ -115,5 +120,11 @@ class DuplicatesController extends BaseDeleteFileController
         $Duplicate->save();
 
         return $Retval->success(true)->response();
+    }
+
+    public function clearAction() : Response
+    {
+        $this->db->delete("duplicate");
+        return $this->response->redirect("/duplicates?cleared");
     }
 }

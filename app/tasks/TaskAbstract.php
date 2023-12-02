@@ -19,6 +19,8 @@ abstract class TaskAbstract extends \Phalcon\Cli\Task
      */
     abstract public function getActions(): array;
 
+    abstract public function getDescription(): string;
+
     public function initialize()
     {
         $this->Climate = new CLIMate();

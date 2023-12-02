@@ -16,6 +16,11 @@ class RegenerateTask extends TaskAbstract
     private const ENTITY_PHOTO = "Photo";
     private const ENTITY_ALBUM = "Album";
 
+    public function getDescription() : string
+    {
+        return "Regenerate images.";
+    }
+
     /**
      * Get all the actions & descriptions for the help
      */

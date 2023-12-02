@@ -8,6 +8,11 @@ use Tracy\Debugger;
 if(DEBUG)
     Debugger::enable();
 
+// Phalcon 5.4 uses a dynamic property approach that is deprecated in PHP 8.2+
+if (str_starts_with(phpversion(), "8.2")) {
+    error_reporting(E_ALL & ~E_DEPRECATED);
+}
+
 require "../app/config/bootstrap.php";
 
 $App = new Phalcon\Mvc\Application($Container);
