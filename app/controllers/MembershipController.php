@@ -3,8 +3,7 @@
 namespace Controller;
 
 use Component\Retval;
-use Model\{Album, AlbumPhoto, Photo};
-use Trait\DeleteFileTrait;
+use Model\{Album, AlbumPhoto, Duplicate, Photo};
 
 class MembershipController extends BaseDeleteFileController
 {
@@ -75,6 +74,19 @@ class MembershipController extends BaseDeleteFileController
             case self::ERROR_DELETE_THUMB:
                 //phpcs:ignore Generic.Files.LineLength
                 return $Retval->message("The original and display files were deleted, but there was an error deleting the thumb file: " . $photo->thumb_path . ". The database record has not been removed.")->response();
+        }
+
+        $duplicates = Duplicate::find([
+            "conditions" => "primary_id = :primaryId: OR secondary_id = :secondaryId:",
+            "bind" => [
+                "primaryId" => $this->photoId,
+                "secondaryId" => $this->photoId
+            ]
+        ]);
+        if (count($duplicates)) {
+            foreach ($duplicates as $duplicate) {
+                $duplicate->delete();
+            }
         }
 
         $photo->delete();
