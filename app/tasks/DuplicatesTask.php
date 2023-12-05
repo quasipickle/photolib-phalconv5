@@ -57,7 +57,7 @@ class DuplicatesTask extends TaskAbstract
 
     public function mainAction()
     {
-        if (!function_exists("gmp_hamdist2")) {
+        if (!function_exists("gmp_hamdist")) {
             $this->Climate->comment("`gmp_hamdist()` does not exist - falling back to the slower, database comparison.");
             $this->Climate->comment("It is suggested you install php-gmp to enable much quicker comparisons.");
             $this->dbAction();
@@ -164,7 +164,6 @@ class DuplicatesTask extends TaskAbstract
                 continue;
             }
 
-            $primaryGmp = gmp_init($primary->phash, 10);
             for ($i = $index + 1; $i < $lastIndex; $i++) {
                 $secondary = $photos[$i];
 
@@ -172,8 +171,7 @@ class DuplicatesTask extends TaskAbstract
                     continue;
                 }
 
-                $secondaryGmp = gmp_init($secondary->phash, 10);
-                $distance = gmp_hamdist($primaryGmp, $secondaryGmp);
+                $distance = gmp_hamdist('0x' . $primary->phash, '0x' . $secondary->phash);
                 if ($distance <= $this->distance) {
                     $this->ExistingDuplicates->addPair($primary->id, $secondary->id);
 

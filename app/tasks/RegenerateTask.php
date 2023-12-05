@@ -9,7 +9,10 @@ declare(strict_types=1);
 namespace Task;
 
 use Component\Image\Image;
+use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Model\{Album, AlbumPhoto, Photo};
+
 
 class RegenerateTask extends TaskAbstract
 {
@@ -116,6 +119,21 @@ class RegenerateTask extends TaskAbstract
         $this->resizeMultiple($this->config->image->versions->display);
     }
 
+    public function hashAction()
+    {
+        $photos = Photo::find();
+        $Hasher = new ImageHash(new DifferenceHash());
+        $Progress = $this->Climate->ProgressPrecision(count($photos));
+        $Progress->precision(3);
+        foreach($photos as $photo)
+        {
+            $path = $this->config->dirs->file->photo . $photo->thumb_path;
+            $photo->phash = Image::getPHash($path, $Hasher);
+            $photo->save();
+            $Progress->advance();
+        }
+    }
+
     /**
      * Get all descendent album ids of the start album
      * @param int $id The id of the start album
@@ -216,7 +234,7 @@ class RegenerateTask extends TaskAbstract
         $Image = new Image($srcPath);
         try {
             if (!$Image->resize($destinationPath, $version->width, $version->height, $version->quality)) {
-                $this->climate->error("Failed to create image from Photo #" . $Photo->id);
+                $this->Climate->error("Failed to create image from Photo #" . $Photo->id);
             }
         } catch (\ImagickException $e) {
             if ($e->getCode() == 435) {

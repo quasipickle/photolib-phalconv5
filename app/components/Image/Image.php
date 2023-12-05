@@ -49,7 +49,7 @@ class Image
 
         // If this line is causing "must return int but returning float"-type errors,
         // see composer.readme
-        $hash = (string)$Hasher->hash($filePath)->toInt();
+        $hash = $Hasher->hash($filePath)->toHex();
         return $hash;
     }
 }
