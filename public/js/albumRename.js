@@ -7,7 +7,7 @@ docOn("alpine:init", () => {
     Alpine.data("albumRename", function() {
         return {
             start(currentAlbumName, currentAlbumId) {
-                const newName = prompt(`Please enter the new name for "${currentAlbumName}"`);
+                const newName = prompt(`Please enter the new name for "${currentAlbumName}"`, currentAlbumName);
                 if(newName == "") {
                     alert("You must provide a name.");
                     this.start();
