@@ -1,9 +1,13 @@
 <?php
 
-namespace Helper;
+namespace Component\Duplicate;
 
 use Model\Duplicate;
 
+/***
+ * Used by Finder
+ * Called DuplicateList because "List" is a reserved word
+ */
 class DuplicateList
 {
     private array $list = [];

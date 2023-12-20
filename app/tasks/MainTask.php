@@ -31,7 +31,11 @@ class MainTask
             $taskObject = new $taskClassName();
 
             $climate = new CLIMate();
-            $climate->br()->bold()->green()->inline('"' . strtolower($task) . '" ')->lightGray($taskObject->getDescription());
+            $climate
+                ->br()
+                ->bold()
+                ->green()
+                ->inline('"' . strtolower($task) . '" ')->lightGray($taskObject->getDescription());
             $actions = $taskObject->getActions();
             $climate->table($actions);
         }

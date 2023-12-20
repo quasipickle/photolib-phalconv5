@@ -10,7 +10,7 @@ namespace Task;
 
 class SassTask extends TaskAbstract
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return "Compile SCSS files to CSS.  Only needed for development.";
     }

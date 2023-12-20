@@ -13,13 +13,12 @@ use Jenssegers\ImageHash\ImageHash;
 use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Model\{Album, AlbumPhoto, Photo};
 
-
 class RegenerateTask extends TaskAbstract
 {
     private const ENTITY_PHOTO = "Photo";
     private const ENTITY_ALBUM = "Album";
 
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return "Regenerate images.";
     }
@@ -125,8 +124,7 @@ class RegenerateTask extends TaskAbstract
         $Hasher = new ImageHash(new DifferenceHash());
         $Progress = $this->Climate->ProgressPrecision(count($photos));
         $Progress->precision(3);
-        foreach($photos as $photo)
-        {
+        foreach ($photos as $photo) {
             $path = $this->config->dirs->file->photo . $photo->thumb_path;
             $photo->phash = Image::getPHash($path, $Hasher);
             $photo->save();

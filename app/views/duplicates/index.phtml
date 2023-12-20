@@ -34,15 +34,15 @@
 
 <div class="overflow-auto">
     <div class="container">
-        {% if cleared %}
-            <div class="alert alert-success">Cleared</div>
-        {% endif %}
         <div class="row">
             <div class="col">
                 <h1 class="d-flex justify-content-between align-items-center">
                     <div>
                         Duplicates {% if duplicates|length > 0 %}<small class="text-body-secondary">(<span id="duplicates-count">{{ duplicates|length }}</span>){% endif %}
                     </div>
+                    <form method="post" action="{{ url('duplicates/find') }}" class="d-inline" id="find-form">
+                        <button type="submit" class="btn btn-secondary">Find</button>
+                    </form>
                     {% if ignoredDuplicatesExist %}
                         <form method="post" action="{{ url('duplicates/clear') }}" class="d-inline" id="clear-form">
                             <button type="submit" class="btn btn-secondary">Clear</button>

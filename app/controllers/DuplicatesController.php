@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Controller;
 
 use Component\Retval;
+use Component\Duplicate\Finder;
 use Model\{Album, Duplicate, Photo};
 use Phalcon\Http\Response;
 
@@ -14,11 +15,9 @@ class DuplicatesController extends BaseDeleteFileController
     {
         $this->footerCollection
                 ->addJs($this->url->get("/public/js/duplicate.js"), true, false, ["type" => "module"]);
-
+        
         $ignored = Duplicate::count("ignore = 1");
         $this->view->ignoredDuplicatesExist = $ignored > 0;
-        
-        $this->view->cleared = $this->request->hasQuery("cleared");
 
         $this->view->duplicates = [];
         $duplicates = Duplicate::find(["conditions" => "ignore != 1 OR ignore IS NULL"]);
@@ -92,8 +91,7 @@ class DuplicatesController extends BaseDeleteFileController
         }
 
         $featuringAlbums = Album::findByPhotoId($Delete->id);
-        foreach($featuringAlbums as $Album)
-        {
+        foreach ($featuringAlbums as $Album) {
             $Album->photo_id = $Take->id;
             $Album->save();
         }
@@ -122,9 +120,18 @@ class DuplicatesController extends BaseDeleteFileController
         return $Retval->success(true)->response();
     }
 
-    public function clearAction() : Response
+    public function findAction(): Response
+    {
+        $Finder = new Finder($this->config->duplicate->distance);
+        $Finder->find();
+        $this->flash->success("{$Finder->duplicatesFound} duplicate(s) found.");
+        return $this->response->redirect("/duplicates");
+    }
+
+    public function clearAction(): Response
     {
         $this->db->delete("duplicate");
-        return $this->response->redirect("/duplicates?cleared");
+        $this->flash->success("Cleared");
+        return $this->response->redirect("/duplicates");
     }
 }
