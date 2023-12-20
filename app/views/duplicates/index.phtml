@@ -40,14 +40,16 @@
                     <div>
                         Duplicates {% if duplicates|length > 0 %}<small class="text-body-secondary">(<span id="duplicates-count">{{ duplicates|length }}</span>){% endif %}
                     </div>
-                    <form method="post" action="{{ url('duplicates/find') }}" class="d-inline" id="find-form">
-                        <button type="submit" class="btn btn-secondary">Find</button>
-                    </form>
-                    {% if ignoredDuplicatesExist %}
-                        <form method="post" action="{{ url('duplicates/clear') }}" class="d-inline" id="clear-form">
-                            <button type="submit" class="btn btn-secondary">Clear</button>
+                    <div>
+                        <form method="post" action="{{ url('duplicates/find') }}" class="d-inline" id="find-form">
+                            <button type="submit" class="btn btn-secondary">Find</button>
                         </form>
-                    {% endif %}
+                        {% if ignoredDuplicatesExist %}
+                            <form method="post" action="{{ url('duplicates/clear') }}" class="d-inline" id="clear-form">
+                                <button type="submit" class="btn btn-secondary">Clear</button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </h1>
                 {% for duplicate in duplicates %}
                     <div class="duplicate">
