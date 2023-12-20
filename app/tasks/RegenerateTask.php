@@ -6,16 +6,22 @@
 
 declare(strict_types=1);
 
-namespace Tasks;
+namespace Task;
 
 use Component\Image\Image;
-use Helper\ProgressPrecision;
+use Jenssegers\ImageHash\ImageHash;
+use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Model\{Album, AlbumPhoto, Photo};
 
 class RegenerateTask extends TaskAbstract
 {
     private const ENTITY_PHOTO = "Photo";
     private const ENTITY_ALBUM = "Album";
+
+    public function getDescription(): string
+    {
+        return "Regenerate images.";
+    }
 
     /**
      * Get all the actions & descriptions for the help
@@ -110,6 +116,20 @@ class RegenerateTask extends TaskAbstract
     public function displaysAction()
     {
         $this->resizeMultiple($this->config->image->versions->display);
+    }
+
+    public function hashAction()
+    {
+        $photos = Photo::find();
+        $Hasher = new ImageHash(new DifferenceHash());
+        $Progress = $this->Climate->ProgressPrecision(count($photos));
+        $Progress->precision(3);
+        foreach ($photos as $photo) {
+            $path = $this->config->dirs->file->photo . $photo->thumb_path;
+            $photo->phash = Image::getPHash($path, $Hasher);
+            $photo->save();
+            $Progress->advance();
+        }
     }
 
     /**
@@ -212,7 +232,7 @@ class RegenerateTask extends TaskAbstract
         $Image = new Image($srcPath);
         try {
             if (!$Image->resize($destinationPath, $version->width, $version->height, $version->quality)) {
-                $this->climate->error("Failed to create image from Photo #" . $Photo->id);
+                $this->Climate->error("Failed to create image from Photo #" . $Photo->id);
             }
         } catch (\ImagickException $e) {
             if ($e->getCode() == 435) {

@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Tasks;
+namespace Task;
 
 use League\CLImate\CLImate;
 
@@ -18,6 +18,8 @@ abstract class TaskAbstract extends \Phalcon\Cli\Task
      * Return an array of actions & their description, for outputing help
      */
     abstract public function getActions(): array;
+
+    abstract public function getDescription(): string;
 
     public function initialize()
     {

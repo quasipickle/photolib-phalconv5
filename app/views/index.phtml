@@ -84,16 +84,24 @@
                     </div>
                 {% endif %}
                 {% if router.getControllerName() != "battle" %}
-                    <a href ="{{ url('/battle') }}" class="btn btn-icon btn-outline-secondary">
-                        {{ icon("bi-bar-chart") }}
-                    </a>
+                    <div>
+                        <a href ="{{ url('/duplicates') }}" class="btn btn-icon btn-outline-secondary">
+                            {{ icon("bi-copy") }}
+                        </a>
+                        <a href ="{{ url('/battle') }}" class="btn btn-icon btn-outline-secondary">
+                            {{ icon("bi-bar-chart") }}
+                        </a>
+                    </div>
                 {% else %}
                     <a href="#" class="btn btn-outline-secondary" id="battle-stats">
                         Stats
                     </a>
                 {% endif %}
             </div>
-            <?= $this->getContent(); ?>
+            <div class="px-2">
+                {{ flash.output() }}
+            </div>
+            {{ content() }}
         </div>
         <script type="text/javascript">
             window.webRootPath = "{{ config.dirs.web.root }}";

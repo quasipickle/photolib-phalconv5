@@ -45,10 +45,13 @@ class BattleController extends BaseController
             "group" => "photo_id"
         ]);
         $breadcrumbs = [];
-        foreach($memberships as $albumPhoto)
-        {
+        foreach ($memberships as $albumPhoto) {
             $Album = Album::findFirst("id = " . $albumPhoto->album_id);
-            $breadcrumbs[$albumPhoto->photo_id] = array_filter($this->buildBreadcrumbs($Album), fn($album) => $album->id != $this->config->rootAlbumId);
+
+            $breadcrumbs[$albumPhoto->photo_id] = array_filter(
+                $this->buildBreadcrumbs($Album),
+                fn($album) => $album->id != $this->config->rootAlbumId
+            );
         }
 
         $this->view->breadcrumbs = $breadcrumbs;

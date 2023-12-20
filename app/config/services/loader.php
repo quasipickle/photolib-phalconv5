@@ -9,7 +9,7 @@ $Loader->setNamespaces(
         "Component"  => $Config->dirs->file->app . "/components",
         "Helper"     => $Config->dirs->file->app . "/helpers",
         "Model"      => $Config->dirs->file->app . "/models",
-        "Tasks"      => $Config->dirs->file->app . "/tasks"
+        "Task"       => $Config->dirs->file->app . "/tasks"
     ]
 );
 $Loader->register();

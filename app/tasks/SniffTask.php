@@ -8,10 +8,15 @@
 
 declare(strict_types=1);
 
-namespace Tasks;
+namespace Task;
 
 class SniffTask extends TaskAbstract
 {
+    public function getDescription(): string
+    {
+        return "Check code styles.";
+    }
+
     public function getActions(): array
     {
         return [

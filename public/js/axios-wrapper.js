@@ -58,7 +58,7 @@ async function axiosWrapper(url, formData, task, verb) {
                 const message = Object.prototype.hasOwnProperty.call(response.data, "message")
                     ? response.data.message
                     : "Error message was not defined";
-                alert(`There was a server error trying to ${task}:\n\n${message}.`);
+                alert(`There was a server error trying to ${task}:\n\n${message}`);
                 return false;
             } else {
                 return response.data;

@@ -24,6 +24,9 @@ $config = [
             "photo" => $web_root . "/public/photos"
         ]
     ],
+    "duplicate" => [
+        "distance" => 6
+    ],
     "image" => [
         "conversions" => [
             // Chrome likes to save .jif files as .jpg files sometimes.  Screw chrome - save 'em as JPGs
