@@ -6,7 +6,7 @@ namespace Controller;
 
 use Component\Retval;
 use Component\Duplicate\Finder;
-use Model\{Album, Duplicate, Photo};
+use Model\{Album, AlbumPhoto, Duplicate, Photo};
 use Phalcon\Http\Response;
 
 class DuplicatesController extends BaseDeleteFileController
@@ -47,8 +47,30 @@ class DuplicatesController extends BaseDeleteFileController
                 $Duplicate->Secondary = $photosIndexed[$Duplicate->secondary_id];
             }
 
+            $breadcrumbs = [];
+            $discoveredAlbums = [];
+
+            foreach ($duplicates as $Duplicate) {
+                $this->getBreadcrumbsForPhoto($Duplicate->primary_id, $breadcrumbs, $discoveredAlbums);
+                $this->getBreadcrumbsForPhoto($Duplicate->secondary_id, $breadcrumbs, $discoveredAlbums);
+            }
+
+            $this->view->breadcrumbs = $breadcrumbs;
             $this->view->duplicates = $duplicates;
         }
+    }
+
+    private function getBreadcrumbsForPhoto(int $photoId, array &$breadcrumbs, array &$discoveredAlbums): void
+    {
+        $Album = AlbumPhoto::findFirst("photo_id = " . $photoId)->Album;
+        if(!array_key_exists($Album->id, $discoveredAlbums))
+        {
+            $discoveredAlbums[$Album->id] = array_filter(
+                $this->buildBreadcrumbs($Album),
+                fn($album) => $album->id != $this->config->rootAlbumId
+            );
+        }
+        $breadcrumbs[$photoId] = $discoveredAlbums[$Album->id];
     }
 
     public function takeAction(): Response

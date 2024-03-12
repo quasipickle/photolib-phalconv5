@@ -11,8 +11,12 @@ class AlbumPhoto extends \Phalcon\Mvc\Model
         $this->belongsTo(
             "album_id",
             Album::class,
-            "id"
+            "id",
+            [
+                "alias" => "Album"
+            ]
         );
+
 
         $this->hasOne(
             "photo_id",

@@ -1,4 +1,4 @@
-{%- macro statsTable(version, Primary, Secondary, distance=null) %}
+{%- macro statsTable(version, Primary, Secondary, breadcrumbs, distance=null) %}
     {% set cssClass = version == "primary" ? "duplicate__stats--primary" : "duplicate__stats--secondary" %}
     {% set areaCss = Primary.Area() > Secondary.Area() ? "fw-bold text-success" : "" %}
     {% set fileSizeCss = Primary.filesize > Secondary.filesize ? "fw-bold text-success" : "" %}
@@ -28,6 +28,17 @@
             {% else %}
                 {{ distance }}
             {% endif %}
+        </div>
+        <div class="duplicate__stat">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    {% for album in breadcrumbs[Primary.id] %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ album(album.id) }}" target="_new">{{ album.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
         </div>
     </div>
 {%- endmacro %}
@@ -62,7 +73,7 @@
                             data-bs-trigger="hover"
                             alt="{{ duplicate.Primary.id }}" />
                         <div class="duplicate__meta duplicate__meta--primary">
-                            {{ statsTable("primary", duplicate.Primary, duplicate.Secondary) }}
+                            {{ statsTable("primary", duplicate.Primary, duplicate.Secondary, breadcrumbs) }}
                             <div class="duplicate__actions">
                                 <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="primary">
                                     Take
@@ -74,7 +85,7 @@
                         </div>
 
                         <div class="duplicate__meta duplicate__meta--secondary">
-                            {{ statsTable("secondary", duplicate.Secondary, duplicate.Primary, duplicate.distance) }}
+                            {{ statsTable("secondary", duplicate.Secondary, duplicate.Primary, breadcrumbs, duplicate.distance) }}
                             <div class="duplicate__actions">
                                 <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="secondary">
                                     Take
