@@ -37,4 +37,13 @@ class ViewHelper
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
+
+    /**
+     * @param string $dateString A MySQL Datetime string
+     */
+    public function formatDatetime(string $dateString): string
+    {
+        $dt = new \DateTime($dateString);
+        return $dt->format('Y-m-d @ g:i a');
+    }
 }

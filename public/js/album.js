@@ -11,6 +11,7 @@ import "./gridRatio.js";
 import "./lightbox.js";
 import "./membership.js";
 import "./photo-info.js";
+import "./photoChooser.js";
 import "./reorder.js";
 import "./upload.js";
 import "./uploadProgress.js";

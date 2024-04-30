@@ -38,6 +38,8 @@
                         </li>
                     </template>
                     <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" @click.prevent="startReplace()">{{ icon("bi-box-arrow-in-right me-1") }}Replace with&hellip;</a></li>
+                    <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" @click.prevent="remove({{ Album.id }})">{{ icon("bi-x-circle-fill me-1") }}Remove from album</a></li>
                     <li><a class="dropdown-item text-danger" @click.prevent="deletePhoto()" href="#">{{ icon("bi-trash me-1") }}Delete</a></li>
                     <li><hr class="dropdown-divider"></li>

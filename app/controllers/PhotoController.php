@@ -80,6 +80,44 @@ class PhotoController extends BaseController
         return $Retval->response();
     }
 
+    public function replaceAction()
+    {
+        $Retval = new Retval();
+
+        $targetPhotoId = $this->request->getPost("targetPhotoId");
+        $replacingPhotoId = $this->request->getPost("replacingPhotoId");
+
+        $TargetPhoto = Photo::findFirst($targetPhotoId);
+        $ReplacingPhoto = Photo::findFirst($replacingPhotoId);
+
+        if($TargetPhoto == null)
+            return $Retval
+                ->success(false)
+                ->message("Target photo doesn't exist.")
+                ->response();
+        if($ReplacingPhoto == null)
+            return $Retval
+                ->success(false)
+                ->message("Replacing photo doesn't exist.")
+                ->response();
+
+        $TargetPhoto->copyForReplacement($ReplacingPhoto);
+
+        $path = $this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $TargetPhoto->path;
+        if(file_exists($path))
+            unlink($path);
+        foreach ($this->config->image->versions as $version) {
+            $path = $this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $TargetPhoto->{$version->type . "_path"};
+            if(file_exists($path))
+                unlink($path);
+        }
+
+        $TargetPhoto->save();
+        $ReplacingPhoto->delete();
+
+        return $Retval->success(true)->response();
+    }
+
     private function importFile(int $albumId, File $File, Validator $Validator): Retval
     {
         $Retval = new Retval();

@@ -1,13 +1,17 @@
 /* global Alpine */
 
+import { $ } from "./selector.js";
 import { on, off,  docOn } from "./on.js";
 import { post } from "./axios-wrapper.js";
 
 docOn("alpine:init", () => {
     Alpine.data("membership", function(photoIdParam) {
         return {
-            chooseListener: null,
-            cancelListener: null,
+            albumChooseListener: null,
+            albumCancelListener: null,
+            photoChooseListener: null,
+            photoCancelListener: null,
+            replaceTargetPhotoId: null,
             action: null,
 
             hasLastAlbum(){
@@ -19,18 +23,49 @@ docOn("alpine:init", () => {
             startMove()
             {
                 this.$dispatch("albumchooser:show");
-                this.chooseListener = on(window, "albumchooser:choose", this.move.bind(this));
-                this.cancelListener = on(window,"albumchooser:cancel", this.removeListeners.bind(this));
+                this.albumChooseListener = on(window, "albumchooser:choose", this.move.bind(this));
+                this.albumCancelListener = on(window,"albumchooser:cancel", this.removeAlbumListeners.bind(this));
             },
             startAdd()
             {
                 this.$dispatch("albumchooser:show");
-                this.chooseListener = on(window, "albumchooser:choose", this.add.bind(this));
-                this.cancelListener = on(window,"albumchooser:cancel", this.removeListeners.bind(this));
+                this.albumChooseListener = on(window, "albumchooser:choose", this.add.bind(this));
+                this.albumCancelListener = on(window,"albumchooser:cancel", this.removeAlbumListeners.bind(this));
             },
-            removeListeners(){
-                off(window, "albumchooser:choose", this.chooseListener);
-                off(window, "albumchooser:cancel", this.cancelListener);
+            startReplace(targetPhotoId)
+            {
+                this.replaceTargetPhotoId = targetPhotoId;
+                this.$dispatch("photochooser:show");
+                this.photoChooseListener = on(window,"photochooser:choose", this.replace.bind(this));
+                this.photoCancelListener = on(window, "photochooser:cancel", this.removePhotoListeners.bind(this));
+            },
+            replace(chooseEvent)
+            {
+                this.removePhotoListeners();
+                const data = {
+                    targetPhotoId: photoIdParam,
+                    replacingPhotoId: chooseEvent.detail
+                };
+                console.log(this.$el);
+
+                post("/photo/replace", data, "replace a photo")
+                    .then(()=> {
+                        const $replacerItem = $("#photo-" + data.replacingPhotoId);
+                        const $replacerPhoto = $("img", $replacerItem);
+
+                        const $targetPhoto = $("img", this.$el.closest(".grid__item"));
+                        $targetPhoto.src = $replacerPhoto.src;
+
+                        $replacerItem.remove();
+                    });
+            },
+            removeAlbumListeners(){
+                off(window, "albumchooser:choose", this.albumChooseListener);
+                off(window, "albumchooser:cancel", this.albumCancelListener);
+            },
+            removePhotoListeners(){
+                off(window, "photochooser:choose", this.photoChooseListener);
+                off(window, "photochooser:cancel", this.photoCancelListener);
             },
             move(chooseEvent)
             {
@@ -42,7 +77,7 @@ docOn("alpine:init", () => {
             
             _move(album)
             {
-                this.removeListeners();
+                this.removeAlbumListeners();
                 this.$store.lastAlbum.album = album;
                 const data = {
                     photoId: photoIdParam,
@@ -61,7 +96,7 @@ docOn("alpine:init", () => {
             },
             _add(album)
             {
-                this.removeListeners();
+                this.removeAlbumListeners();
                 this.$store.lastAlbum.album = album;
                 const data = {
                     photoId: photoIdParam,

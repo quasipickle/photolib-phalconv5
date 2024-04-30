@@ -19,6 +19,8 @@ class DuplicatesController extends BaseDeleteFileController
         $ignored = Duplicate::count("ignore = 1");
         $this->view->ignoredDuplicatesExist = $ignored > 0;
 
+        $this->view->distance = $this->session->has("distance") ? $this->session->get("distance") : $this->config->duplicate->distance;
+
         $this->view->duplicates = [];
         $duplicates = Duplicate::find(["conditions" => "ignore != 1 OR ignore IS NULL"]);
         if (count($duplicates) > 0) {
@@ -144,9 +146,11 @@ class DuplicatesController extends BaseDeleteFileController
 
     public function findAction(): Response
     {
-        $Finder = new Finder($this->config->duplicate->distance);
+        $distance = $this->request->hasPost('distance') ? $this->request->getPost('distance','int') : $this->config->duplicate->distance;
+        $Finder = new Finder($distance);
         $Finder->find();
-        $this->flash->success("{$Finder->duplicatesFound} duplicate(s) found.");
+        $this->flash->success("{$Finder->duplicatesFound} duplicate(s).");
+        $this->session->set("distance", $distance);
         return $this->response->redirect("/duplicates");
     }
 

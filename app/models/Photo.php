@@ -48,4 +48,31 @@ class Photo extends \Phalcon\Mvc\Model
     {
         return (count($this->Albums)) ? $this->Albums[0] : null;
     }
+
+    /**
+     * This method is used when replacing a photo, to copy all the necessary properties (ie: pretty much all of them)
+     *
+     * @param Photo $ReplacingPhoto The photo to do the replacing
+     *
+     * @return void
+     */
+    public function copyForReplacement(Photo $ReplacingPhoto): void
+    {
+        $this->date_uploaded = $ReplacingPhoto->date_uploaded;
+        $this->path = $ReplacingPhoto->path;
+        $this->width = $ReplacingPhoto->width;
+        $this->height = $ReplacingPhoto->height;
+        $this->thumb_path = $ReplacingPhoto->thumb_path;
+        $this->thumb_width = $ReplacingPhoto->thumb_width;
+        $this->thumb_height = $ReplacingPhoto->thumb_height;
+        $this->display_path = $ReplacingPhoto->display_path;
+        $this->display_width = $ReplacingPhoto->display_width;
+        $this->display_height = $ReplacingPhoto->display_height;
+        $this->mime_type = $ReplacingPhoto->mime_type;
+        $this->filesize = $ReplacingPhoto->filesize;
+        $this->phash = $ReplacingPhoto->phash;
+
+        $this->battles += $ReplacingPhoto->battles;
+        $this->wins += $ReplacingPhoto->wins;
+    }
 }

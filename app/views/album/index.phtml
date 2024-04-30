@@ -168,6 +168,7 @@
 </div>
 {{ partial("album/partials/album-new") }}
 {{ partial("album/partials/album-chooser") }}
+{{ partial("album/partials/photo-chooser", ['photos': Album.photos]) }}
 <script type="text/javascript">
     window.albumId = {{ Album.id }};
     window.parentAlbumId = {{ Album.album_id|default(0) }};
