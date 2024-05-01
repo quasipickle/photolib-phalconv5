@@ -8,47 +8,16 @@
                 <button @click = "cancel()" type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-                <table class="table table-sm table-striped table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>
-                                Photo
-                            </th>
-                            <th>
-                                Dimensions
-                            </th>
-                            <th>
-                                Filesize
-                            </th>
-                            <th>
-                                Date uploaded
-                            </th>
-                            <th style="width:1%;">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        {% for photo in photos %}
-                            <tr class="position-relative">
-                                <td>
-                                    <img src="{{ photo(photo.thumb_path) }}" style="max-width:200px;max-height:200px;"/>
-                                </td>
-                                <td>
-                                    {{ photo.width }} &times; {{ photo.height }}
-                                </td>
-                                <td>
-                                    {{ filesize(photo.filesize) }}
-                                </td>
-                                <td>
-                                    {{ formatDatetime(photo.date_uploaded) }}
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary stretched-link" @click="choose({{photo.id}})">Choose</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="photochooser__grid">
+                    {% for photo in photos %}
+                        <button type="button" class="photochooser__tile" @click="choose({{photo.id}})">
+                            <img src="{{ photo(photo.thumb_path) }}" style="max-width:200px;max-height:200px;"/><br />
+                            {{ photo.width }} &times; {{ photo.height }}<br />
+                            {{ filesize(photo.filesize) }}<br />
+                            {{ formatDatetime(photo.date_uploaded) }}
+                        </button>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
