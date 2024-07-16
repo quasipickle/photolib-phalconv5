@@ -15,11 +15,13 @@ class DuplicatesController extends BaseDeleteFileController
     {
         $this->footerCollection
                 ->addJs($this->url->get("/public/js/duplicate.js"), true, false, ["type" => "module"]);
-        
+
         $ignored = Duplicate::count("ignore = 1");
         $this->view->ignoredDuplicatesExist = $ignored > 0;
 
-        $this->view->distance = $this->session->has("distance") ? $this->session->get("distance") : $this->config->duplicate->distance;
+        $this->view->distance = $this->session->has("distance")
+            ? $this->session->get("distance")
+            : $this->config->duplicate->distance;
 
         $this->view->duplicates = [];
         $duplicates = Duplicate::find(["conditions" => "ignore != 1 OR ignore IS NULL"]);
@@ -65,8 +67,7 @@ class DuplicatesController extends BaseDeleteFileController
     private function getBreadcrumbsForPhoto(int $photoId, array &$breadcrumbs, array &$discoveredAlbums): void
     {
         $Album = AlbumPhoto::findFirst("photo_id = " . $photoId)->Album;
-        if(!array_key_exists($Album->id, $discoveredAlbums))
-        {
+        if (!array_key_exists($Album->id, $discoveredAlbums)) {
             $discoveredAlbums[$Album->id] = array_filter(
                 $this->buildBreadcrumbs($Album),
                 fn($album) => $album->id != $this->config->rootAlbumId
@@ -146,7 +147,9 @@ class DuplicatesController extends BaseDeleteFileController
 
     public function findAction(): Response
     {
-        $distance = $this->request->hasPost('distance') ? $this->request->getPost('distance','int') : $this->config->duplicate->distance;
+        $distance = $this->request->hasPost('distance')
+            ? $this->request->getPost('distance', 'int')
+            : $this->config->duplicate->distance;
         $Finder = new Finder($distance);
         $Finder->find();
         $this->flash->success("{$Finder->duplicatesFound} duplicate(s).");

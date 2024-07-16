@@ -50,6 +50,18 @@ class Photo extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Redefining with a class-specific return type to kill some errors
+     *
+     * @param mixed $parameters See Phalcon\Mvc\Model::findFirst
+     *
+     * @return self
+     */
+    public static function findFirst(mixed $parameters = null): self
+    {
+        return parent::findFirst($parameters);
+    }
+
+    /**
      * This method is used when replacing a photo, to copy all the necessary properties (ie: pretty much all of them)
      *
      * @param Photo $ReplacingPhoto The photo to do the replacing

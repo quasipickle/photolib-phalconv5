@@ -41,7 +41,7 @@ $Container->setShared("voltService", function (Phalcon\Mvc\View $View) use ($Con
         return '$this->viewHelper->photoUrl(' . $path . ')';
     });
 
-    $Compiler->addFunction("formatDatetime", function($resolvedArgs, $exprArgs) use ($Compiler){
+    $Compiler->addFunction("formatDatetime", function ($resolvedArgs, $exprArgs) use ($Compiler) {
         $dateString = $Compiler->expression($exprArgs[0]['expr']);
         return '$this->viewHelper->formatDatetime(' . $dateString . ')';
     });
