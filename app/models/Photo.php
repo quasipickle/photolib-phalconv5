@@ -56,7 +56,7 @@ class Photo extends \Phalcon\Mvc\Model
      *
      * @return self
      */
-    public static function findFirst(mixed $parameters = null): self
+    public static function findFirst(mixed $parameters = null): ?self
     {
         return parent::findFirst($parameters);
     }
