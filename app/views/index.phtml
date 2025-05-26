@@ -14,7 +14,7 @@
             <div class="upload-progress__total progress" x-ref="total">
                 <div class="progress-bar" :style="{width: filesDonePercentage + '%'}" :class="waiting && 'progress-bar-striped progress-bar-animated'"></div>
             </div>
-            <div class="upload-progress__processing d-inline-flex align-items-center gap-2 border ms-1 mt-1 bg-white px-2 py-1" :class="!waiting && d-none">
+            <div class="upload-progress__processing d-inline-flex align-items-center gap-2 border ms-1 mt-1 bg-white px-2 py-1" :class="!waiting && 'd-none'">
                 Processing large photo
                 <div class="spinner-border spinner-border-sm">
                     <span class="visually-hidden">Working</span>
