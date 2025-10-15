@@ -34,10 +34,13 @@ class BattleController extends BaseController
             ->addJs($this->url->get("/public/js/battle.js"), true, false, ["type" => "module"]);
         $this->view->title = "Battle";
 
-        $photos = Photo::find(["order" => "RAND()", "limit" => 2]);
+        $photos = $this->db
+            //phpcs:ignore Generic.Files.LineLength
+            ->query("SELECT * FROM photo p JOIN(SELECT id FROM photo ORDER BY -LOG(RAND())/(1 + battles) DESC LIMIT 2) as p2 on p.id = p2.id")
+            ->fetchAll(\PDO::FETCH_OBJ);
         $this->view->photos = $photos;
 
-        $photoIds = array_column($photos->toArray(), "id");
+        $photoIds = array_column($photos, "id");
         $memberships = AlbumPhoto::find([
             "columns" => ["album_id" => "MAX(album_id)", "photo_id"],
             "conditions" => "photo_id IN ({ids:array})",

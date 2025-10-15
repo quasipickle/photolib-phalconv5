@@ -90,26 +90,30 @@ class PhotoController extends BaseController
         $TargetPhoto = Photo::findFirst($targetPhotoId);
         $ReplacingPhoto = Photo::findFirst($replacingPhotoId);
 
-        if($TargetPhoto == null)
+        if ($TargetPhoto == null) {
             return $Retval
                 ->success(false)
                 ->message("Target photo doesn't exist.")
                 ->response();
-        if($ReplacingPhoto == null)
+        }
+        if ($ReplacingPhoto == null) {
             return $Retval
                 ->success(false)
                 ->message("Replacing photo doesn't exist.")
                 ->response();
+        }
 
         $TargetPhoto->copyForReplacement($ReplacingPhoto);
 
         $path = $this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $TargetPhoto->path;
-        if(file_exists($path))
+        if (file_exists($path)) {
             unlink($path);
+        }
         foreach ($this->config->image->versions as $version) {
             $path = $this->config->dirs->file->photo . DIRECTORY_SEPARATOR . $TargetPhoto->{$version->type . "_path"};
-            if(file_exists($path))
+            if (file_exists($path)) {
                 unlink($path);
+            }
         }
 
         $TargetPhoto->save();

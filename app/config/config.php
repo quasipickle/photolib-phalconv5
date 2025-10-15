@@ -1,5 +1,7 @@
 <?php
 
+use Helper\IniHelper;
+
 $file_root  = realpath(dirname(__DIR__ . "/../../.."));
 $app_file_root   = $file_root . "/app";
 $views_file_root = $app_file_root . "/views";
@@ -49,7 +51,10 @@ $config = [
                 "width" => 1000,
                 "height" => 1000
             ]
-        ]
+        ],
+        "maxFileSize" => 0,// to be populated in index.php after auto-loading is set up
+        // The maximum size to resize an image to, when it's being uploaded and is larger than maxFileSize
+        "maxResizeDimension" => 4000
     ],
     "rootAlbumId" => 1,
     "sniff" => [

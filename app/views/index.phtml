@@ -12,7 +12,13 @@
     <body>
         <div class="upload-progress" :class="files.length > 0 && 'upload-progress__show'" x-data="uploadProgress">
             <div class="upload-progress__total progress" x-ref="total">
-                <div class="progress-bar" :style="{width: filesDonePercentage + '%'}"></div>
+                <div class="progress-bar" :style="{width: filesDonePercentage + '%'}" :class="waiting && 'progress-bar-striped progress-bar-animated'"></div>
+            </div>
+            <div class="upload-progress__processing d-inline-flex align-items-center gap-2 border ms-1 mt-1 bg-white px-2 py-1" :class="!waiting && 'd-none'">
+                Processing large photo
+                <div class="spinner-border spinner-border-sm">
+                    <span class="visually-hidden">Working</span>
+                </div>
             </div>
         </div>
         <div class = "app">
@@ -106,8 +112,11 @@
         <script type="text/javascript">
             window.webRootPath = "{{ config.dirs.web.root }}";
             window.rootAlbumId = {{ config.rootAlbumId }};
+            window.maxFileSize = {{ config.image.maxFileSize }};
+            window.maxResizeDimension = {{ config.image.maxResizeDimension }};
         </script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/image-blob-reduce@4.1.0/dist/image-blob-reduce.min.js" integrity="sha256-xr4fmtp/M9yaevmd5u/KZeWQSiU2lzUlW2iAxKjxOfI=" crossorigin="anonymous"></script>
         <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         {{ assets.outputJs("footer") }}
     </body>

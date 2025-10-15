@@ -14,3 +14,5 @@ require "services/router.php";
 require "services/view.php";
 require "services/url.php";
 session_start();
+
+return $Config;

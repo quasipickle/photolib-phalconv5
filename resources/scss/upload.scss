@@ -8,6 +8,7 @@ $uploadProgressBarHeight: 10px;
     opacity:0;
     z-index:1;
     transition: opacity 0.5s;
+    pointer-events:none;
 
     .progress{
         --bs-progress-height: #{$uploadProgressBarHeight};
@@ -17,6 +18,9 @@ $uploadProgressBarHeight: 10px;
 .upload-progress__show{
     opacity:1;
     transition: none;
+}
+.upload-progress__processing .spinner-border-sm{
+    --bs-spinner-border-width: 0.125rem;
 }
 
 .drop-target{

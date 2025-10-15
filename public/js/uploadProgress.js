@@ -5,6 +5,7 @@ import { docOn } from "./on.js";
 docOn("alpine:init", () => {
     Alpine.data("uploadProgress", () => ({
         files:[],
+        waiting: false,
         get filesDonePercentage() {
             const done = this.files.filter(x => x.done).length;
             return (done / this.files.length) * 100;
@@ -24,6 +25,12 @@ docOn("alpine:init", () => {
                 if(this.filesDonePercentage == 100) {
                     this.hideTimeout = setTimeout(this.hide.bind(this), 200);
                 }
+            });
+            docOn("uploadprogress:waitstart", () => {
+                this.waiting = true;
+            });
+            docOn("uploadprogress:waitend", () => {
+                this.waiting = false;
             });
         },
         hide(){

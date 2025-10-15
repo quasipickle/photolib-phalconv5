@@ -30,7 +30,8 @@ abstract class Validator
             "JPG" => "image/jpeg",
             "PNG" => "image/png",
             "WEBP" => "image/webp",
-            "GIF" => "image/gif"
+            "GIF" => "image/gif",
+            "AVIF" => "image/avif"
         ];
         $this->allowedTypes = array_intersect_key($possibleTypes, $imagickTypes);
     }

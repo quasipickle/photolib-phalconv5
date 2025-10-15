@@ -3,7 +3,7 @@
 namespace Component\Image\Validator;
 
 use Component\Image\File\UploadedFile;
-use Helper\ViewHelper;
+use Helper\{IniHelper, ViewHelper};
 
 /**
  * Validates an uploaded file
@@ -42,15 +42,7 @@ class UploadValidator extends \Component\Image\Validator
             case \UPLOAD_ERR_OK:
                 return true;
             case \UPLOAD_ERR_INI_SIZE:
-                $uploadIni = trim(ini_get("upload_max_filesize"));
-                // source: https://stackoverflow.com/a/19570313/251859
-                $uploadInt = intval($uploadIni) *
-                    (['g' => 1 << 30, 'm' => 1 << 20, 'k' => 1 << 10 ][strtolower(substr($uploadIni, -1))] ?: 1);
-                $postIni = trim(ini_get("post_max_size"));
-                // source: https://stackoverflow.com/a/19570313/251859
-                $postInt = intval($postIni) *
-                    (['g' => 1 << 30, 'm' => 1 << 20, 'k' => 1 << 10 ][strtolower(substr($uploadIni, -1))] ?: 1);
-                $int = min($uploadInt, $postInt);
+                $int = IniHelper::getUploadMaxFilesize();
                 $hr = ViewHelper::filesize($int);
                 throw new \RuntimeException("File is larger that PHP allows: $hr.");
             case \UPLOAD_ERR_FORM_SIZE:

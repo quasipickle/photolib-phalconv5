@@ -4,6 +4,7 @@ require(__DIR__ . "/../vendor/autoload.php");
 define("DEBUG", TRUE);
 define("DEBUG_SQL", FALSE);
 
+use Helper\IniHelper;
 use Tracy\Debugger;
 if(DEBUG)
     Debugger::enable();
@@ -13,7 +14,8 @@ if (str_starts_with(phpversion(), "8.2")) {
     error_reporting(E_ALL & ~E_DEPRECATED);
 }
 
-require "../app/config/bootstrap.php";
+$Config = require "../app/config/bootstrap.php";
+$Config->image->maxFileSize = IniHelper::getUploadMaxFilesize();
 
 $App = new Phalcon\Mvc\Application($Container);
 $app_request_url = substr($_SERVER["REQUEST_URI"],strlen($Config->dirs->web->root));
