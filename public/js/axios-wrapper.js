@@ -1,7 +1,7 @@
 
 /* global axios */
-export async function get(url, formData, task, options) {
-    return axiosWrapper(url, formData, task, "get", options);
+export async function get(url, formData, task) {
+    return axiosWrapper(url, formData, task, "get");
 }
 export async function post(url, formData, task) {
     return axiosWrapper(url, formData, task, "post");

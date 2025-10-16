@@ -46,7 +46,6 @@ docOn("alpine:init", () => {
                     targetPhotoId: photoIdParam,
                     replacingPhotoId: chooseEvent.detail
                 };
-                console.log(this.$el);
 
                 post("/photo/replace", data, "replace a photo")
                     .then(()=> {

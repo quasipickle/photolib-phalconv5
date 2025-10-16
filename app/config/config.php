@@ -57,6 +57,10 @@ $config = [
         "maxResizeDimension" => 4000
     ],
     "rootAlbumId" => 1,
+    "slideshow" => [
+        //milliseconds
+        "duration" => 5000
+    ],
     "sniff" => [
         "dirs" => [
             __DIR__,

@@ -15,6 +15,11 @@ $routes = [
         "controller" => "photo",
         "action"     => "index",
         "id"         => 1
+    ],
+    "/slideshow/:int" => [
+        "controller" => "slideshow",
+        "action"     => "index",
+        "id"         => 1
     ]
 ];
 

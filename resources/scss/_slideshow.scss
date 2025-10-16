@@ -1,0 +1,60 @@
+:root{
+    --slideshow-mask-opacity:0.8;
+    --slideshow-slide-duration:5000ms;/* default.  Gets overridden by javascript */
+    --slideshow-transition-factor: 0.2;/* the percentage of the slide duration that the transition should take */
+}
+
+#slideshow{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    grid-template-areas: "stack";
+
+    & > *{
+        grid-area:stack;
+    }
+}
+.slideshow{
+    &__dialog{
+        border-width:0;
+        border-radius: $border-radius;
+        text-align:center;
+        box-shadow: $box-shadow;
+
+        &::backdrop{
+            @include mask;
+        }
+    }
+    &__mask{
+        inset:0;
+        background: var(--mask-bg-colour);
+        position:absolute;
+        z-index:101;
+    }
+
+    &__loading{
+        z-index:101;
+        color:white;
+        font-size:2rem;
+    }
+
+    &__slide{
+        z-index:101;
+        display:grid;
+        place-items:center;
+        opacity:0;
+        transition:opacity calc(var(--slideshow-slide-duration) * var(--slideshow-transition-factor)) ease-out;
+
+        &.active{
+            z-index:101;
+            opacity:1;
+            transition-timing-function: ease-in;
+        }
+
+        img{
+            max-height:95vh;
+            max-width:95vw;
+        }
+    }
+}
