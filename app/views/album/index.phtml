@@ -85,11 +85,18 @@
                         </div>
                     </template>
                     <dialog x-ref="dialog" class="slideshow__dialog" @close="showDialog = false">
-                        <p>
-                            Include photos from child albums, or just this album?
-                        </p>
-                        <button type="button" class="btn btn-secondary" @click="start(true)">With child albums</button>
-                        <button type="button" class="btn btn-secondary" @click="start(false)">Just this album</button>
+                        {% if Album.photos|length > 0 %}
+                            <p>
+                                Include photos from child albums, or just this album?
+                            </p>
+                            <button type="button" class="btn btn-secondary" @click="start(true)">With child albums</button>
+                            <button type="button" class="btn btn-secondary" @click="start(false)">Just this album</button>
+                        {% else %}
+                            <p>
+                                Slideshow will consist of photos from child albums, as this album has no photos
+                            </p>
+                            <button type="button" class="btn btn-secondary" @click="start(true)">Ok</button>
+                        {% endif %}
                     </dialog>
                 </div>
                 {#
