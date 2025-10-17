@@ -12,6 +12,7 @@ docOn("alpine:init", () => {
             activeSlide: 0,
             src:["",""],
             continueLoop: false,
+            timeoutId: null,
             init() {
                 this.$watch('showDialog', value => {
                     if(value) {
@@ -60,7 +61,7 @@ docOn("alpine:init", () => {
                     const nextIndex = (currentIndex + 1) % this.slides.length;
                     await Promise.all([
                         this.slides[nextIndex].loadImage(),
-                        new Promise(resolve => setTimeout(resolve, window.slideshowDuration))
+                        this.delay(window.slideshowDuration),
                     ]);
 
                     if(!this.continueLoop)
@@ -72,11 +73,29 @@ docOn("alpine:init", () => {
                     currentIndex++;
                 }
             },
+            // Wait for {duration} ms, but if triggered, fastForward() will
+            // shortcut the delay
+            delay(duration){
+                return new Promise(resolve => {
+                    this.timeoutId = setTimeout(resolve, duration);
+                    this.fastForward = () => {
+                        clearTimeout(this.timeoutId);
+                        this.timeoutId = null;
+                        resolve(); // resolve immediately
+                    };
+                });
+            },
+            // continually redefined based on new timeouts
+            fastForward: null,
             end(){
                 this.show = false;
                 this.continueLoop = false;
+                if(this.timeoutId != null){
+                    clearTimeout(this.timeoutId);
+                    this.timoutId = null;
+                }
+                this.fastForward = null;
             }
-
         };
     });
 

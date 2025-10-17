@@ -67,7 +67,7 @@
                         </button>
                     </template>
                 </div>
-                <div x-data="slideshow" x-cloak>
+                <div x-data="slideshow" x-cloak @keydown.window.escape="end()">
                     <template x-if="!$store.sorting">
                         <button class="btn btn-outline-secondary btn-icon" @click="showDialog = true">
                             {{ icon("bi-collection-play")}}
@@ -77,10 +77,10 @@
                         <div id="slideshow" @click="end()" class="mask">
                             <div class="slideshow__loading" x-show="loading">Loading&hellip;</div>
                             <div class="slideshow__slide" :class="activeSlide == 0 ? 'active' : ''">
-                                <img class="slideshow__img" :src="src[0]"/>
+                                <img class="slideshow__img" :src="src[0]" @click.stop="fastForward()"/>
                             </div>
                             <div class="slideshow__slide" :class="activeSlide == 1 ? 'active' : ''">
-                                <img class="slideshow__img" :src="src[1]" />
+                                <img class="slideshow__img" :src="src[1]" @click.stop="fastForward()"/>
                             </div>
                         </div>
                     </template>

@@ -46,6 +46,10 @@
         opacity:0;
         transition:opacity calc(var(--slideshow-slide-duration) * var(--slideshow-transition-factor)) ease-out;
 
+        &:not(.active){
+            pointer-events:none;
+        }
+        
         &.active{
             z-index:101;
             opacity:1;
