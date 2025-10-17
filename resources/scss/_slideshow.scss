@@ -4,7 +4,9 @@
     --slideshow-transition-factor: 0.2;/* the percentage of the slide duration that the transition should take */
 }
 
+$mask-opacity:0.93;
 #slideshow{
+    --mask-opacity:#{$mask-opacity};
     position:absolute;
     inset:0;
     display:grid;
@@ -23,7 +25,7 @@
         box-shadow: $box-shadow;
 
         &::backdrop{
-            @include mask;
+            @include mask($mask-opacity);
         }
     }
     &__loading{
