@@ -9,4 +9,5 @@
     inset:0;
     background: hsla(240, 100%, 1%, var(--mask-opacity));
     z-index: 100;
+    backdrop-filter:blur(10px);
 }

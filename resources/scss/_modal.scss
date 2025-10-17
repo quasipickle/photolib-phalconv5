@@ -1,0 +1,12 @@
+/**
+ * Extra styles for Bootstrap's modal.
+ */
+ .modal{
+    background-color:transparent;
+ }
+ .modal-backdrop{
+    @include mask;
+    &.show{
+        --bs-backdrop-opacity:1;
+    }
+ }
