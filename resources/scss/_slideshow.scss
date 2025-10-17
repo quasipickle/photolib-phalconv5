@@ -26,13 +26,6 @@
             @include mask;
         }
     }
-    &__mask{
-        inset:0;
-        background: var(--mask-bg-colour);
-        position:absolute;
-        z-index:101;
-    }
-
     &__loading{
         z-index:101;
         color:white;
@@ -49,16 +42,23 @@
         &:not(.active){
             pointer-events:none;
         }
-        
+
         &.active{
             z-index:101;
             opacity:1;
             transition-timing-function: ease-in;
         }
+        &:focus{
+            outline:2px solid red;
+        }
 
         img{
             max-height:95vh;
             max-width:95vw;
+
+            &:focus{
+                outline:2px solid red;
+            }
         }
     }
 }

@@ -20,10 +20,26 @@ docOn("alpine:init", () => {
                     } else {
                         this.$refs.dialog.close();
                     }
-                })
+                });
+
+                // close the slideshow if the user exits fullscreen
+                document.addEventListener('fullscreenchange', () => {
+                    if(!document.fullscreenElement && this.show)
+                        this.end();
+                });
+
+                // or they hit escape at all
+                document.addEventListener("keydown", e => {
+                    if(e.key === "Escape" && this.show)
+                        this.end();
+                });
+
+                
             },
             start(withChildren) {
                 this.$refs.dialog.close();
+                this.$nextTick(() => this.$refs.mask.focus());
+                document.documentElement.requestFullscreen();
                           
                 // Reset
                 this.activeSlide = 0;
@@ -95,6 +111,7 @@ docOn("alpine:init", () => {
                     this.timoutId = null;
                 }
                 this.fastForward = null;
+                document.documentElement.exitFullscreen();
             }
         };
     });
