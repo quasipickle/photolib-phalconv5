@@ -77,10 +77,10 @@
                         <div id="slideshow" class="mask" tabindex="0" x-ref="mask" @click="end()" @keydown.escape="end()">
                             <div class="slideshow__loading" x-show="loading">Loading&hellip;</div>
                             <div class="slideshow__slide" :class="activeSlide == 0 ? 'active' : ''">
-                                <img class="slideshow__img" :src="src[0]" @click.stop="fastForward()" @keydown.escape="end()"/>
+                                <img class="slideshow__img" :src="src[0]" @click.stop="fastForward()"/>
                             </div>
                             <div class="slideshow__slide" :class="activeSlide == 1 ? 'active' : ''">
-                                <img class="slideshow__img" :src="src[1]" @click.stop="fastForward()" @keydown.escape="end()"/>
+                                <img class="slideshow__img" :src="src[1]" @click.stop="fastForward()"/>
                             </div>
                         </div>
                     </template>

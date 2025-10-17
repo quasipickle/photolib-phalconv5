@@ -111,7 +111,7 @@ docOn("alpine:init", () => {
                     this.timoutId = null;
                 }
                 this.fastForward = null;
-                document.documentElement.exitFullscreen();
+                document.exitFullscreen();
             }
         };
     });
