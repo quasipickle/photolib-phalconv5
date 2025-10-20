@@ -4,6 +4,7 @@ namespace Model;
 
 class Photo extends \Phalcon\Mvc\Model
 {
+    public int $id = 0;
     public function initialize()
     {
         $this->hasManyToMany(

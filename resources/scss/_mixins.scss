@@ -2,3 +2,12 @@
     outline:1px solid $input-focus-border-color;
     box-shadow: 0 0 0 0.4rem #cee0fd; //$input-btn-focus-color;
 }
+
+@mixin mask($opacity: 0.8) {
+    --mask-opacity:#{$opacity};
+    position: fixed;
+    inset:0;
+    background: hsla(240, 100%, 1%, var(--mask-opacity));
+    z-index: 100;
+    backdrop-filter:blur(10px);
+}

@@ -49,10 +49,10 @@
                 </ol>
             </nav>
 
-            <div class="d-flex gap-4">
+            <div class="d-flex gap-2">
                 <div class="d-flex gap-2" x-data="reorder" x-cloak>
                     <template x-if="!$store.sorting">
-                        <button class="btn btn-outline-secondary btn-icon"@click="startReorder()">
+                        <button class="btn btn-outline-secondary btn-icon" @click="startReorder()">
                             {{ icon("bi-arrow-left-right") }}
                         </button>
                     </template>
@@ -66,6 +66,38 @@
                             {{ icon("bi-x") }}
                         </button>
                     </template>
+                </div>
+                <div x-data="slideshow" x-cloak>
+                    <template x-if="!$store.sorting">
+                        <button class="btn btn-outline-secondary btn-icon" @click="showDialog = true">
+                            {{ icon("bi-collection-play")}}
+                        </button>
+                    </template>
+                    <template x-if="show">
+                        <div id="slideshow" class="mask" tabindex="0" x-ref="mask" @click="end()" @keydown.escape="end()">
+                            <div class="slideshow__loading" x-show="loading">Loading&hellip;</div>
+                            <div class="slideshow__slide" :class="activeSlide == 0 ? 'active' : ''">
+                                <img class="slideshow__img" :src="src[0]" @click.stop="fastForward()"/>
+                            </div>
+                            <div class="slideshow__slide" :class="activeSlide == 1 ? 'active' : ''">
+                                <img class="slideshow__img" :src="src[1]" @click.stop="fastForward()"/>
+                            </div>
+                        </div>
+                    </template>
+                    <dialog x-ref="dialog" class="slideshow__dialog" @close="showDialog = false">
+                        {% if Album.photos|length > 0 %}
+                            <p>
+                                Include photos from child albums, or just this album?
+                            </p>
+                            <button type="button" class="btn btn-secondary" @click="start(true)">With child albums</button>
+                            <button type="button" class="btn btn-secondary" @click="start(false)">Just this album</button>
+                        {% else %}
+                            <p>
+                                Slideshow will consist of photos from child albums, as this album has no photos
+                            </p>
+                            <button type="button" class="btn btn-secondary" @click="start(true)">Ok</button>
+                        {% endif %}
+                    </dialog>
                 </div>
                 {#
                     Uploading
@@ -146,7 +178,7 @@
         </div>
     </div>
 </div>
-<div class = "lightbox"
+<div class = "lightbox mask"
     x-data="lightbox"
     x-on:lightboxable-clicked.window="box($event.detail)"
     :class="show ? 'lightbox--show' : ''"
@@ -172,8 +204,13 @@
 <script type="text/javascript">
     window.albumId = {{ Album.id }};
     window.parentAlbumId = {{ Album.album_id|default(0) }};
+    window.slideshowDuration = {{ config.slideshow.duration }};
 </script>
-
+<style type="text/css">
+    :root{
+        --slideshow-slide-duration: {{config.slideshow.duration}}ms;
+    }
+</style>
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
 
 <script defer src = "{{ url('/public/js/album.js') }}" type="module"></script>

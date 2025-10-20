@@ -13,6 +13,7 @@ import "./membership.js";
 import "./photo-info.js";
 import "./photoChooser.js";
 import "./reorder.js";
+import "./slideshow.js";
 import "./upload.js";
 import "./uploadProgress.js";
 

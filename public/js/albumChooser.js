@@ -17,13 +17,12 @@ docOn("alpine:init", () => {
                     backdrop:"static",
                     keyboard: false
                 });
-                window.addEventListener("albumchooser:show", e => {
-                    this.options = e.detail;    
+                window.addEventListener("albumchooser:show", e => { 
                     this.loadAlbum(albumIdParam);
                 });
             },
             loadAlbum(albumId) {
-                get(`/chooser/${albumId}`, this.options, "load an album for the chooser")
+                get(`/chooser/${albumId}`, {}, "load an album for the chooser")
                     .then(data => {
                         this.Album = data.album;
                         this.albums = data.albums;
