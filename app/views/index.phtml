@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,7 +34,7 @@
                         <div class="d-inline-flex align-items-center gap-1" x-data="{}" :class="$store.sorting && 'invisible'">
                             {% if !Album.isRootAlbum() %}
                                 <div class="dropdown dropdown--no-caret">
-                                    <button class="btn btn-appear-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-ghost-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ icon("bi-gear-fill") }}
                                     </button>
                                     <ul class="dropdown-menu">
@@ -63,7 +63,7 @@
                                     </ul>
                                 </div>
                             {% endif %}
-                            <button class="btn btn-appear-secondary" data-bs-toggle="modal" data-bs-target="#new-album-modal">
+                            <button class="btn btn-ghost-secondary btn-icon" data-bs-toggle="modal" data-bs-target="#new-album-modal">
                                 {{ icon("bi-folder-plus") }}
                             </button>
                         </div>
@@ -72,18 +72,18 @@
                 {% if Album is defined %}
                     <div class="btn-toolbar gap-3" role="toolbar" aria-label="Album-wide tools">
                         <div class="d-flex gap-1" x-data="gridSize">
-                            <div class="btn btn-appear-secondary btn-icon" :class="size == 'sm' && 'active'" @click="setSize('sm')">
+                            <div class="btn btn-ghost-secondary btn-icon" :class="size == 'sm' && 'active'" @click="setSize('sm')">
                                 {{ icon("bi-grid-3x3-gap") }}
                             </div>
-                            <div class="btn btn-appear-secondary btn-icon" :class="size == 'lg' && 'active'" @click="setSize('lg')">
+                            <div class="btn btn-ghost-secondary btn-icon" :class="size == 'lg' && 'active'" @click="setSize('lg')">
                                 {{ icon("bi-grid") }}
                             </div>
                         </div>
                         <div class="d-flex gap-1" x-data="gridRatio">
-                            <div class="btn btn-appear-secondary btn-icon" :class="ratio == 'square' && 'active'" @click="setRatio('square')">
+                            <div class="btn btn-ghost-secondary btn-icon" :class="ratio == 'square' && 'active'" @click="setRatio('square')">
                                 {{ icon("bi-aspect-ratio") }}
                             </div>
-                            <div class="btn btn-appear-secondary btn-icon"  :class="ratio == 'natural' && 'active'" @click="setRatio('natural')">
+                            <div class="btn btn-ghost-secondary btn-icon"  :class="ratio == 'natural' && 'active'" @click="setRatio('natural')">
                                 {{ icon("bi-square") }}
                             </div>
                         </div>
@@ -91,15 +91,15 @@
                 {% endif %}
                 {% if router.getControllerName() != "battle" %}
                     <div>
-                        <a href ="{{ url('/duplicates') }}" class="btn btn-icon btn-outline-secondary">
+                        <a href ="{{ url('/duplicates') }}" class="btn btn-icon btn-ghost-secondary">
                             {{ icon("bi-copy") }}
                         </a>
-                        <a href ="{{ url('/battle') }}" class="btn btn-icon btn-outline-secondary">
+                        <a href ="{{ url('/battle') }}" class="btn btn-icon btn-ghost-secondary">
                             {{ icon("bi-bar-chart") }}
                         </a>
                     </div>
                 {% else %}
-                    <a href="#" class="btn btn-outline-secondary" id="battle-stats">
+                    <a href="#" class="btn btn-ghost-secondary" id="battle-stats">
                         Stats
                     </a>
                 {% endif %}

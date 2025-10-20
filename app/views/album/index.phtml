@@ -16,7 +16,7 @@
                    href="{{ album(album.id) }}">
                     {{ album.name }}
                     {% if album.subAlbumCount != 0 %}
-                        <span class="badge rounded-pill border-circle bg-secondary">{{ album.subAlbumCount }}</span>
+                        <span class="badge rounded-pill border-circle text-bg-secondary">{{ album.subAlbumCount }}</span>
                     {% endif %}
                 </a>
             {% endfor %}
@@ -49,10 +49,10 @@
                 </ol>
             </nav>
 
-            <div class="d-flex gap-2">
-                <div class="d-flex gap-2" x-data="reorder" x-cloak>
+            <div class="d-flex gap-1">
+                <div class="d-flex gap-1" x-data="reorder" x-cloak>
                     <template x-if="!$store.sorting">
-                        <button class="btn btn-outline-secondary btn-icon" @click="startReorder()">
+                        <button class="btn btn-ghost-secondary btn-icon" @click="startReorder()">
                             {{ icon("bi-arrow-left-right") }}
                         </button>
                     </template>
@@ -67,12 +67,10 @@
                         </button>
                     </template>
                 </div>
-                <div x-data="slideshow" x-cloak>
-                    <template x-if="!$store.sorting">
-                        <button class="btn btn-outline-secondary btn-icon" @click="showDialog = true">
-                            {{ icon("bi-collection-play")}}
-                        </button>
-                    </template>
+                <div x-data="slideshow" x-cloak x-show="!$store.sorting">
+                    <button class="btn btn-ghost-secondary btn-icon" @click="showDialog = true">
+                        {{ icon("bi-collection-play")}}
+                    </button>
                     <template x-if="show">
                         <div id="slideshow" class="mask" tabindex="0" x-ref="mask" @click="end()" @keydown.escape="end()">
                             <div class="slideshow__loading" x-show="loading">Loading&hellip;</div>
@@ -104,12 +102,12 @@
                 #}
                 {% if !Album.isRootAlbum() %}
                 <div x-data="upload">
-                    <div class = "d-flex gap-2" :class="$store.sorting && 'invisible'">
-                        <button class="btn btn-outline-secondary btn-icon" @click="startDownload()">
+                    <div class = "d-flex gap-1" :class="$store.sorting && 'invisible'">
+                        <button class="btn btn-ghost-secondary btn-icon" @click="startDownload()">
                             {{ icon("bi-cloud-arrow-down") }}
                         </button>
                         <span>
-                            <button class="btn btn-outline-secondary btn-icon" @click="filesChoose()">
+                            <button class="btn btn-ghost-secondary btn-icon" @click="filesChoose()">
                                 {{ icon("bi-upload") }}
                             </button>
                             <div class="d-none">
