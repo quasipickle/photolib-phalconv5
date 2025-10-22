@@ -3,7 +3,6 @@
 namespace Controller;
 
 use Component\Retval;
-use Helper\IniHelper;
 use Model\{Album, AlbumPhoto, Photo, Tag};
 use Phalcon\Mvc\Model\Query\Builder as QueryBuilder;
 

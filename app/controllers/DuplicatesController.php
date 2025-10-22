@@ -25,7 +25,7 @@ class DuplicatesController extends BaseDeleteFileController
 
         $this->view->duplicates = [];
         $duplicates = Duplicate::find(["conditions" => "ignore != 1 OR ignore IS NULL"]);
-        if (count($duplicates) > 0) {
+        if ($duplicates->count() > 0) {
             $ids = [];
             foreach ($duplicates as $duplicate) {
                 $ids[] = $duplicate->primary_id;

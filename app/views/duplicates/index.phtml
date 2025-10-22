@@ -3,6 +3,7 @@
     {% set cssClass = version == "primary" ? "duplicate__stats--primary" : "duplicate__stats--secondary" %}
     {% set areaCss = Primary.Area() > Secondary.Area() ? "fw-bold text-success" : "" %}
     {% set fileSizeCss = Primary.filesize > Secondary.filesize ? "fw-bold text-success" : "" %}
+    {% set idCss = Primary.id < Secondary.id ? "fw-bold text-success" : "" %}
     {% set betterOrder = version == "secondary" ? "order-2" : "" %}
     <div class="duplicate__stats {{ cssClass }}">
         <div class="duplicate__stat {{ areaCss }}">
@@ -20,7 +21,7 @@
         <div class="duplicate__stat">
             {{ Primary.mime_type }}
         </div>
-        <div class="duplicate__stat">
+        <div class="duplicate__stat {{ idCss }}">
             #{{ Primary.id }}
         </div>
         <div class="duplicate__stat">
@@ -83,7 +84,7 @@
                                 <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="primary">
                                     Take
                                 </button>
-                                <a href="{{ photo(duplicate.Primary.path) }}" class="btn btn-outline-secondary" target="_blank">
+                                <a href="{{ photo(duplicate.Primary.path) }}" class="btn btn-ghost-secondary" target="_blank">
                                     Original {{ icon("bi-arrow-up-right")}}
                                 </a>
                             </div>
@@ -95,7 +96,7 @@
                                 <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="secondary">
                                     Take
                                 </button>
-                                <a href="{{ photo(duplicate.Secondary.path) }}" class="btn btn-outline-secondary" target="_blank">
+                                <a href="{{ photo(duplicate.Secondary.path) }}" class="btn btn-ghost-secondary" target="_blank">
                                     Original {{ icon("bi-arrow-up-right")}}
                                 </a>
                             </div>

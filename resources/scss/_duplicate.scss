@@ -6,7 +6,7 @@
         "primaryPhoto ignore      ignore        secondaryPhoto";
     gap:map.get($spacers, 2);
     margin-bottom:map.get($spacers, 3);
-    background-color:$gray-200;
+    background-color:var(--bs-tertiary-bg);
     padding:map.get($spacers, 3);
     border-radius:var(--bs-border-radius-xl);
 }
