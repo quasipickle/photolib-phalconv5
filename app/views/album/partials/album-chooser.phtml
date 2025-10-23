@@ -12,13 +12,13 @@
                         <template x-if="Album.id == window.rootAlbumId">
                             <span x-text="Album.name"></span>
                         </template>
-                        <button type = "button" class = "btn btn-sm btn-outline-primary ms-2" @click="choose(Album)">Choose</button>
+                        <button type = "button" class = "btn btn-sm btn-ghost-primary ms-2" @click="choose(Album)">Choose</button>
                         <button @click = "cancel()" type="button" class="btn-close" aria-label="Close"></button>
                     </h5>
                 </template>
                 <div class = "input-group" x-data="filter('.chooser__list .chooser__item')">
                     <input type = "text" class = "form-control filter__input" x-model="searchTerms" required placeholder = "Filter albums" autocomplete = "off">
-                    <button class = "btn btn-outline-secondary filter__button" @click="clear()">
+                    <button class = "btn btn-ghost-secondary filter__button" @click="clear()">
                         {{ icon("bi-x-lg") }}
                     </button>
                 </div>
@@ -36,7 +36,7 @@
                                 <template x-if="subalbum.subAlbumCount == 0">
                                     <span x-text="subalbum.name" class = "chooser__title"></span>
                                 </template>
-                                <button type = "button" class = "btn btn-sm btn-outline-primary" @click="choose(subalbum)">Choose</button>
+                                <button type = "button" class = "btn btn-sm btn-ghost-primary" @click="choose(subalbum)">Choose</button>
                             </li>
                         </template>
                     </ul>

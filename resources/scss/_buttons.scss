@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .btn-outline-input{
     --bs-btn-border-color: #{$input-border-color};
     &:hover{
@@ -55,10 +57,26 @@
     }
 }
 @each $name, $colour in $theme-colors{
-    .btn-appear-#{$name}{
-        --base-colour: #{$colour};
-        --hover-text-colour: #{color-contrast($colour)};
-        --bs-btn-active-bg: #{rgba($colour, 0.5)};
-        --bs-btn-active-border-color:transparent;
+    .btn-ghost-#{$name}{
+        $text-colour: $colour;
+        $bg-colour: mix($colour, $body-bg-dark, 10%);
+        $hover-bg-colour: mix($colour, $body-bg-dark, 30%);
+        $active-bg-colour: mix($colour, $body-bg-dark, 50%);
+
+        @if($name == "primary") {
+            $bg-colour: mix($colour, $body-bg-dark, 25%);
+            $text-colour: tint-color($colour, 50%); 
+        }
+
+        @include button-variant(
+            $background: $bg-colour,
+            $border: transparent,
+            $color: $text-colour,
+            $hover-background:$hover-bg-colour,
+            $hover-border: transparent,
+            $active-background: $active-bg-colour,
+            $active-border:transparent,
+
+        );
     }
 }

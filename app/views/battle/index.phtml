@@ -1,9 +1,8 @@
 <div class="contenders">
-    <div class="battle__mask d-none"></div>
-    {% for photo in photos %}
+        {% for photo in photos %}
         <div class="contender" data-contender-id="{{ photo.id }}">
             <div class="contender__img-wrapper zoom__container">
-                <img class="js-contender-img zoom__img zoom__img--no-zoom" src = "{{ photo(photo.display_path) }}" data-zoom-src = "{{ photo(photo.path) }}"/>
+                <img class="zoom__img zoom__img--no-zoom" src = "{{ photo(photo.display_path) }}" data-zoom-src = "{{ photo(photo.path) }}"/>
             </div>
             <div class="contender__meta">
                 {% if breadcrumbs[photo.id] is defined %}
@@ -25,7 +24,7 @@
                         {{ icon("bi-bar-chart") }} {{ photo.battles }}
                     </span>
                 </div>
-                <a href="{{ photo(photo.path) }}" class="btn bg-frosted btn-outline-secondary" target="_blank">Original {{ icon('bi-arrow-up-right') }}</a>
+                <a href="{{ photo(photo.path) }}" class="btn btn-ghost-secondary" target="_blank">Original {{ icon('bi-arrow-up-right') }}</a>
             </div>
         </div>
     {% endfor %}

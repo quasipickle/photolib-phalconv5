@@ -2,10 +2,7 @@
     --slideshow-slide-duration:5000ms;/* default.  Gets overridden by javascript */
     --slideshow-transition-factor: 0.2;/* the percentage of the slide duration that the transition should take */
 }
-
-$mask-opacity:0.93;
 #slideshow{
-    --mask-opacity:#{$mask-opacity};
     position:absolute;
     inset:0;
     display:grid;
@@ -24,7 +21,7 @@ $mask-opacity:0.93;
         box-shadow: $box-shadow;
 
         &::backdrop{
-            @include mask($mask-opacity);
+            @include mask;
         }
     }
     &__loading{

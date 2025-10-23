@@ -40,7 +40,7 @@
 
     &__meta{
         display:flex;
-        background:hsla(0, 100%, 100%, 70%);
+        background:var(--bs-tertiary-bg);
         justify-content:center;
         gap:1rem;
         height:3rem;
@@ -99,6 +99,7 @@
         aspect-ratio:1;
     }
     &-rate{
+        color:$body-color;
         text-align:center;
         $bg-green: $green-400;
         $bg-red: $red-400;
@@ -109,10 +110,4 @@
 }
 .battle__stat-popover{
     --bs-popover-max-width: 400px;
-}
-.battle__mask{
-    position:absolute;
-    background:hsla(0, 100%, 100%, 70%);
-    inset:0;
-    z-index:1;
 }
