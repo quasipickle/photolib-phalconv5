@@ -2,73 +2,57 @@
 .duplicate{
     display:grid;
     grid-template-areas:
-        "primaryPhoto primaryMeta secondaryMeta secondaryPhoto"
-        "primaryPhoto ignore      ignore        secondaryPhoto";
+        "pImg pArea spacer sArea sImg"
+        "pImg pSize spacer sSize sImg"
+        "pImg pFormat spacer sFormat sImg"
+        "pImg pId spacer sId sImg"
+        "pImg distLabel spacer distance sImg"
+        "pImg pBread spacer sBread sImg"
+        "pImg pTake spacer sTake sImg"
+        "pImg pOrig spacer sOrig sImg"
+        "pImg ignore ignore ignore sImg";
+
+    grid-template-columns:1fr 1fr 1em 1fr 1fr;
     gap:map.get($spacers, 2);
     margin-bottom:map.get($spacers, 3);
     background-color:var(--bs-tertiary-bg);
     padding:map.get($spacers, 3);
     border-radius:var(--bs-border-radius-xl);
 }
-.duplicate__photo{
-    width:300px;
-    max-height:300px;
-    object-fit:contain;
 
-    &--primary{
-        grid-area:primaryPhoto;
-        object-position: top right;
-        justify-self:end;
-    }
-    &--secondary{
-        grid-area: secondaryPhoto;
-        object-position: top left;
-    }
+.duplicate__area--primary { grid-area: pArea; text-align:right; }
+.duplicate__area--secondary { grid-area: sArea; }
+.duplicate__size--primary { grid-area: pSize; text-align:right; }
+.duplicate__size--secondary { grid-area: sSize; }
+.duplicate__format--primary { grid-area: pFormat; text-align:right; }
+.duplicate__format--secondary { grid-area: sFormat; }
+.duplicate__id--primary { grid-area: pId; text-align:right;}
+.duplicate__id--secondary { grid-area: sId; }
+.duplicate__breadcrumb--primary { 
+    grid-area: pBread; 
+    ol{ justify-content:flex-end; }
 }
-
-.duplicate__meta{
-    --space: #{map.get($spacers, 1)};
-    padding:0 0 0 var(--space);
-    &--primary{
-        grid-area:primaryMeta;
-    }
-    &--secondary{
-        grid-area:secondaryMeta;
-    }
-}
-.duplicate__actions{
-    display:flex;
-    flex-direction:column;
-    gap: var(--space);
-}
+.duplicate__breadcrumb--secondary { grid-area: sBread; }
+.duplicate__take--primary { grid-area: pTake; text-align:right;}
+.duplicate__take--secondary { grid-area: sTake; }
+.duplicate__orig--primary { grid-area: pOrig; text-align:right;}
+.duplicate__orig--secondary { grid-area: sOrig; }
+.duplicate__distance-label { grid-area: distLabel; text-align:right;}
+.duplicate__distance { grid-area: distance; }
+.duplicate__img-container--primary{ grid-area: pImg; }
+.duplicate__img-container--secondary{ grid-area: sImg; }
 .duplicate__ignore{
     grid-area: ignore;
     justify-self:center;
     align-self:end;
 }
-.duplicate__stats{
-    display:grid;
-    gap: var(--space);
-    grid-auto-rows:min-content;
-    margin-bottom:map.get($spacers, 2);
 
-    &--primary .duplicate__stat{
-        justify-content: end;
-    }
-}
-
-.duplicate__stat{
-    gap: var(--space);
-    display:flex;
+.duplicate__img{
+    width:300px;
+    max-height:300px;
+    object-fit:contain;
+    object-position: top center;
 }
 .duplicate__stat--better{
     background-color: $green-500;
-}
-.duplicate__popover{
-    --bs-popover-max-width: 400px;
-    --bs-popover-bg: var(--bs-popover-border-color);
-    --bs-popover-border-radius:0px;
-    --bs-popover-inner-border-radius:0px;
-    --bs-popover-body-padding-x: 0px;
-    --bs-popover-body-padding-y: 0px;
 }

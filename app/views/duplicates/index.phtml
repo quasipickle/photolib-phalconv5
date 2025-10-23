@@ -1,47 +1,56 @@
 {% set title = "Duplicates" %}
-{%- macro statsTable(version, Primary, Secondary, breadcrumbs, distance=null) %}
-    {% set cssClass = version == "primary" ? "duplicate__stats--primary" : "duplicate__stats--secondary" %}
+{%- macro metaSection(version, Primary, Secondary, breadcrumbs, duplicateId, distance=null) %}
+    {% set cssModifier = version == "primary" ? "--primary" : "--secondary" %}
     {% set areaCss = Primary.Area() > Secondary.Area() ? "fw-bold text-success" : "" %}
     {% set fileSizeCss = Primary.filesize > Secondary.filesize ? "fw-bold text-success" : "" %}
     {% set idCss = Primary.id < Secondary.id ? "fw-bold text-success" : "" %}
-    {% set betterOrder = version == "secondary" ? "order-2" : "" %}
-    <div class="duplicate__stats {{ cssClass }}">
-        <div class="duplicate__stat {{ areaCss }}">
-            {% if Primary.Area() > Secondary.Area() %}
-                {{ icon("bi bi-arrow-up-circle-fill text-success " ~ betterOrder) }}
-            {% endif %}
-            {{ Primary.width }} &times; {{ Primary.height}}
+    <div class="duplicate__area{{ cssModifier }} {{ areaCss}}">
+        {% if Primary.Area() > Secondary.Area() %}
+            {{ icon("bi bi-arrow-up-circle-fill text-success") }}
+        {% endif %}
+        {{ Primary.width }} &times; {{ Primary.height}}
+    </div>
+    <div class="duplicate__size{{ cssModifier }} {{ fileSizeCss }}">
+        {% if Primary.filesize > Secondary.filesize %}
+            {{ icon("bi bi-arrow-up-circle-fill text-success") }}
+        {% endif %}
+        {{ filesize(Primary.filesize) }}
+    </div>
+    <div class="duplicate__format{{ cssModifier }}">
+        {{ Primary.mime_type }}
+    </div>
+    <div class="duplicate__id{{ cssModifier }} {{ idCss }}">
+        #{{ Primary.id }}
+    </div>
+    {% if version == "primary" %}
+        <div class="duplicate__distance-label">
+            Distance:
         </div>
-        <div class="duplicate__stat {{ fileSizeCss }}">
-            {% if Primary.filesize > Secondary.filesize %}
-                {{ icon("bi bi-arrow-up-circle-fill text-success " ~ betterOrder) }}
-            {% endif %}
-            {{ filesize(Primary.filesize) }}
+    {% else %}
+        <div class="duplicate__distance">
+            {{ distance }}
         </div>
-        <div class="duplicate__stat">
-            {{ Primary.mime_type }}
-        </div>
-        <div class="duplicate__stat {{ idCss }}">
-            #{{ Primary.id }}
-        </div>
-        <div class="duplicate__stat">
-            {% if version == "primary" %}
-                Distance:
-            {% else %}
-                {{ distance }}
-            {% endif %}
-        </div>
-        <div class="duplicate__stat">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    {% for album in breadcrumbs[Primary.id] %}
-                        <li class="breadcrumb-item">
-                            <a href="{{ album(album.id) }}" target="_new">{{ album.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ol>
-            </nav>
-        </div>
+    {% endif %}
+    <div class="duplicate__breadcrumb{{ cssModifier }}">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                {% for album in breadcrumbs[Primary.id] %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ album(album.id) }}" target="_new">{{ album.name }}</a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+    <div class="duplicate__take{{ cssModifier }}">
+        <button class="btn btn-success js-take" data-duplicate-id="{{ duplicateId }}" data-take="{{ version }}">
+            Take
+        </button>
+    </div>
+    <div class="duplicate__orig{{ cssModifier }}">
+        <a href="{{ photo(Primary.path) }}" class="btn btn-ghost-secondary" target="_blank">
+            Original {{ icon("bi-arrow-up-right")}}
+        </a>
     </div>
 {%- endmacro %}
 
@@ -69,56 +78,30 @@
                     </div>
                 </div>
                 {% for duplicate in duplicates %}
-                    <div class="duplicate">
-                        <img src = "{{ photo(duplicate.Primary.display_path) }}" 
-                            class="duplicate__photo duplicate__photo--primary"
-                            data-bs-toggle="popover"
-                            data-bs-content="<img src = '{{ photo(duplicate.Primary.display_path) }}' class='mw-100'>"
-                            data-bs-custom-class="duplicate__popover"
-                            data-bs-html="true"
-                            data-bs-trigger="hover"
-                            alt="{{ duplicate.Primary.id }}" />
-                        <div class="duplicate__meta duplicate__meta--primary">
-                            {{ statsTable("primary", duplicate.Primary, duplicate.Secondary, breadcrumbs) }}
-                            <div class="duplicate__actions">
-                                <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="primary">
-                                    Take
-                                </button>
-                                <a href="{{ photo(duplicate.Primary.path) }}" class="btn btn-ghost-secondary" target="_blank">
-                                    Original {{ icon("bi-arrow-up-right")}}
-                                </a>
-                            </div>
+                    <div class="duplicate" id="duplicate-{{ duplicate.id }}">
+                        <div class="duplicate__img-container--primary zoom__container">
+                            <img src = "{{ photo(duplicate.Primary.display_path) }}"
+                                class="duplicate__img zoom__img"
+                                data-zoom-src="{{ photo(duplicate.Primary.path) }}"
+                                alt="{{ duplicate.Primary.id }}" />
                         </div>
-
-                        <div class="duplicate__meta duplicate__meta--secondary">
-                            {{ statsTable("secondary", duplicate.Secondary, duplicate.Primary, breadcrumbs, duplicate.distance) }}
-                            <div class="duplicate__actions">
-                                <button class="btn btn-success js-take" data-duplicate-id="{{ duplicate.id }}" data-take="secondary">
-                                    Take
-                                </button>
-                                <a href="{{ photo(duplicate.Secondary.path) }}" class="btn btn-ghost-secondary" target="_blank">
-                                    Original {{ icon("bi-arrow-up-right")}}
-                                </a>
-                            </div>
+                        {{ metaSection("primary", duplicate.Primary, duplicate.Secondary, breadcrumbs, duplicate.id) }}
+                        {{ metaSection("secondary", duplicate.Secondary, duplicate.Primary, breadcrumbs, duplicate.id, duplicate.distance) }}
+                        <div class="duplicate__img-container--secondary zoom__container">
+                            <img src = "{{ photo(duplicate.Secondary.display_path) }}"
+                                class="duplicate__img zoom__img"
+                                data-zoom-src="{{ photo(duplicate.Secondary.path) }}"
+                                alt="{{ duplicate.Secondary.id }}" />
                         </div>
-                        
-                        <img src = "{{ photo(duplicate.Secondary.display_path) }}" 
-                            class="duplicate__photo duplicate__photo--secondary"
-                            data-bs-toggle="popover"
-                            data-bs-content="<img src = '{{ photo(duplicate.Secondary.display_path) }}' class='mw-100'>"
-                            data-bs-custom-class="duplicate__popover"
-                            data-bs-html="true"
-                            data-bs-trigger="hover"
-                            alt="{{ duplicate.Secondary.id }}"
-                            />
                         <button class="btn btn-secondary duplicate__ignore js-ignore" data-duplicate-id="{{ duplicate.id}}">Ignore</button>
                     </div>
                     {% else %}
                         <p class="alert alert-light">
-                            No duplicates have been found.  Run the <code>app/cli.php duplicates</code> task on the server to look for duplicates.
+                            No duplicates have been found.
                         </p>
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
+<script defer src = "{{ url('/public/js/zoom.js') }}" type="module"></script>
