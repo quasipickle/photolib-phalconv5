@@ -84,7 +84,7 @@ class DuplicatesController extends BaseDeleteFileController
         $take        = $this->request->getPost("take");
         $Duplicate   = Duplicate::findFirstById($duplicateId);
         if ($Duplicate == null) {
-            return $Retval->error("Could not find the duplicate record to process.")->response();
+            return $Retval->success(false)->message("Could not find the duplicate record to process.")->response();
         }
 
         $Take   = $take == "primary" ? $Duplicate->Primary : $Duplicate->Secondary;
@@ -115,13 +115,26 @@ class DuplicatesController extends BaseDeleteFileController
                     ->response();
         }
 
+        // transfer over feature flag
         $featuringAlbums = Album::findByPhotoId($Delete->id);
         foreach ($featuringAlbums as $Album) {
             $Album->photo_id = $Take->id;
             $Album->save();
         }
 
-        $Duplicate->delete();
+        // delete all Duplicate records that concern the Photo being deleted
+        $allRelevantDuplicates = Duplicate::find([
+            "conditions" => "primary_id = :id: or secondary_id = :id:", 
+            "bind" => [
+                "id" => $Delete->id
+            ]
+        ]);
+        $deletedDuplicateIds = [];
+        foreach ($allRelevantDuplicates as $duplicate) {
+            $deletedDuplicateIds[] = $duplicate->id;
+            $duplicate->delete();
+        }
+        $Retval->deletedDuplicates($deletedDuplicateIds);
         $Delete->delete();
         $Take->save();
 

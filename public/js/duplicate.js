@@ -25,7 +25,7 @@ docOn("click", evt => {
         post("/duplicates/take", data, "resolve a duplicate")
             .then(returned => {
                 if(returned.success)
-                    removeDuplicate(evt.target);
+                    removeDuplicates(returned.deletedDuplicates);
                 else
                     alert(returned.error);
             });
@@ -45,6 +45,12 @@ docOn("click", evt => {
     }
 });
 
+function removeDuplicates(duplicateIds)
+{
+    duplicateIds.forEach(id => {
+        removeDuplicate($('#duplicate-' + id));
+    })
+}
 function removeDuplicate($el)
 {
     $el.closest(".duplicate").remove();
