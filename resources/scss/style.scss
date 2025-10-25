@@ -29,10 +29,10 @@
 @import "../../vendor/twbs/bootstrap/scss/button-group";
 @import "../../vendor/twbs/bootstrap/scss/nav";
 @import "../../vendor/twbs/bootstrap/scss/navbar";
-@import "../../vendor/twbs/bootstrap/scss/card";
+// @import "../../vendor/twbs/bootstrap/scss/card";
 @import "../../vendor/twbs/bootstrap/scss/accordion";
 @import "../../vendor/twbs/bootstrap/scss/breadcrumb";
-@import "../../vendor/twbs/bootstrap/scss/pagination";
+// @import "../../vendor/twbs/bootstrap/scss/pagination";
 @import "../../vendor/twbs/bootstrap/scss/badge";
 @import "../../vendor/twbs/bootstrap/scss/alert";
 @import "../../vendor/twbs/bootstrap/scss/progress";
@@ -42,10 +42,10 @@
 @import "../../vendor/twbs/bootstrap/scss/modal";
 @import "../../vendor/twbs/bootstrap/scss/tooltip";
 @import "../../vendor/twbs/bootstrap/scss/popover";
-@import "../../vendor/twbs/bootstrap/scss/carousel";
-@import "../../vendor/twbs/bootstrap/scss/spinners";
-@import "../../vendor/twbs/bootstrap/scss/offcanvas";
-@import "../../vendor/twbs/bootstrap/scss/placeholders";
+// @import "../../vendor/twbs/bootstrap/scss/carousel";
+// @import "../../vendor/twbs/bootstrap/scss/spinners";
+// @import "../../vendor/twbs/bootstrap/scss/offcanvas";
+// @import "../../vendor/twbs/bootstrap/scss/placeholders";
 
 // Helpers
 @import "../../vendor/twbs/bootstrap/scss/helpers";
@@ -70,6 +70,7 @@
 @import "photochooser";
 @import "sidebar";
 @import "slideshow";
+@import "toasts";
 @import "upload";
 @import "zoom";
 

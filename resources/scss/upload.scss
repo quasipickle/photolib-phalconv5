@@ -1,28 +1,3 @@
-$uploadProgressBarHeight: 10px;
-.upload-progress{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height: 2 * $uploadProgressBarHeight;
-    opacity:0;
-    z-index:1;
-    transition: opacity 0.5s;
-    pointer-events:none;
-
-    .progress{
-        --bs-progress-height: #{$uploadProgressBarHeight};
-        --bs-progress-border-radius:0px;
-    }
-}
-.upload-progress__show{
-    opacity:1;
-    transition: none;
-}
-.upload-progress__processing .spinner-border-sm{
-    --bs-spinner-border-width: 0.125rem;
-}
-
 .drop-target{
     background:hsl(0 100% 100% / 90%);
     position:absolute;

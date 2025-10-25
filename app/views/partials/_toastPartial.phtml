@@ -1,0 +1,27 @@
+<div x-data>
+    <div class="toast-container">
+        <template x-for="toast in $store.toasts.toasts" :key="toast.id">
+            <div class="toast show d-flex flex-column" :class="toast.css" role="alert" aria-live="assertive" area-atomic="true">
+                <template x-if="toast.title != null">
+                    <div class="toast-header d-flex">
+                        <div x-text="toast.title" class="toast-title"></div>
+                        <button @click="$store.toasts.remove(toast)" type="button" class="btn-close ms-auto"></button>
+                    </div>
+                </template>
+                <div class="d-flex toast-body flex-column gap-2">
+                    <div class="d-flex">
+                        <div x-html="toast.content"></div>
+                        <template x-if="toast.title == null && (toast.persistent || toast.indeterminant)">
+                            <button @click="$store.toasts.remove(toast)" type="button" class="btn-close ms-auto"></button>
+                        </template>
+                    </div>
+                    <template x-if="toast.indeterminant">
+                        <div class="progress" role="progressbar" aria-label="Indeterminate toast progress bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated w-100"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>

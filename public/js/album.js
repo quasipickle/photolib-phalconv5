@@ -15,7 +15,6 @@ import "./photoChooser.js";
 import "./reorder.js";
 import "./slideshow.js";
 import "./upload.js";
-import "./uploadProgress.js";
 
 import { $ } from "./selector.js";
 import { docOn, docOnLoad } from "./on.js";
@@ -27,5 +26,5 @@ docOn("alpine:init", () => {
     Alpine.store("lastAlbum", {
         album: Alpine.$persist(false)
     });
-    Alpine.store("sorting", false);
+    Alpine.store("sorting", false);   
 });
