@@ -1,5 +1,5 @@
+@use "sass:map";
 // not BEM because we're modifying Bootstrap toast styles
-
 .toast-container{
     position:absolute;
     top:1rem;
@@ -7,11 +7,28 @@
     width:$toast-max-width;
 }
 
+.toast-wrapper{
+    display:grid;
+    grid-template-rows:1fr;
+    padding-bottom:map.get($spacers, 1);
+    transition: grid-template-rows 500ms ease,
+                opacity 500ms ease,
+                padding-bottom 500ms ease;
+
+    &--closing{
+        padding-bottom:0;
+        grid-template-rows:0fr;
+        opacity:0;
+    }
+}
+
 .toast{
     --bs-toast-spacing:0.5rem;
     --bs-toast-header-bg: var(--toast-bg-base);
     --bs-toast-header-color: var(--bs-toast-color);
     --bs-toast-bg: hsla(from var(--toast-bg-base) h calc(s * 0.4) l);
+
+    overflow:hidden;
 
     .progress{
         --bs-progress-bar-bg: var(--bs-toast-bg);
@@ -21,14 +38,7 @@
             calc(-1 * var(--bs-toast-padding-x))
             calc(-1 * var(--bs-toast-padding-x)) 
             calc(-1 * var(--bs-toast-padding-x));
-
-        margin-top:0;
         height:0.5rem;
-    }
-
-    p:last-child,
-    ul:last-child{
-        margin-bottom:0;
     }
 }
 

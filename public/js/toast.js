@@ -37,6 +37,7 @@ docOn("alpine:init", () => {
         },
         add(type, content, title, persistent, indeterminant) {
             const toast = Alpine.reactive({
+                visible:true,
                 id: ++this.lastId,
                 css: type.css,
                 content: content,
@@ -59,6 +60,9 @@ docOn("alpine:init", () => {
 
             this.maybeAffectTimeout(toast);
         },
+        hide(toast){
+            toast.visible = false;
+        },
         remove(toast){
             this.toasts = this.toasts.filter(i => i.id !== toast.id);
         },
@@ -75,7 +79,7 @@ docOn("alpine:init", () => {
         _createTimeout(toast) {
             toast.timeoutId = setTimeout(() => {
                 if(!(toast.persistent || toast.indeterminant)) {
-                    this.remove(toast);
+                    this.hide(toast);
                 }
             }, this.duration);
              
