@@ -68,7 +68,7 @@ class SlideshowController extends BaseController
                 'p' => Photo::class
             ])
             ->columns([
-                'p.display_path'
+                'p.path'
             ])
             ->where('ap.album_id in ({albumIds:array})', [
                 'albumIds' => $albumIds
@@ -80,7 +80,7 @@ class SlideshowController extends BaseController
 
         $paths = [];
         foreach ($result as $Row) {
-            $paths[] = $this->config->dirs->web->photo . $Row->display_path;
+            $paths[] = $this->config->dirs->web->photo . $Row->path;
         }
 
         return $paths;
