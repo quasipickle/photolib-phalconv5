@@ -34,6 +34,10 @@ class AlbumController extends BaseController
             ]
         );
 
+        if ($this->request->hasQuery('q')) {
+            $this->view->setVar('q', $this->request->getQuery('q'));
+        }
+
         $this->footerCollection->addJs(
             "https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js",
             false,

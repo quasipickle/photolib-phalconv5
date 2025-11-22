@@ -16,22 +16,26 @@ import { docOn } from "./on.js";
 
 
 docOn("alpine:init", () => {
-    Alpine.data("filter", (itemsSelector) => ({
-        searchTerms: null,
+    Alpine.data("filter", (itemsSelector, defaultSearchTerms = null) => ({
+        searchTerms: defaultSearchTerms,
 
-        init(){            
-            this.$watch("searchTerms",() => {
-                const normalizedSearchTerms = this.normalize(this.searchTerms);
-                const $$items = $$(itemsSelector);
+        init(){
+            if(this.searchTerms != null) {
+                this.doFilter();
+            }
+            this.$watch("searchTerms",this.doFilter.bind(this));
+        },
+        doFilter(){
+            const normalizedSearchTerms = this.normalize(this.searchTerms);
+            const $$items = $$(itemsSelector);
 
-                $$items.forEach(node => {
-                    node.dataset.filterOnNormalized ??= this.normalize(node.dataset.filterOn);
-                    if(node.dataset.filterOnNormalized.includes(normalizedSearchTerms)) {
-                        node.classList.remove("d-none");
-                    } else {
-                        node.classList.add("d-none");
-                    }
-                });
+            $$items.forEach(node => {
+                node.dataset.filterOnNormalized ??= this.normalize(node.dataset.filterOn);
+                if(node.dataset.filterOnNormalized.includes(normalizedSearchTerms)) {
+                    node.classList.remove("d-none");
+                } else {
+                    node.classList.add("d-none");
+                }
             });
         },
         clear(){
