@@ -30,13 +30,10 @@ class AlbumController extends BaseController
                 "subAlbums" => $subAlbums,
                 "title" => $Album->name,
                 "tags" => $this->getGroupedTags($albumId),
-                "viewingRoot" => $Album->id == $this->config->rootAlbumId
+                "viewingRoot" => $Album->id == $this->config->rootAlbumId,
+                'q' => $this->request->getQuery('q') ?? ''
             ]
         );
-
-        if ($this->request->hasQuery('q')) {
-            $this->view->setVar('q', $this->request->getQuery('q'));
-        }
 
         $this->footerCollection->addJs(
             "https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js",
