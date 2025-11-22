@@ -50,7 +50,7 @@
             </nav>
 
             <div class="d-flex gap-1">
-                <div class="d-flex gap-1" x-data="reorder" x-cloak>
+                <div class="d-flex gap-1" x-data="reorder">
                     <template x-if="!$store.sorting">
                         <button class="btn btn-ghost-secondary btn-icon" @click="startReorder()">
                             {{ icon("bi-arrow-left-right") }}
@@ -67,7 +67,7 @@
                         </button>
                     </template>
                 </div>
-                <div x-data="slideshow" x-cloak x-show="!$store.sorting">
+                <div x-data="slideshow" x-show="!$store.sorting">
                     <button class="btn btn-ghost-secondary btn-icon" @click="showDialog = true">
                         {{ icon("bi-collection-play")}}
                     </button>
@@ -209,9 +209,3 @@
         --slideshow-slide-duration: {{config.slideshow.duration}}ms;
     }
 </style>
-<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-
-<script defer src = "{{ url('/public/js/album.js') }}" type="module"></script>
-<script defer src = "{{ url('/public/js/zoom.js') }}" type="module"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-

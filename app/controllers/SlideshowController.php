@@ -1,4 +1,5 @@
 <?php
+
 namespace Controller;
 
 use Component\Retval;
@@ -16,7 +17,7 @@ class SlideshowController extends BaseController
 
         $urls = [];
 
-        if(!$children) {
+        if (!$children) {
             $urls = $this->getPhotos([$albumId]);
         } else {
             $albumIds = $this->getDescendentAlbumIds($albumId);
@@ -38,8 +39,7 @@ class SlideshowController extends BaseController
         $newAlbumsAdded = true;
         $foundAlbumIds = [$progenitorId];
         $searchAlbumIds = [$progenitorId];
-        while($newAlbumsAdded)
-        {
+        while ($newAlbumsAdded) {
             $albums = Album::find([
                 'columns' => ['id'],
                 'conditions' => 'album_id in ({ids:array})',
@@ -47,7 +47,7 @@ class SlideshowController extends BaseController
                 'hydration' => \Phalcon\Mvc\Model\Resultset::HYDRATE_ARRAYS
             ]);
             $ids = array_column($albums->toArray(), 'id');
-            if(count($ids)) {
+            if (count($ids)) {
                 $newAlbumsAdded = true;
                 $foundAlbumIds = array_unique(array_merge($foundAlbumIds, $ids));
                 $searchAlbumIds = $ids;
@@ -68,7 +68,7 @@ class SlideshowController extends BaseController
                 'p' => Photo::class
             ])
             ->columns([
-                'p.display_path'
+                'p.path'
             ])
             ->where('ap.album_id in ({albumIds:array})', [
                 'albumIds' => $albumIds
@@ -79,9 +79,8 @@ class SlideshowController extends BaseController
             ->execute();
 
         $paths = [];
-        foreach($result as $Row)
-        {
-            $paths[] = $this->config->dirs->web->photo . $Row->display_path;
+        foreach ($result as $Row) {
+            $paths[] = $this->config->dirs->web->photo . $Row->path;
         }
 
         return $paths;

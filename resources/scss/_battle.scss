@@ -62,7 +62,7 @@
     flex:1 0 0;
     border-radius:$border-radius;
     &:hover{
-        background-color:$blue-100;
+        background-color:var(--bs-dark-bg-subtle)
     }
 }
 .battle-dist__bar-container{

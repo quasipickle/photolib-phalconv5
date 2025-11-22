@@ -3,6 +3,7 @@
 import { on, docOn, off } from "./on.js";
 import { post } from "./axios-wrapper.js";
 import { $ } from "./selector.js";
+import { types as toastTypes, toasts } from "./toast.js";
 
 docOn("alpine:init", () => {
     Alpine.data("upload", () => ({
@@ -27,7 +28,6 @@ docOn("alpine:init", () => {
                 albumId: window.albumId
             };
             const id = this.uploadId++;
-            this.$dispatch("uploadprogress:fileadd", id);
             post("/photo/download", data, `import ${url}`)
                 .then(this.reloadWindow);
         },
@@ -44,22 +44,25 @@ docOn("alpine:init", () => {
                 this
                     .upload(file,this.uploadId++)
                     .catch(error => {
-                        alert(error);
+                        if(error) {
+                            alert(error);
+                        }
                     });
             }
         },
         async upload(file, id) {
-            this.$dispatch("uploadprogress:fileadd", id);
+            var toast = toasts().addInfo("Uploading", file.name, false, true);
             if(file.size > window.maxFileSize)
             {
-                this.$dispatch("uploadprogress:waitstart");
+                toasts(toast).setType(toastTypes.WARNING).setContent("Resizing");
                 file = await this.resizeFile(file);
-                this.$dispatch("uploadprogress:waitend");
-                if(file.size > window.maxFileSize)
-                    return new Promise((resolve, reject) => {
-                        reject(`File ${file.name} is still too large, even after resizing to within the configured maximum resize dimension (${window.maxResizeDimension}px), and was not uploaded.`);
-                        this.$dispatch("uploadprogress:filedone", id);
-                    });
+                if(file.size > window.maxFileSize) {
+                    toasts(toast)
+                        .setType(toastTypes.ERROR)
+                        .setContent(`File ${file.name} is still too large, even after resizing to within the configured maximum resize dimension (${window.maxResizeDimension}px), and was not uploaded.`)
+                        .setIndeterminant(false)
+                        .setPersistent(true);
+                }
             }
 
             const formData = new FormData();
@@ -73,8 +76,15 @@ docOn("alpine:init", () => {
                     this.$grid.appendChild(newNode);
                     // this won't work well if the album is so full it has images that haven't loaded yet (lazy)
                     newNode.scrollIntoView(false);
+                    toasts(toast).setType(toastTypes.SUCCESS).setContent("Uploaded").setIndeterminant(false);
                 })
-                .finally(() => this.$dispatch("uploadprogress:filedone", id));
+                .catch(() => {
+                    toasts(toast)
+                        .setType(toastTypes.ERROR)
+                        .setContent("Error")
+                        .setIndeterminant(false)
+                        .setPersistent(true);
+                });
             return uploadPromise;
         },
 
@@ -104,8 +114,6 @@ docOn("alpine:init", () => {
             });
 
             const newFile = new File([blob], file.name, {type: file.type});
-
-            console.log(newFile);
             return newFile;
         },
 

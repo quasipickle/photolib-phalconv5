@@ -1,0 +1,96 @@
+@use "sass:map";
+// not BEM because we're modifying Bootstrap toast styles
+.toast-container{
+    position:absolute;
+    top:1rem;
+    right:1rem;
+    width:$toast-max-width;
+}
+
+.toast-wrapper{
+    display:grid;
+    grid-template-rows:1fr;
+    padding-bottom:map.get($spacers, 1);
+    transition: grid-template-rows 500ms ease,
+                opacity 500ms ease,
+                padding-bottom 500ms ease;
+
+    &--closing{
+        padding-bottom:0;
+        grid-template-rows:0fr;
+        opacity:0;
+    }
+}
+
+.toast{
+    --bs-toast-spacing:0.5rem;
+    --bs-toast-header-bg: var(--toast-bg-base);
+    --bs-toast-header-color: var(--bs-toast-color);
+    --bs-toast-bg: hsla(from var(--toast-bg-base) h calc(s * 0.4) l);
+
+    overflow:hidden;
+
+    .progress{
+        --bs-progress-bar-bg: var(--bs-toast-bg);
+        border-radius: 0 0 calc(1.2 * var(--bs-toast-border-radius)) calc(1.2 * var(--bs-toast-border-radius));
+        margin: 
+            0 
+            calc(-1 * var(--bs-toast-padding-x))
+            calc(-1 * var(--bs-toast-padding-x)) 
+            calc(-1 * var(--bs-toast-padding-x));
+        height:0.5rem;
+    }
+}
+
+.toast-header{
+    font-weight:bold;
+    display:flex;
+    align-items:start;
+}
+.toast-title{
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    &:hover{
+        white-space:normal;
+    }
+}
+.toast-body{
+    word-break:break-word;
+}
+
+.toast-danger{
+    --toast-bg-base: var(--bs-danger-bg-subtle);
+    --bs-toast-color: var(--bs-danger-text-emphasis);
+    --bs-toast-border-color: var(--bs-danger-border-subtle);
+}
+.toast-warning{
+    --toast-bg-base: var(--bs-warning-bg-subtle);
+    --bs-toast-color: var(--bs-warning-text-emphasis);
+    --bs-toast-border-color: var(--bs-warning-border-subtle); 
+ }
+ .toast-success{
+    --toast-bg-base: var(--bs-success-bg-subtle);
+    --bs-toast-color: var(--bs-success-text-emphasis);
+    --bs-toast-border-color: var(--bs-success-border-subtle); 
+ }
+ .toast-info{
+    --toast-bg-base: var(--bs-info-bg-subtle);
+    --bs-toast-color: var(--bs-info-text-emphasis);
+    --bs-toast-border-color: var(--bs-info-border-subtle); 
+ }
+
+ /* classes that Vue adds when removing a toast */
+ .toasts-move,
+ .toasts-enter-active,
+ .toasts-leave-active {
+    transition: all 0.3s ease;
+ }
+ .toasts-leave-active{
+    position:absolute;
+ }
+ .toasts-enter-from,
+ .toasts-leave-to {
+    opacity:0;
+    transform: translateY(-30px);
+ }

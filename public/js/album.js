@@ -15,7 +15,6 @@ import "./photoChooser.js";
 import "./reorder.js";
 import "./slideshow.js";
 import "./upload.js";
-import "./uploadProgress.js";
 
 import { $ } from "./selector.js";
 import { docOn, docOnLoad } from "./on.js";

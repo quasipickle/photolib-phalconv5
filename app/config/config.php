@@ -19,7 +19,7 @@ $config = [
             "public"         => $file_root . "/public",
             "tasks"          => $app_file_root . "/tasks",
             "views"          => $views_file_root,
-            "viewsCompiled" => $views_file_root . "/compiled"
+            "viewsCompiled"  => $views_file_root . "/compiled"
         ],
         "web" => [
             "root" => $web_root,

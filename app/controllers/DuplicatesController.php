@@ -124,7 +124,7 @@ class DuplicatesController extends BaseDeleteFileController
 
         // delete all Duplicate records that concern the Photo being deleted
         $allRelevantDuplicates = Duplicate::find([
-            "conditions" => "primary_id = :id: or secondary_id = :id:", 
+            "conditions" => "primary_id = :id: or secondary_id = :id:",
             "bind" => [
                 "id" => $Delete->id
             ]

@@ -35,7 +35,35 @@ class AlbumController extends BaseController
         );
 
         $this->footerCollection->addJs(
-            "https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js",
+            "https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js",
+            false,
+            false,
+            ["defer" => "true"]
+        );
+
+        $this->footerCollection->setSourcePath($this->config->dirs->web->root);
+        $this->footerCollection->addJs(
+            "/public/js/album.js",
+            false,
+            false,
+            ["type" => "module", "defer" => "true"]
+        );
+        $this->footerCollection->addJs(
+            "/public/js/zoom.js",
+            false,
+            false,
+            ["type" => "module", "defer" => "true"]
+        );
+
+        $this->footerCollection->addJs(
+            "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
+            false,
+            false,
+            ["defer" => "true"]
+        );
+
+        $this->footerCollection->addJs(
+            "https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js",
             false,
             false,
             ["type" => "module", "defer" => "true"]
