@@ -81,12 +81,17 @@
                                     type="buton" 
                                     data-bs-toggle="dropdown" 
                                     aria-expanded="false"
-                                    x-text="'Order: ' + orderTypes[$store.albumOrder.current]"
+                                    x-text="'Order: ' + orderTypes[$store.albumOrder.current].label"
                                     >
                             </button>
                             <ul class="dropdown-menu">
-                                <template  x-for="(label, key) in orderTypes" :key="key">
-                                    <li><a href="#" class="dropdown-item" @click="order(key)" x-text="label"></a></li>
+                                <template  x-for="(entry, key) in orderTypes" :key="key">
+                                    <li>
+                                        <a href="#" class="dropdown-item" @click="order(key)">
+                                            <i :class="entry.icon"></i>
+                                            <span x-text="entry.label"></span>
+                                        </a>
+                                    </li>
                                 </template>
                             </ul>
                         </div>

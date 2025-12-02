@@ -9,9 +9,18 @@ docOn("alpine:init", () => {
     Alpine.data("order", () => {
         return {
             orderTypes: {
-                'manual':'Manual',
-                'rank':'Rank',
-                'date':'Date'
+                'manual':{
+                    label: 'Manual',
+                    icon: 'bi bi-arrow-left-right'
+                },
+                'rank':{
+                    label: 'Rank',
+                    icon: 'bi bi-bar-chart'
+                },
+                'date':{
+                    label: 'Date',
+                    icon: 'bi bi-calendar'
+                }
             },
             init(){
                 if(Alpine.store('albumOrder').current != "manual") {

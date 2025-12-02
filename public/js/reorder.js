@@ -1,7 +1,7 @@
 /* global Alpine, Sortable */
 
 import { docOn } from "./on.js";
-import { $ } from "./selector.js";
+import { $,$$ } from "./selector.js";
 import { post } from "./axios-wrapper.js";
 
 docOn("alpine:init", () => {
@@ -37,6 +37,7 @@ docOn("alpine:init", () => {
                 };
 
                 post("/album/order", data, "ordering photos");
+                this.storeOrder();
                 this.stopOrdering();
             },
             cancelOrder(){
@@ -50,6 +51,14 @@ docOn("alpine:init", () => {
             stopOrdering(){
                 this._Sortable.option("disabled", true);
                 this.$store.sorting = false;
+            },
+            // store the new order in the DOM attributes
+            storeOrder(){
+                const $$sortable = $$(".grid__item[data-manual]", this.$grid);
+                let counter = 0;
+                $$sortable.forEach(item => {
+                    item.dataset.manual = counter++;
+                });
             }
         };
     });
