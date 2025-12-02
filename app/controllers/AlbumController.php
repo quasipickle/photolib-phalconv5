@@ -30,7 +30,8 @@ class AlbumController extends BaseController
                 "subAlbums" => $subAlbums,
                 "title" => $Album->name,
                 "tags" => $this->getGroupedTags($albumId),
-                "viewingRoot" => $Album->id == $this->config->rootAlbumId
+                "viewingRoot" => $Album->id == $this->config->rootAlbumId,
+                'q' => $this->request->getQuery('q') ?? ''
             ]
         );
 
