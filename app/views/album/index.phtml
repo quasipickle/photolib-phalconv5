@@ -51,8 +51,15 @@
 
             <div class="d-flex gap-1">
                 <div class="d-flex gap-1" x-data="reorder">
-                    <template x-if="!$store.sorting">
-                        <button class="btn btn-ghost-secondary btn-icon" @click="startReorder()">
+                    <template x-if="!$store.sorting && $store.albumOrder.current == 'manual'">
+                        <template x-if="$store.albumOrder.current == 'manual'">
+                            <button class="btn btn-ghost-secondary btn-icon" @click="startReorder()">
+                                {{ icon("bi-arrow-left-right") }}
+                            </button>
+                        </template>
+                    </template>
+                    <template x-if="!$store.sorting && $store.albumOrder.current != 'manual'">
+                        <button class="btn btn-ghost-secondary btn-icon text-danger" title="Photos cannot be manually re-ordered unless they are sorted by 'Manual'">
                             {{ icon("bi-arrow-left-right") }}
                         </button>
                     </template>
@@ -65,6 +72,24 @@
                         <button class="btn btn-danger btn-icon" @click="cancelOrder()">
                             {{ icon("bi-x") }}
                         </button>
+                    </template>
+                </div>
+                <div x-data="order">
+                    <template x-if="!$store.sorting">
+                        <div class="dropdown">
+                            <button class="btn btn-ghost-secondary dropdown-toggle" 
+                                    type="buton" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-expanded="false"
+                                    x-text="'Order: ' + orderTypes[$store.albumOrder.current]"
+                                    >
+                            </button>
+                            <ul class="dropdown-menu">
+                                <template  x-for="(label, key) in orderTypes" :key="key">
+                                    <li><a href="#" class="dropdown-item" @click="order(key)" x-text="label"></a></li>
+                                </template>
+                            </ul>
+                        </div>
                     </template>
                 </div>
                 <div x-data="slideshow" x-show="!$store.sorting">
@@ -169,7 +194,7 @@
                 {#
                     Photos
                 #}
-                {% for photo in Album.photos %}
+                {% for index, photo in Album.photos %}
                     {% include "album/partials/photo.phtml" %}
                 {% endfor %}
             </div>

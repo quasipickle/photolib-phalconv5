@@ -1,4 +1,9 @@
-<div class="grid__item {% if Featured is defined AND Featured IS NOT null AND photo.id == Featured.id %}grid__item--featured{% endif %}" id="photo-{{ photo.id }}" data-id="{{ photo.id}}">
+<div class="grid__item {% if Featured is defined AND Featured IS NOT null AND photo.id == Featured.id %}grid__item--featured{% endif %}" 
+    id="photo-{{ photo.id }}" 
+    data-id="{{ photo.id}}"
+    data-date="{{ photo.date_uploaded }}"
+    data-rank="{{ photo.winPercentageFloat() }}"
+    data-manual="{{ index }}">
     <div class="grid__photo">
         <button class="btn btn-grid grid__photo-btn grid__info"
             data-bs-toggle="popover"

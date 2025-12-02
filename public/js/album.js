@@ -10,6 +10,7 @@ import "./gridSize.js";
 import "./gridRatio.js";
 import "./lightbox.js";
 import "./membership.js";
+import "./order.js";
 import "./photo-info.js";
 import "./photoChooser.js";
 import "./reorder.js";
