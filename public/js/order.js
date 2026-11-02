@@ -54,7 +54,7 @@ docOn("alpine:init", () => {
                         const rankA = a.dataset.rank;
                         const rankB = b.dataset.rank;
                         return rankA == rankB 
-                            ? this.orderByDate(a, b)
+                            ? b.dataset.battles - a.dataset.battles
                             : rankB - rankA;
                     });
                 }
