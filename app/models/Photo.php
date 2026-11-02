@@ -40,6 +40,11 @@ class Photo extends \Phalcon\Mvc\Model
         return $this->battles != 0 ? round($this->wins / $this->battles * 100) : null;
     }
 
+    public function winPercentageFloat(): ?float
+    {
+        return $this->battles != 0 ? $this->wins / $this->battles : null;
+    }
+
     public function area(): int
     {
         return $this->width * $this->height;
