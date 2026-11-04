@@ -89,6 +89,7 @@ class Photo extends \Phalcon\Mvc\Model
         $this->mime_type = $ReplacingPhoto->mime_type;
         $this->filesize = $ReplacingPhoto->filesize;
         $this->phash = $ReplacingPhoto->phash;
+        $this->duplicate_checked = $ReplacingPhoto->duplicate_checked;
 
         $this->battles += $ReplacingPhoto->battles;
         $this->wins += $ReplacingPhoto->wins;

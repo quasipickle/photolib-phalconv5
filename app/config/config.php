@@ -1,7 +1,5 @@
 <?php
 
-use Helper\IniHelper;
-
 $file_root  = realpath(dirname(__DIR__ . "/../../.."));
 $app_file_root   = $file_root . "/app";
 $views_file_root = $app_file_root . "/views";
