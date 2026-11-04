@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Task;
 
 use Component\Duplicate\Finder;
+use Model\Photo;
 
 class DuplicatesTask extends TaskAbstract
 {
@@ -47,6 +48,44 @@ class DuplicatesTask extends TaskAbstract
         }
         $this->find();
     }
+
+    // public function testAction()
+    // {
+    //     $limit = 30000;
+    //     $photos = Photo::find([
+    //         'columns' => 'phash',
+    //         'order' => 'RAND()',
+    //         'limit' => $limit
+    //     ])->toArray();
+    //     $distances = [];
+    //     $min = 64;
+    //     $max = 0;
+    //     $sum = 0;
+    //     for($i = 0; $i < $limit - 2;$i += 2){
+    //         $distance = gmp_hamdist('0x' . $photos[$i]['phash'],'0x' . $photos[$i+1]['phash']);
+    //         $min = min($min, $distance);
+    //         $max = max($max, $distance);
+    //         $sum += $distance;
+    //         $distances[] = $distance;
+    //     }
+
+    //     sort($distances);
+    //     $middleIndex = (int)floor($limit / 2 / 2);
+    //     $median = $middleIndex % 2 === 0
+    //         ? ($distances[$middleIndex - 1] + $distances[$middleIndex + 1]) / 2
+    //         : $distances[$middleIndex];
+    //     $distribution = array_count_values($distances);
+
+
+    //     $avg = $sum / $limit;
+    //     print_r([
+    //         "min" => $min, 
+    //         "max" => $max, 
+    //         "avg" => $avg, 
+    //         "median" => $median, 
+    //         "distribution" => $distribution
+    //     ]);
+    // }
 
     public function find()
     {

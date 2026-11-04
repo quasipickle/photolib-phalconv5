@@ -3,8 +3,11 @@
 namespace Component\Image;
 
 use Phalcon\Image\Adapter\{Gd, Imagick};
-use Jenssegers\ImageHash\ImageHash;
-use Jenssegers\ImageHash\Implementations\DifferenceHash;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
+use Intervention\ImageHash\ImageHasher;
+use Intervention\ImageHash\Strategies\PerceptualStrategy;
+
 
 class Image
 {
@@ -39,17 +42,24 @@ class Image
         return true;
     }
 
+    public static function getHasher(string $library = self::LIB_IMAGICK): ImageHasher
+    {
+        $driver = $library == self::LIB_GD
+            ? new GdDriver()
+            : new ImagickDriver();
+
+        return new ImageHasher($driver, new PerceptualStrategy());
+    }
+
+
     /**
      * Generate the perceptual hash for the file - used for finding duplicates
      */
-    public static function getPHash(string $filePath, ImageHash $Hasher = null): string
+    public static function getPHash(string $filePath, ?ImageHasher $hasher = null): string
     {
         //phpcs:ignore Generic.Files.LineLength
-        $Hasher = $Hasher ?? new ImageHash(new DifferenceHash());
+        $Hasher = $hasher ?? self::getHasher();
 
-        // If this line is causing "must return int but returning float"-type errors,
-        // see composer.readme
-        $hash = $Hasher->hash($filePath)->toHex();
-        return $hash;
+        return $Hasher->hash($filePath)->toHex();
     }
 }

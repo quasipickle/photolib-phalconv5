@@ -7,11 +7,11 @@ namespace Component\Image\File;
  */
 abstract class File
 {
-    abstract protected function getError(): string;
-    abstract protected function getExtension(): string;
-    abstract protected function getName(): string;
-    abstract protected function getType(): string;
-    abstract protected function getSize(): int;
-    abstract protected function getTempName(): string;
-    abstract protected function moveTo(string $destination): bool;
+    abstract public function getError(): string;
+    abstract public function getExtension(): string;
+    abstract public function getName(): string;
+    abstract public function getType(): string;
+    abstract public function getSize(): int;
+    abstract public function getTempName(): string;
+    abstract public function moveTo(string $destination): bool;
 }

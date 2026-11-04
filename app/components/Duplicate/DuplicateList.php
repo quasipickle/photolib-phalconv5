@@ -10,7 +10,7 @@ use Model\Duplicate;
  */
 class DuplicateList
 {
-    private array $list = [];
+    public array $list = [];
 
     public function addPair(int $primaryId, int $secondaryId)
     {
@@ -28,7 +28,7 @@ class DuplicateList
         $this->addPair($duplicate->primary_id, $duplicate->secondary_id);
     }
 
-    public function addDuplicates(\Phalcon\Mvc\Model\ResultsetInterface $duplicates)
+    public function addDuplicates(\Phalcon\Mvc\Model\ResultsetInterface|DuplicateList $duplicates)
     {
         foreach ($duplicates as $duplicate) {
             $this->addDuplicate($duplicate);

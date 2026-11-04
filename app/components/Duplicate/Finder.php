@@ -9,60 +9,98 @@ class Finder extends Injectable
 {
     private int $distance;
     private DuplicateList $ExistingDuplicates;
+    private array $newDuplicates;
 
     public int $duplicatesFound = 0;
     public float $elapsed = 0;
 
+    private ?array $tree = null;
+
     public function __construct(int $distance)
     {
-        $this->ExistingDuplicates = new DuplicateList();
         $this->distance = $distance;
     }
 
     public function find()
     {
+        $this->ExistingDuplicates = new DuplicateList();
         $this->ExistingDuplicates->addDuplicates(Duplicate::find());
+        $this->newDuplicates = [];
+        $this->tree = null;
         $start = microtime(true);
-        $this->duplicatesFound = 0;
 
-        // Get all hashes
-        // convert from a ResultSet to an array with filter() because for some reason,
-        // a ResultSet was skipping every second entry.
-        $photos = Photo::find(["order" => "phash"])->filter(fn($e) => $e);
-        $lastIndex = count($photos) - 1;
+        $photos = Photo::find([
+            'columns' => 'id, phash'
+        ]);
 
-        foreach ($photos as $index => $primary) {
-            $looped[] = $index;
-            if ($index == $lastIndex) {
-                continue;
+        foreach($photos as $photo) {
+            $this->search($photo->id, $photo->phash);
+            $this->insert($photo->id, $photo->phash);
+        }
+
+        $this->elapsed = microtime(true) - $start;
+        $this->duplicatesFound = count($this->newDuplicates);
+
+        foreach($this->newDuplicates as $newDuplicate) { 
+            $newDuplicate->save();
+        }
+    }
+
+    private function insert(int $id, string $hash): void
+    {
+        $node = [
+            'id' => $id,
+            'hash' => $hash,
+            'children' => []
+        ];
+
+        if($this->tree === null) {
+            $this->tree = $node;
+            return;
+        }
+
+        $current = &$this->tree;
+        while(true) {
+            $distance = gmp_hamdist('0x' . $hash, '0x' . $current['hash']);
+
+            if(!isset($current['children'][$distance])){
+                $current['children'][$distance] = $node;
+                return;
             }
 
-            for ($i = $index + 1; $i < $lastIndex; $i++) {
-                $secondary = $photos[$i];
+            $current = &$current['children'][$distance];
+        }
+    }
 
-                if ($this->ExistingDuplicates->exists($primary->id, $secondary->id)) {
-                    $exists[$primary->id] = $secondary->id;
-                    continue;
-                }
+    private function search(int $id, string $hash): void
+    {
+        if($this->tree === null)
+            return;
 
-                $distance = gmp_hamdist('0x' . $primary->phash, '0x' . $secondary->phash);
+        $stack = [$this->tree];
 
-                if ($distance <= $this->distance) {
-                    $this->ExistingDuplicates->addPair($primary->id, $secondary->id);
-
+        while(!empty($stack)){
+            $current = array_pop($stack);
+            $distance = gmp_hamdist('0x' . $hash, '0x' . $current['hash']);
+            if($distance <= $this->distance) {
+                if(true && !$this->ExistingDuplicates->exists($id, $current['id'])) {
                     $Duplicate = new Duplicate();
-                    $Duplicate->primary_id = $primary->id;
-                    $Duplicate->secondary_id = $secondary->id;
+                    $Duplicate->primary_id = $id;
+                    $Duplicate->secondary_id = $current['id'];
                     $Duplicate->distance = $distance;
-                    $Duplicate->save();
+                    $this->newDuplicates[] = $Duplicate;
+                }
+            }
 
-                    $this->duplicatesFound++;
+            $minDistance = max(0, $distance - $this->distance);
+            $maxDistance = $distance + $this->distance;
+
+            foreach($current['children'] as $edgeDistance => $child) {
+                if($edgeDistance >= $minDistance && $edgeDistance <= $maxDistance) {
+                    $stack[] = $child;
                 } else {
-                    break;
                 }
             }
         }
-
-        $this->elapsed = number_format(microtime(true) - $start, 2);
     }
 }

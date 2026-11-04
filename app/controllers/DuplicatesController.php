@@ -165,9 +165,21 @@ class DuplicatesController extends BaseDeleteFileController
             : $this->config->duplicate->distance;
         $Finder = new Finder($distance);
         $Finder->find();
-        $this->flash->success("{$Finder->duplicatesFound} duplicate(s).");
+        $elapsed = $this->elapsedHuman($Finder->elapsed);
+        $this->flash->success("Found {$Finder->duplicatesFound} duplicate(s) in {$elapsed}");
         $this->session->set("distance", $distance);
         return $this->response->redirect("/duplicates");
+    }
+
+    private function elapsedHuman(float $seconds): string {
+        if ($seconds >= 60) {
+            $minutes = $seconds / 60;
+            return round($minutes, 2) . 'm';
+        } elseif ($seconds > 1) {
+            return round($seconds, 2) . 's';
+        }
+        
+        return round($seconds * 1000, 2) . 'ms';
     }
 
     public function clearAction(): Response
