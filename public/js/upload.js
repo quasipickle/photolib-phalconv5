@@ -12,6 +12,8 @@ docOn("alpine:init", () => {
         inPageDragging: false,
         $body: $("body"),
         $grid: $(".album__grid"),
+        $container:$(".album__grid-container"),
+        observer: null,
         dropTargetSelector:".drop-target",
         reducer: null,
         init(){
@@ -74,8 +76,15 @@ docOn("alpine:init", () => {
                     template.innerHTML = data.content.trim();
                     const newNode = template.content.firstElementChild;
                     this.$grid.appendChild(newNode);
-                    // this won't work well if the album is so full it has images that haven't loaded yet (lazy)
-                    newNode.scrollIntoView(false);
+
+                    if(!this.observer){
+                        this.observer = new ResizeObserver(() => {
+                            this.$container.scrollTop = this.$container.scrollHeight;
+                        });
+                        this.observer.observe(this.$grid);
+                    }
+
+                    this.$container.scrollTop = this.$container.scrollHeight;
                     toasts(toast).setType(toastTypes.SUCCESS).setContent("Uploaded").setIndeterminant(false);
                 })
                 .catch(() => {
