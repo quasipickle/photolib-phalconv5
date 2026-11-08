@@ -12,7 +12,8 @@
         <div class = "list-group list-group-flush list-group--sm sidebar__list-group">
             {% for album in menuAlbums %}
                 <a class = "list-group-item list-group-item-action {% if Album.id == album.id %}active{% endif %} sidebar__list-item d-flex justify-content-between align-items-center"
-                   data-filter-on = "{{ album.name|escape_attr }}"
+                   data-filter-on="{{ album.name|escape_attr }}"
+                   data-id="{{ album.id }}"
                    href="{{ album(album.id) }}">
                     {{ album.name }}
                     {% if album.subAlbumCount != 0 %}
@@ -179,7 +180,7 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <a class="grid__album" href="{{ album(subAlbum.id) }}">
+                        <a class="grid__album" href="{{ album(subAlbum.id) }}" data-id="{{ subAlbum.id }}">
                             {% if subAlbum.hasFeatured() %}
                                 <img class="grid__album-image" src = "{{ photo(subAlbum.Featured.thumb_path) }}" loading="lazy" alt="{{ subAlbum.name }}"/>
                             {% else %}

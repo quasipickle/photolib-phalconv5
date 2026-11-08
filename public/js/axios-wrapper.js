@@ -25,7 +25,7 @@ export async function post(url, formData, task) {
  * @param {object}      options     An object of options.
  *                                      `fresh` - default:false.  Forces a new request, bypassing the cache.
  *                                                                Only GET requests are cached.
- * @returns
+ * @returns false or the returned data
  */
 async function axiosWrapper(url, formData, task, verb) {
     if (verb == "get" && Object.keys(formData).length > 0) {

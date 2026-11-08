@@ -91,6 +91,7 @@
     .grid__item:has(.grid__photo) img{
         cursor:move;
     }
+
     .grid__item:has(.grid__album){
         cursor:not-allowed;
     }
@@ -103,6 +104,10 @@
     & .grid__item--featured::after{
         display:none;
     }
+}
+
+.sortable-ghost img{
+    box-shadow: 0 0 0 0.4rem var(--bs-form-valid-border-color);
 }
 .sortable-selected img{
     outline:1px solid $input-focus-border-color;

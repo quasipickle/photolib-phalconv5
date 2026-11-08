@@ -1,6 +1,6 @@
 /* global Alpine, Sortable */
 
-import { docOn } from "./on.js";
+import { docOn, docOff } from "./on.js";
 import { $,$$ } from "./selector.js";
 import { post } from "./axios-wrapper.js";
 
@@ -8,8 +8,13 @@ docOn("alpine:init", () => {
     Alpine.data("reorder", function() {
         return {
             _Sortable: null,
+            _SidebarSortable:null,
             $grid: $(".album__grid"),
+            $sidebar: $(".sidebar__list-group"),
             orderChanged: false,
+            dragging: false,
+            $dragAlbum: null,
+            pointerListener: null,
             init(){
                 this.$watch("$store.sorting", () => {
                     if (this.$store.sorting) {
@@ -21,13 +26,45 @@ docOn("alpine:init", () => {
             },
             startReorder(){
                 this.$store.sorting = true;
-                this._Sortable = Sortable.create(this.$grid,{
+                this.$sidebar.classList.add("move-drop-target")
+                this._Sortable = Sortable.create(this.$grid, {
                     filter:".grid__item:has(.grid__album)",
+                    forceFallback: true,
+                    group: {
+                        name: "photos",
+                        pull: true,
+                        put: false,
+                    },
                     multiDrag:true,
                     selectedClass: "sortable-selected",
+                    onStart: () => {
+                        this.dragging = true;
+                        this.pointerListener ??= docOn("pointermove", this.onPointerMove.bind(this));
+                    },
                     onUpdate: () => {
                         this.orderChanged = true;
+                    },
+                    onEnd: (evt) => {
+                        const $$items = evt.items.length ? evt.items : [evt.item];
+                        if(this.$dragAlbum) {
+                            this.saveMove(this.$dragAlbum.dataset.id, $$items);
+                        }
+                        this.$dragAlbum = null;
+                        this.dragging = false;
                     }
+                });
+            },
+            saveMove(albumId, $$photos){
+                $$photos.forEach($photo => {
+                    const data = {
+                        albumId,
+                        photoId: $photo.dataset.id
+                        
+                    };
+                    post("/membership/move", data, "move photo")
+                        .then(_ => {
+                            $photo.remove();
+                        });
                 });
             },
             saveOrder(){
@@ -49,8 +86,10 @@ docOn("alpine:init", () => {
                 }
             },
             stopOrdering(){
+                this.$sidebar.classList.remove('move-drop-target');
                 this._Sortable.option("disabled", true);
                 this.$store.sorting = false;
+                docOff('pointermove', this.pointerListener);
             },
             // store the new order in the DOM attributes
             storeOrder(){
@@ -59,6 +98,12 @@ docOn("alpine:init", () => {
                 $$sortable.forEach(item => {
                     item.dataset.manual = counter++;
                 });
+            },
+            onPointerMove(evt){
+                if(!this.dragging)
+                    return;
+                const $element = document.elementFromPoint(evt.clientX, evt.clientY);
+                this.$dragAlbum = $element?.closest(".sidebar__list-item");
             }
         };
     });

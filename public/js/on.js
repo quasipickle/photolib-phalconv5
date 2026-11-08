@@ -63,6 +63,16 @@ export function docOn(eventName, fn) {
 }
 
 /**
+ * Shortcut for the shortcut off().  Sets the element to act on to `document`
+ *
+ * @param string    eventName   The event name to act on
+ * @param function  fn          The function to remove
+ */
+export function docOff(eventName, fn) {
+    return off(document, eventName, fn);
+}
+
+/**
  * Shortcut for on(document,"DOMContentLoaded",function...);
  * 
  * @param function fn The function to run
