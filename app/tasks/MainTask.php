@@ -18,6 +18,7 @@ class MainTask
     public function mainAction()
     {
         $tasks = [
+            "Cleanup",
             "Duplicates",
             "Regenerate",
             "Sass",

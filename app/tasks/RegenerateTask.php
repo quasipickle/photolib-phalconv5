@@ -9,8 +9,6 @@ declare(strict_types=1);
 namespace Task;
 
 use Component\Image\Image;
-use Jenssegers\ImageHash\ImageHash;
-use Jenssegers\ImageHash\Implementations\DifferenceHash;
 use Model\{Album, AlbumPhoto, Photo};
 
 class RegenerateTask extends TaskAbstract
@@ -60,9 +58,8 @@ class RegenerateTask extends TaskAbstract
     {
         parent::initialize();
 
-        $this->Climate->extend("Helper\ProgressPrecision", "ProgressPrecision");
         if ($this->dispatcher->getActionName()) {
-            $iam = trim(`whoami`);
+            $iam = trim(shell_exec('whoami'));
             if ($iam != "root") {
                 $this->Climate->backgroundYellow()->black()
                 //phpcs:ignore Generic.Files.LineLength
@@ -75,7 +72,6 @@ class RegenerateTask extends TaskAbstract
     /**
      * Resize a single thumb
      *
-     * @param int id When calling this action, pass a single integer for the photo id
      * @return void
      */
     public function thumbAction()
@@ -98,7 +94,6 @@ class RegenerateTask extends TaskAbstract
     /**
      * Resize a single display
      *
-     * @param int id When calling this action, pass a single integer for the photo id
      * @return void
      */
     public function displayAction()
@@ -109,8 +104,6 @@ class RegenerateTask extends TaskAbstract
     /**
      * Resize multiple displays
      *
-     * @param int id When calling this action, pass a single integer as the start album id.
-     *               All displays within the album and sub albums will be re-generated.
      * @return void
      */
     public function displaysAction()
@@ -118,16 +111,23 @@ class RegenerateTask extends TaskAbstract
         $this->resizeMultiple($this->config->image->versions->display);
     }
 
+    /**
+     * Generate hashes for all photos
+     * 
+     * @return void
+     */
     public function hashAction()
     {
         $photos = Photo::find();
-        $Hasher = new ImageHash(new DifferenceHash());
-        $Progress = $this->Climate->ProgressPrecision(count($photos));
+        $Hasher = Image::getHasher();
+        $Progress = $this->Climate->Progress(count($photos));
         $Progress->precision(3);
         foreach ($photos as $photo) {
             $path = $this->config->dirs->file->photo . $photo->thumb_path;
-            $photo->phash = Image::getPHash($path, $Hasher);
-            $photo->save();
+            if(file_exists($path)) {
+                $photo->phash = Image::getPHash($path, $Hasher);
+                $photo->save();
+            }
             $Progress->advance();
         }
     }
@@ -234,7 +234,7 @@ class RegenerateTask extends TaskAbstract
             if (!$Image->resize($destinationPath, $version->width, $version->height, $version->quality)) {
                 $this->Climate->error("Failed to create image from Photo #" . $Photo->id);
             }
-        } catch (\ImagickException $e) {
+        } catch (\Exception $e) {
             if ($e->getCode() == 435) {
                 $this->Climate->bold()->red("Unable to open image for processing:")
                     ->tab()->output("Image: {$srcPath}")

@@ -14,14 +14,10 @@
 .album__grid-container{
     flex-grow:1;
     overflow-y:auto;
-    padding-inline-end:1.25rem;
-    padding-block-start:0.5rem;
+    padding-inline:0.5rem;
 }
 .album__breadcrumb .breadcrumb{
     --bs-breadcrumb-margin-bottom:0;
-}
-.album__grid-container{
-    padding-inline-start:0.5rem;
 }
 .album__header{
     padding: 0 0.5rem 0.5rem 0;

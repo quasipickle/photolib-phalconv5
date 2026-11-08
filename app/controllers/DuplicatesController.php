@@ -165,7 +165,8 @@ class DuplicatesController extends BaseDeleteFileController
             : $this->config->duplicate->distance;
         $Finder = new Finder($distance);
         $Finder->find();
-        $this->flash->success("{$Finder->duplicatesFound} duplicate(s).");
+        $elapsed = $Finder->elapsedHuman();
+        $this->flash->success("Found {$Finder->duplicatesFound} duplicate(s) in {$Finder->totalSearched} unchecked photos searched in {$elapsed}");
         $this->session->set("distance", $distance);
         return $this->response->redirect("/duplicates");
     }

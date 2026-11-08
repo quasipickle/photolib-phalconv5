@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Task;
 
 use Component\Duplicate\Finder;
+use League\CLImate\CLImate;
+use Model\Photo;
 
 class DuplicatesTask extends TaskAbstract
 {
@@ -53,10 +55,14 @@ class DuplicatesTask extends TaskAbstract
         $distance = $this->getDistance();
 
         $Finder = new Finder($distance);
-        $Finder->find();
+        if(!$Finder->find($this->Climate)) {
+            $this->Climate->bold()->red($Finder->error);
+            return;
+        }
 
-        $this->Climate->bold()->inline("Duplicates found: ")->out($Finder->duplicatesFound);
-        $this->Climate->bold()->inline("Elapsed: ")->out($Finder->elapsed . "s");
+        $this->Climate->out("Searched: " . $Finder->totalSearched);
+        $this->Climate->out("Duplicates found: " . $Finder->duplicatesFound);
+        $this->Climate->out("Elapsed: " . $Finder->elapsedHuman());
     }
 
 

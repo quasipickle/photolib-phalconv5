@@ -192,8 +192,10 @@ class PhotoController extends BaseController
         $AlbumPhoto->photo_id = $Photo->id;
         $AlbumPhoto->save();
 
+        
         $this->view->photo = $Photo;
         $this->view->Album = $Album;
+        $this->view->index = PHP_INT_MAX;
         $this->view->disableLevel(\Phalcon\Mvc\View::LEVEL_MAIN_LAYOUT);
         $this->view->start();
         $this->view->render("photo", "new");
