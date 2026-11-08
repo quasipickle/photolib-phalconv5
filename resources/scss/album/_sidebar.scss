@@ -1,5 +1,4 @@
-.sidebar__list-group.move-drop-target .list-group-item{
+.sidebar__list-group .list-group-item.move-drop-target{
     --bs-list-group-action-hover-bg: #{$input-focus-border-color};
-    --bs-list-group-action-hover-color: black;
-    
+    --bs-list-group-action-hover-color: black;   
 }

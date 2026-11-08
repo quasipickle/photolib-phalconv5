@@ -11,9 +11,10 @@ docOn("alpine:init", () => {
             _SidebarSortable:null,
             $grid: $(".album__grid"),
             $sidebar: $(".sidebar__list-group"),
+            $breadcrumb: $(".album__breadcrumb"),
             orderChanged: false,
             dragging: false,
-            $dragAlbum: null,
+            $dragTarget: null,
             pointerListener: null,
             init(){
                 this.$watch("$store.sorting", () => {
@@ -26,7 +27,8 @@ docOn("alpine:init", () => {
             },
             startReorder(){
                 this.$store.sorting = true;
-                this.$sidebar.classList.add("move-drop-target")
+                this.$sidebar.classList.add("move-drop-target");
+                this.$breadcrumb.classList.add("move-drop-target");
                 this._Sortable = Sortable.create(this.$grid, {
                     filter:".grid__item:has(.grid__album)",
                     forceFallback: true,
@@ -46,10 +48,10 @@ docOn("alpine:init", () => {
                     },
                     onEnd: (evt) => {
                         const $$items = evt.items.length ? evt.items : [evt.item];
-                        if(this.$dragAlbum) {
-                            this.saveMove(this.$dragAlbum.dataset.id, $$items);
+                        if(this.$dragTarget) {
+                            this.saveMove(this.$dragTarget.dataset.id, $$items);
                         }
-                        this.$dragAlbum = null;
+                        this.$dragTarget = null;
                         this.dragging = false;
                     }
                 });
@@ -87,6 +89,7 @@ docOn("alpine:init", () => {
             },
             stopOrdering(){
                 this.$sidebar.classList.remove('move-drop-target');
+                this.$breadcrumb.classList.remove("move-drop-target");
                 this._Sortable.option("disabled", true);
                 this.$store.sorting = false;
                 docOff('pointermove', this.pointerListener);
@@ -103,7 +106,14 @@ docOn("alpine:init", () => {
                 if(!this.dragging)
                     return;
                 const $element = document.elementFromPoint(evt.clientX, evt.clientY);
-                this.$dragAlbum = $element?.closest(".sidebar__list-item");
+                const $currentTarget = $element?.closest(".sidebar__list-item, .breadcrumb-item");
+
+                if($currentTarget === this.$dragTarget)
+                    return;
+                
+                this.$dragTarget?.classList.remove('move-drop-target');
+                this.$dragTarget = $currentTarget;
+                this.$dragTarget?.classList.add('move-drop-target');
             }
         };
     });

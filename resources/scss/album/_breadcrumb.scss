@@ -6,3 +6,9 @@
     color: $gray-400;
     font-size:0.8rem;
 }
+.album__breadcrumb .breadcrumb-item.move-drop-target a{
+    &:hover{
+        color: black;
+        background-color: #{$input-focus-border-color};
+    }
+}

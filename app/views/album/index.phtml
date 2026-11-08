@@ -32,7 +32,7 @@
                 <ol class="breadcrumb">
                     {% for crumb in breadcrumbs %}
                         {% set active = loop.last ? "active" : "" %}
-                        <li class="breadcrumb-item {{ active }}">
+                        <li class="breadcrumb-item {{ active }}" data-id="{{ crumb.id }}">
                             {% if !loop.last %}
                                 <a href="{{ album(crumb.id) }}">
                             {% endif %}
