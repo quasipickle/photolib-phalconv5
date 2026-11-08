@@ -15,6 +15,7 @@ body:not(.show-drop-target) .drop-target{
     width:97%;
     height:97%;
     border:0.5rem dashed $gray-500;
+    color: $gray-500;
     border-radius:1rem;
     display:flex;
     align-items:center;
